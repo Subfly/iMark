@@ -25,11 +25,22 @@ Until the deadline all of your PRs **need to be merged** and your final app **ne
 
 ## Problem Statement (max. 500 words)
 
-TODO: Add your problem statement here. 
+Every platform has its own bookmarking system but has limited capabilities. For example, X (formerly Twitter) requires users to have premium membership in order to do categorization, and Instagram only let users to save the posts without labeling or giving a unique identification for them. People struggle to find the saved posts or links  form the internet later on everyday in their life. In order to solve this Yaba (Yet Another Bookmark App) is here, where users can save any link, post or tweet by labeling and/or tagging them, and then, search them easily.
 
 ## Requirements
 
-TODO: Document the requirements you fulfilled with your app. Discuss them with your tutor.
+### Functional
+
+- Users can save any type of link by providing a label to it.
+- Users can create their own folders for easier categorization.
+- Users can save links to folder, in order to easily categorize them.
+- Users can search their bookmarks by their label or description.
+
+### Nonfunctional
+
+- Users should see the unfurled version of their saved content. 
+- Unfurling the link should be lazily in order to preserve data usage.
+- All bookmarks should be saved on device locally.
 
 ## Analysis
 
