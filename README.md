@@ -33,8 +33,11 @@ Every platform has its own bookmarking system but has limited capabilities. For 
 
 - Users can save any type of link by providing a label to it.
 - Users can create their own folders for easier categorization.
+- Users can create tags for easier categorization.
 - Users can save links to folder, in order to easily categorize them.
+- Users can add how many tags they want to a bookmark, as well as remove any tag.
 - Users can search their bookmarks by their label or description.
+- Users can be move their bookmarks to any other folder.
 
 ### Nonfunctional
 
@@ -44,7 +47,7 @@ Every platform has its own bookmarking system but has limited capabilities. For 
 
 ## Analysis
 
-TODO: Include an analysis object model. You can use [draw.io](https://draw.io) or [apollon](https://apollon.ase.cit.tum.de) to create it. Please add all models as an Image - not as a link!
+![Analysis Design](./assets/analysis_diagram.svg) 
 
 ## System Design
 
