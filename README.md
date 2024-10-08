@@ -51,8 +51,19 @@ Every platform has its own bookmarking system but has limited capabilities. For 
 
 ## System Design
 
-TODO: Include a system design overview describing your application.
+![System Design](./assets/system_design.svg) 
 
 ## Product Backlog
 
-TODO: Add a product backlog and don't forget to update it with each MR.
+| Code    | Requirement                            | Severity       | Progress    |
+|---------|--:-:-----------------------------------|--:-------------|--:----------|
+| YABA-1  | Add folder creation                    | Vert Important | Not Started |
+| YABA-2  | Add tag creation                       | Very Important | Not Started |
+| YABA-3  | Add bookmark creation                  | Very Important | Not Started |
+| YABA-4  | Add bookmark and folder detail screens | Very Important | Not Started |
+| YABA-5  | Add bookmark search                    | Very Important | Not Started |
+| YABA-6  | Add create bookmark from share modal   | Very Important | Not Started |
+| YABA-7  | Add link previews                      | Important      | Not Started |
+| YABA-8  | Add folder colors                      | Nice to have   | Not Started |
+| YABA-9  | Add tag colors                         | Nice to have   | Not Started |
+| YABA-10 | Add move bookmark to another folder    | Nice to have   | Not Started |
