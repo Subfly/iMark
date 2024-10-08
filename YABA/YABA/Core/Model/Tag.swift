@@ -13,7 +13,7 @@ final class Tag {
     var label: String
     var createdAt: Date
     var icon: String?
-    
+
     init(label: String, createdAt: Date, icon: String? = nil) {
         self.label = label
         self.createdAt = createdAt

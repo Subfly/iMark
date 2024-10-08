@@ -23,7 +23,7 @@ struct YABAApp: App {
 
     var body: some Scene {
         WindowGroup {
-            
+            // TODO: ADD NAVIGATION COMPONENT
         }
         .modelContainer(sharedModelContainer)
     }

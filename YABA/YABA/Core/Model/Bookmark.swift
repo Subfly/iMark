@@ -17,8 +17,16 @@ final class Bookmark {
     var bookmarkDescription: String?
     var imageUrl: URL?
     var folder: Folder?
-    
-    init(link: URL, label: String, createdAt: Date, tags: [Tag], bookmarkDescription: String? = nil, imageUrl: URL? = nil, folder: Folder? = nil) {
+
+    init(
+        link: URL,
+        label: String,
+        createdAt: Date,
+        tags: [Tag],
+        bookmarkDescription: String? = nil,
+        imageUrl: URL? = nil,
+        folder: Folder? = nil
+    ) {
         self.link = link
         self.label = label
         self.createdAt = createdAt
