@@ -12,7 +12,16 @@ struct FolderView: View {
 
     var body: some View {
         VStack {
-            // TODO: ADD BODY
+            HStack {
+                ZStack {
+                    Circle()
+                        .frame(width: 48, height: 48)
+                        .blur(radius: 8)
+                    Text(folder.icon ?? folder.label.first?.uppercased() ?? "")
+                }
+            }
+            Text(folder.label)
+                .fontWeight(.semibold)
         }
     }
 }
