@@ -57,7 +57,7 @@ Every platform has its own bookmarking system but has limited capabilities. For 
 
 | Code    | Requirement                            | Severity       | Progress    |
 |---------|--:-:-----------------------------------|--:-------------|--:----------|
-| YABA-1  | Add folder creation                    | Vert Important | Not Started |
+| YABA-1  | Add folder creation                    | Very Important | Not Started |
 | YABA-2  | Add tag creation                       | Very Important | Not Started |
 | YABA-3  | Add bookmark creation                  | Very Important | Not Started |
 | YABA-4  | Add bookmark and folder detail screens | Very Important | Not Started |
