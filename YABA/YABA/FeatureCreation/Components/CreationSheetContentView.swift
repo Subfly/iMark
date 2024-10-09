@@ -51,6 +51,5 @@ struct CreationSheetContentView<Content: View>: View {
             // Do Nothing
         } content: {
             EmptyView()
-        }
-
+    }
 }

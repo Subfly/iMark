@@ -22,44 +22,13 @@ struct FolderView: View {
         } label: {
             VStack(alignment: .leading) {
                 HStack {
-                    ZStack(alignment: .center) {
-                        Circle()
-                            .frame(width: 56, height: 56)
-                            .blur(radius: 2)
-                            .foregroundStyle(.white.opacity(0.3))
-                        if (self.folder.icon == nil || self.folder.icon?.isEmpty == true) && self.folder.label.isEmpty {
-                            Image(systemName: "folder")
-                                .foregroundStyle(.white)
-                        } else {
-                            Text(
-                                self.folder.icon
-                                ?? self.folder.label.first?.uppercased()
-                                ?? ""
-                            ).font(.system(size: 32))
-                        }
-                    }
+                    self.imageArea
                     Spacer()
-                    if self.isInPreviewMode {
-                        optionsButton
-                    } else {
-                        Menu {
-                            self.menuContext
-                        } label: {
-                            self.optionsButton
-                        }.buttonStyle(.plain)
-                    }
-
+                    self.optionsArea
                 }
                 Spacer()
                     .frame(height: 18)
-                Text(
-                    self.folder.label.isEmpty
-                    ? "Folder Name"
-                    : self.folder.label
-                )
-                .font(.title2)
-                .fontWeight(.semibold)
-                .foregroundStyle(.white)
+                self.textArea
             }
             .padding()
             .background {
@@ -102,6 +71,51 @@ struct FolderView: View {
             Image(systemName: "ellipsis")
                 .foregroundStyle(.white)
         }
+    }
+    
+    @ViewBuilder
+    private var imageArea: some View {
+        ZStack(alignment: .center) {
+            Circle()
+                .frame(width: 56, height: 56)
+                .blur(radius: 2)
+                .foregroundStyle(.white.opacity(0.3))
+            if (self.folder.icon == nil || self.folder.icon?.isEmpty == true) && self.folder.label.isEmpty {
+                Image(systemName: "folder")
+                    .foregroundStyle(.white)
+            } else {
+                Text(
+                    self.folder.icon
+                    ?? self.folder.label.first?.uppercased()
+                    ?? ""
+                ).font(.system(size: 32))
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var optionsArea: some View {
+        if self.isInPreviewMode {
+            self.optionsButton
+        } else {
+            Menu {
+                self.menuContext
+            } label: {
+                self.optionsButton
+            }.buttonStyle(.plain)
+        }
+    }
+    
+    @ViewBuilder
+    private var textArea: some View {
+        Text(
+            self.folder.label.isEmpty
+            ? "Folder Name"
+            : self.folder.label
+        )
+        .font(.title2)
+        .fontWeight(.semibold)
+        .foregroundStyle(.white)
     }
 }
 

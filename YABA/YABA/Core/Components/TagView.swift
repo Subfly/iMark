@@ -41,7 +41,8 @@ struct TagView: View {
                 Color.accentColor.clipShape(
                     RoundedRectangle(cornerSize: CGSize(width: 16, height: 16))
                 )
-            }.contextMenu {
+            }
+            .contextMenu {
                 if !self.isInPreviewMode {
                     self.menuContext
                 }

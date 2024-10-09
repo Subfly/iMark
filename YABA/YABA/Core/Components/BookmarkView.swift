@@ -17,7 +17,7 @@ struct BookmarkView: View {
     var body: some View {
         HStack {
             HStack {
-                bookmarkIconBuilder
+                self.bookmarkIconBuilder
                 VStack(alignment: .leading) {
                     Text(
                         self.bookmark.label.isEmpty ? "Bookmark Title" : self.bookmark.label
@@ -35,8 +35,8 @@ struct BookmarkView: View {
             Image(systemName: "chevron.right")
         }
         .contextMenu {
-            if !isInPreviewMode {
-                menuContext
+            if !self.isInPreviewMode {
+                self.menuContext
             }
         }
     }
@@ -60,21 +60,32 @@ struct BookmarkView: View {
     @ViewBuilder
     private var bookmarkIconBuilder: some View {
         if self.bookmark.imageUrl != nil {
-            AsyncImage(url: URL(string: self.bookmark.imageUrl!)) { result in
-                        result.image?
-                            .resizable()
-                            .scaledToFill()
-                    }
-                    .frame(width: 80, height: 80)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+            AsyncImage(
+                url: URL(string: self.bookmark.imageUrl ?? "")
+            ) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFill()
+                case .failure:
+                    self.bookmarkIcon
+                @unknown default:
+                    self.bookmarkIcon
+                }
+            }
+            .frame(width: 80, height: 80)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
         } else if self.bookmark.folder != nil {
             if self.bookmark.folder?.icon != nil || self.bookmark.folder?.icon?.isEmpty == false {
                 Text(self.bookmark.folder?.icon ?? "")
             } else {
-                bookmarkIcon
+                self.bookmarkIcon
             }
         } else {
-            bookmarkIcon
+            self.bookmarkIcon
         }
     }
 

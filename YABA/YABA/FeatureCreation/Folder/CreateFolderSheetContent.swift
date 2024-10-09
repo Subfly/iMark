@@ -29,45 +29,9 @@ struct CreateFolderSheetContent: View {
                 navigationManager.onDismissFolderCreationSheet()
             } content: {
                 Form {
-                    Section("Preview") {
-                        FolderView(
-                            folder: Folder(
-                                label: self.createFolderVM.labelText,
-                                createdAt: .now,
-                                bookmarks: [],
-                                icon: self.createFolderVM.selectedIcon
-                            ),
-                            isInPreviewMode: true,
-                            onClickFolder: {},
-                            onEditPressed: {},
-                            onDeletePressed: {}
-                        )
-                        .frame(width: 200, alignment: .center)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                    }.listRowBackground(Color(.systemGroupedBackground))
-                    Section {
-                        TextField(
-                            "Folder Name",
-                            text: self.$createFolderVM.labelText
-                        ).onChange(of: self.createFolderVM.labelText) { _, newValue in
-                            self.createFolderVM.onChaneLabel(newValue)
-                        }
-                    } header: {
-                        Text("Info")
-                    } footer: {
-                        Text(self.createFolderVM.labelCounterText)
-                            .foregroundStyle(self.createFolderVM.labelHasError ? .red : .secondary)
-                    }
-                    Section {
-                        EmojiTextField(
-                            text: self.$createFolderVM.selectedIcon,
-                            placeholder: "Folder Icon"
-                        ).onChange(of: self.createFolderVM.selectedIcon) { _, newValue in
-                            self.createFolderVM.onChangeIcon(newValue)
-                        }
-                    } header: {
-                        Text("Icon")
-                    }
+                    self.previewSection
+                    self.nameSection
+                    self.iconSection
                 }
             }
             .navigationTitle("Create Folder")
@@ -84,6 +48,57 @@ struct CreateFolderSheetContent: View {
         }
         .presentationDetents([.fraction(0.8)])
         .presentationDragIndicator(.visible)
+    }
+    
+    @ViewBuilder
+    private var previewSection: some View {
+        Section("Preview") {
+            FolderView(
+                folder: Folder(
+                    label: self.createFolderVM.labelText,
+                    createdAt: .now,
+                    bookmarks: [],
+                    icon: self.createFolderVM.selectedIcon
+                ),
+                isInPreviewMode: true,
+                onClickFolder: {},
+                onEditPressed: {},
+                onDeletePressed: {}
+            )
+            .frame(width: 200, alignment: .center)
+            .frame(maxWidth: .infinity, alignment: .center)
+        }.listRowBackground(Color(.systemGroupedBackground))
+    }
+    
+    @ViewBuilder
+    private var nameSection: some View {
+        Section {
+            TextField(
+                "Folder Name",
+                text: self.$createFolderVM.labelText
+            ).onChange(of: self.createFolderVM.labelText) { _, newValue in
+                self.createFolderVM.onChaneLabel(newValue)
+            }
+        } header: {
+            Text("Info")
+        } footer: {
+            Text(self.createFolderVM.labelCounterText)
+                .foregroundStyle(self.createFolderVM.labelHasError ? .red : .secondary)
+        }
+    }
+    
+    @ViewBuilder
+    private var iconSection: some View {
+        Section {
+            EmojiTextField(
+                text: self.$createFolderVM.selectedIcon,
+                placeholder: "Folder Icon"
+            ).onChange(of: self.createFolderVM.selectedIcon) { _, newValue in
+                self.createFolderVM.onChangeIcon(newValue)
+            }
+        } header: {
+            Text("Icon")
+        }
     }
 }
 
