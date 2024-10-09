@@ -10,16 +10,29 @@ import SwiftUI
 struct CreateContentFAB: View {
     let isActive: Bool
     let onClickAction: (_ type: CreationType) -> Void
+    let onDismissRequest: () -> Void
 
     var body: some View {
-        VStack(spacing: 15) {
-            clickableMiniFab(type: .bookmark)
-            clickableMiniFab(type: .folder)
-            clickableMiniFab(type: .tag)
-            Button {
-                onClickAction(.main)
-            } label: {
-                fab(isMini: false, type: .main)
+        ZStack {
+            if isActive {
+                Rectangle()
+                    .fill()
+                    .foregroundStyle(.secondary.opacity(0.5))
+                    .blur(radius: 24)
+                    .onTapGesture {
+                        onDismissRequest()
+                    }
+            }
+        }.overlay(alignment: .bottom) {
+            VStack(spacing: 15) {
+                clickableMiniFab(type: .bookmark)
+                clickableMiniFab(type: .folder)
+                clickableMiniFab(type: .tag)
+                Button {
+                    onClickAction(.main)
+                } label: {
+                    fab(isMini: false, type: .main)
+                }
             }
         }
     }
@@ -66,6 +79,8 @@ struct CreateContentFAB: View {
 
 #Preview {
     CreateContentFAB(isActive: true) { _ in
+        // Do Nothing
+    } onDismissRequest: {
         // Do Nothing
     }
 }
