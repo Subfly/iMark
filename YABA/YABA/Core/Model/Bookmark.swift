@@ -10,21 +10,21 @@ import SwiftData
 
 @Model
 final class Bookmark {
-    var link: URL
+    var link: String
     var label: String
     var createdAt: Date
     var tags: [Tag]
     var bookmarkDescription: String?
-    var imageUrl: URL?
+    var imageUrl: String?
     var folder: Folder?
 
     init(
-        link: URL,
+        link: String,
         label: String,
         createdAt: Date,
         tags: [Tag],
         bookmarkDescription: String? = nil,
-        imageUrl: URL? = nil,
+        imageUrl: String? = nil,
         folder: Folder? = nil
     ) {
         self.link = link
