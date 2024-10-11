@@ -18,11 +18,9 @@ enum Destination: Hashable {
         switch self {
         case .home:
             HomeScreen()
-        case .tag(tag: _):
-            EmptyView()
         case .folder(folder: let folder):
             FolderDetailScreen(folder: folder)
-        case .bookmark(bookmark: _):
+        default:
             EmptyView()
         }
     }
