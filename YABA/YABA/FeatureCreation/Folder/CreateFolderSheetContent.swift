@@ -10,23 +10,32 @@ import SwiftUI
 import SwiftData
 
 struct CreateFolderSheetContent: View {
-    @Environment(NavigationManager.self)
-    private var navigationManager
-
     @Environment(\.modelContext)
     private var modelContext
 
-    @Bindable
-    var createFolderVM: CreateFolderVM = .init()
+    @State
+    private var createFolderVM: CreateFolderVM
+
+    let onDismiss: () -> Void
+    
+    init(
+        folder: Folder?,
+        onDismiss: @escaping () -> Void
+    ) {
+        self.createFolderVM = .init(folder: folder)
+        self.onDismiss = onDismiss
+    }
 
     var body: some View {
         NavigationView {
-            CreationSheetContentView(onCreateButtonLabel: "Create Folder") {
-                let createdFolder = self.createFolderVM.getFolder()
-                self.modelContext.insert(createdFolder)
-                navigationManager.onDismissFolderCreationSheet()
+            CreationSheetContentView(
+                buttonLabel: self.createFolderVM.isEditMode ? "Edit Folder" : "Create Folder"
+            ) {
+                // TASK: VALIDATE BEFORE SAVE
+                self.modelContext.insert(self.createFolderVM.folder)
+                self.onDismiss()
             } onDismissRequest: {
-                navigationManager.onDismissFolderCreationSheet()
+                self.onDismiss()
             } content: {
                 Form {
                     self.previewSection
@@ -34,12 +43,12 @@ struct CreateFolderSheetContent: View {
                     self.iconSection
                 }
             }
-            .navigationTitle("Create Folder")
+            .navigationTitle(self.createFolderVM.isEditMode ? "Edit Folder" : "Create Folder")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        navigationManager.onDismissFolderCreationSheet()
+                        self.onDismiss()
                     } label: {
                         Text("Cancel")
                     }
@@ -54,12 +63,7 @@ struct CreateFolderSheetContent: View {
     private var previewSection: some View {
         Section("Preview") {
             FolderView(
-                folder: Folder(
-                    label: self.createFolderVM.labelText,
-                    createdAt: .now,
-                    bookmarks: [],
-                    icon: self.createFolderVM.selectedIcon
-                ),
+                folder: self.createFolderVM.folder,
                 isInPreviewMode: true,
                 onClickFolder: {},
                 onEditPressed: {},
@@ -75,8 +79,8 @@ struct CreateFolderSheetContent: View {
         Section {
             TextField(
                 "Folder Name",
-                text: self.$createFolderVM.labelText
-            ).onChange(of: self.createFolderVM.labelText) { _, newValue in
+                text: self.$createFolderVM.folder.label
+            ).onChange(of: self.createFolderVM.folder.label) { _, newValue in
                 self.createFolderVM.onChaneLabel(newValue)
             }
         } header: {
@@ -91,9 +95,9 @@ struct CreateFolderSheetContent: View {
     private var iconSection: some View {
         Section {
             EmojiTextField(
-                text: self.$createFolderVM.selectedIcon,
+                text: self.$createFolderVM.folder.icon,
                 placeholder: "Folder Icon"
-            ).onChange(of: self.createFolderVM.selectedIcon) { _, newValue in
+            ).onChange(of: self.createFolderVM.folder.icon) { _, newValue in
                 self.createFolderVM.onChangeIcon(newValue)
             }
         } header: {
@@ -103,5 +107,8 @@ struct CreateFolderSheetContent: View {
 }
 
 #Preview {
-    CreateFolderSheetContent()
+    CreateFolderSheetContent(
+        folder: .empty(),
+        onDismiss: {}
+    )
 }

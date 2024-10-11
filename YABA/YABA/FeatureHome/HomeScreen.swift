@@ -73,11 +73,11 @@ struct HomeScreen: View {
                 onClickAction: { type in
                     switch type {
                     case .bookmark:
-                        navigationManager.showBookmarkCreationSheet()
+                        self.navigationManager.showBookmarkCreationSheet()
                     case .folder:
-                        navigationManager.showFolderCreationSheet()
+                        self.navigationManager.showFolderCreationSheet(folder: nil)
                     case .tag:
-                        navigationManager.showTagCreationSheet()
+                        self.navigationManager.showTagCreationSheet(tag: nil)
                     case .main:
                         withAnimation {
                             self.homeVM.toggleCreateMenu()
@@ -100,30 +100,22 @@ struct HomeScreen: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
             .padding(.bottom)
-        if self.tags.isEmpty {
-            NoContentView(
-                iconName: "tag",
-                message: "No tags yet. Press + button to create your first folder."
-            )
-        } else {
-            HFlow(horizontalAlignment: .center, verticalAlignment: .top) {
-                ForEach(self.tags) { tag in
-                    TagView(
-                        tag: tag,
-                        isInPreviewMode: false,
-                        onPressed: {
-                            // TASK: NAVIGATE TO TAG DETAIL
-                        },
-                        onEditPressed: {
-                            // TASK: OPEN CREATE SHEET WITH EDIT MODE
-                        },
-                        onDeletePressed: {
-                            self.homeVM.onShowDeleteDailog(tag: tag)
-                        }
-                    )
-                }
-            }.frame(maxWidth: .infinity)
-        }
+        TagsFlowView(
+            tags: self.tags,
+            noContentMessage: "No tags yet. Press + button to create your first folder.",
+            allowTagAddition: false,
+            isInPreviewMode: false,
+            onPressTag: { tag in
+                // TASK: NAVIGATE TO TAG DETAIL
+            },
+            onEditTag: { tag in
+                self.navigationManager.showTagCreationSheet(tag: tag)
+            },
+            onDeleteTag: { tag in
+                self.homeVM.onShowDeleteDailog(tag: tag)
+            },
+            onClickTagCreation: nil
+        )
     }
     
     @ViewBuilder
@@ -133,32 +125,21 @@ struct HomeScreen: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
             .padding(.bottom)
-        if self.folders.isEmpty {
-            NoContentView(
-                iconName: "folder",
-                message: "No folders yet. Press + button to create your first folder."
-            )
-        } else {
-            LazyVGrid(columns: [
-                GridItem(),
-                GridItem()
-            ]) {
-                ForEach(self.folders) { folder in
-                    FolderView(
-                        folder: folder,
-                        isInPreviewMode: false,
-                        onClickFolder: {
-                            // TASK: NAVIGATE TO FOLDER DETAIL
-                        },
-                        onEditPressed: {
-                            // TASK: OPEN CREATE SHEET WITH EDIT MODE
-                        },
-                        onDeletePressed: {
-                            self.homeVM.onShowDeleteDailog(folder: folder)
-                        }
-                    )
-                }
-            }.padding(.horizontal)
-        }
+        FolderListView(
+            folders: self.folders,
+            noContentMessage: "No folders yet. Press + button to create your first folder.",
+            allowFolderAddition: false,
+            isInPreviewMode: false,
+            onClickFolder: { folder in
+                // TASK: NAVIGATE TO FOLDER DETAIL
+            },
+            onEditFolder: { folder in
+                self.navigationManager.showFolderCreationSheet(folder: folder)
+            },
+            onDeleteFolder: { folder in
+                self.homeVM.onShowDeleteDailog(folder: folder)
+            },
+            onClickCreateFolder: nil
+        )
     }
 }

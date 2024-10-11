@@ -10,70 +10,87 @@ import SwiftUI
 import SwiftData
 
 struct CreateBookmarkSheetContent: View {
-    @Environment(NavigationManager.self)
-    private var navigationManager
-
     @Environment(\.modelContext)
     private var modelContext
+    
+    @Query(sort: \Folder.createdAt, order: .forward)
+    private var folders: [Folder]
+    
+    @Query(sort: \Tag.createdAt, order: .forward)
+    private var tags: [Tag]
 
-    @Bindable
-    var createBookmarkVM: CreateBookmarkVM = .init()
+    @State
+    var createBookmarkVM: CreateBookmarkVM
+    
+    let onDismiss: () -> Void
+    
+    init(bookmark: Bookmark?, onDismiss: @escaping () -> Void) {
+        self.createBookmarkVM = .init(bookmark: bookmark)
+        self.onDismiss = onDismiss
+    }
 
     var body: some View {
         NavigationView {
-            CreationSheetContentView(onCreateButtonLabel: "Create Bookmark") {
-                // TASK: ADD FUNCTIONALITY
-                self.navigationManager.onDismissBookmarkCreationSheet()
+            CreationSheetContentView(buttonLabel: "Create Bookmark") {
+                // TASK: VALIDATE BEFORE SAVE
+                self.modelContext.insert(self.createBookmarkVM.bookmark)
+                self.onDismiss()
             } onDismissRequest: {
-                self.navigationManager.onDismissBookmarkCreationSheet()
+                self.onDismiss()
             } content: {
-                Form {
-                    self.previewSection
-                    self.linkSection
-                    self.nameSection
-                    self.descriptionSection
-                }
+                self.formContent
             }
             .navigationTitle("Create Bookmark")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        self.navigationManager.onDismissBookmarkCreationSheet()
-                    } label: {
-                        Text("Cancel")
-                    }
+                    self.cancelButton
                 }
+            }
+            .popover(isPresented: self.$createBookmarkVM.shouldShowFolderSelectionPopover) {
+                self.folderSelectionPopover
+            }
+            .sheet(isPresented: self.$createBookmarkVM.shouldShowCreateFolderSheet) {
+                self.folderCreationSheetContent
+            }
+            .popover(isPresented: self.$createBookmarkVM.shouldShowTagSelectionPopover) {
+                self.tagSelectionPopover
+            }
+            .sheet(isPresented: self.$createBookmarkVM.shouldShowCreateTagSheet) {
+                self.createTagSheetContent
             }
         }
         .presentationDragIndicator(.visible)
     }
     
     @ViewBuilder
-    private var previewSection: some View {
-        Section("Preview") {
-            BookmarkView(
-                bookmark: Bookmark(
-                    link: self.createBookmarkVM.linkText,
-                    label: self.createBookmarkVM.labelText,
-                    createdAt: .now,
-                    tags: [],
-                    bookmarkDescription: self.createBookmarkVM.description
-                ),
-                isInPreviewMode: true,
-                onPressed: {},
-                onEditPressed: {},
-                onDeletePressed: {}
-            )
-            .padding(.horizontal)
-            .frame(maxWidth: .infinity, minHeight: 90, alignment: .center)
-            .background {
-                Color.secondary.opacity(0.5).clipShape(
-                    RoundedRectangle(cornerRadius: 16)
-                )
+    private var cancelButton: some View {
+        Button {
+            self.onDismiss()
+        } label: {
+            Text("Cancel")
+        }
+    }
+    
+    @ViewBuilder
+    private var formContent: some View {
+        VStack {
+            Form {
+                self.previewSection
+                self.linkSection
+                self.nameSection
+                self.descriptionSection
+                self.folderSelection
+                self.tagSelection
             }
-            .frame(maxWidth: .infinity, alignment: .center)
-        }.listRowBackground(Color(.systemGroupedBackground))
+        }
+    }
+    
+    @ViewBuilder
+    private var previewSection: some View {
+        CreateBookmarkBookmarkPreviewView(
+            bookmark: self.createBookmarkVM.bookmark
+        )
     }
     
     @ViewBuilder
@@ -81,8 +98,8 @@ struct CreateBookmarkSheetContent: View {
         Section("Link") {
             TextField(
                 "Bookmark Link",
-                text: self.$createBookmarkVM.linkText
-            ).onChange(of: self.createBookmarkVM.linkText) { _, newValue in
+                text: self.$createBookmarkVM.bookmark.link
+            ).onChange(of: self.createBookmarkVM.bookmark.link) { _, newValue in
                 self.createBookmarkVM.onChangeLink(newValue)
             }
         }
@@ -93,8 +110,8 @@ struct CreateBookmarkSheetContent: View {
         Section {
             TextField(
                 "Bookmark Title",
-                text: self.$createBookmarkVM.labelText
-            ).onChange(of: self.createBookmarkVM.labelText) { _, newValue in
+                text: self.$createBookmarkVM.bookmark.label
+            ).onChange(of: self.createBookmarkVM.bookmark.label) { _, newValue in
                 self.createBookmarkVM.onChaneLabel(newValue)
             }
         } header: {
@@ -110,11 +127,11 @@ struct CreateBookmarkSheetContent: View {
         Section {
             TextField(
                 "Bookmark Description",
-                text: self.$createBookmarkVM.description,
+                text: self.$createBookmarkVM.bookmark.bookmarkDescription,
                 axis: .vertical
             )
             .lineLimit(2...5)
-            .onChange(of: self.createBookmarkVM.description) { _, newValue in
+            .onChange(of: self.createBookmarkVM.bookmark.bookmarkDescription) { _, newValue in
                 self.createBookmarkVM.onChaneDescription(newValue)
             }
         } header: {
@@ -124,8 +141,85 @@ struct CreateBookmarkSheetContent: View {
                 .foregroundStyle(self.createBookmarkVM.descriptionHasError ? .red : .secondary)
         }
     }
+    
+    @ViewBuilder
+    private var folderSelection: some View {
+        CreateBookmarkFolderSelectionView(
+            selectedFolder: self.createBookmarkVM.bookmark.folder,
+            onClickSelectFolder: {
+                self.createBookmarkVM.onShowFolderSelectionPopover()
+            }
+        )
+    }
+    
+    @ViewBuilder
+    private var tagSelection: some View {
+        CreateBookmarkTagSelectionView(
+            tags: self.createBookmarkVM.bookmark.tags,
+            onPressTag: {
+                self.createBookmarkVM.onShowTagSelectionPopover()
+            }
+        )
+    }
+    
+    @ViewBuilder
+    private var folderSelectionPopover: some View {
+        CreateBookmarkFolderSelectionPopover(
+            folders: self.folders,
+            onClickFolder: { folder in
+                self.createBookmarkVM.onSelectFolder(folder: folder)
+                self.createBookmarkVM.onCloseFolderSelectionPopover()
+            },
+            onClickCreateFolder: {
+                self.createBookmarkVM.onShowFolderCreationSheet(folder: nil)
+            },
+            onDismiss: {
+                self.createBookmarkVM.onCloseFolderSelectionPopover()
+            }
+        )
+    }
+
+    @ViewBuilder
+    private var folderCreationSheetContent: some View {
+        CreateFolderSheetContent(
+            folder: self.createBookmarkVM.creationFolder,
+            onDismiss: {
+                self.createBookmarkVM.onCloseFolderCreationSheet()
+            }
+        )
+    }
+
+    @ViewBuilder
+    private var tagSelectionPopover: some View {
+        CreateBookmarkTagSelectionPopoverContent(
+            selectedTags: self.createBookmarkVM.bookmark.tags,
+            tags: self.tags,
+            onPressTag: { tag in
+                self.createBookmarkVM.onSelectTag(tag: tag)
+            },
+            onPressTagCreation: {
+                self.createBookmarkVM.onShowTagCreationSheet(tag: nil)
+            },
+            onDismiss: {
+                self.createBookmarkVM.onCloseTagSelectionPopover()
+            }
+        )
+    }
+
+    @ViewBuilder
+    private var createTagSheetContent: some View {
+        CreateTagSheetContent(
+            tag: self.createBookmarkVM.creationTag,
+            onDismiss: {
+                self.createBookmarkVM.onCloseTagCreationSheet()
+            }
+        )
+    }
 }
 
 #Preview {
-    CreateBookmarkSheetContent()
+    CreateBookmarkSheetContent(
+        bookmark: .empty(),
+        onDismiss: {}
+    )
 }

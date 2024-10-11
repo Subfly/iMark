@@ -16,9 +16,7 @@ struct FolderView: View {
 
     var body: some View {
         Button {
-            if !self.isInPreviewMode {
-                self.onClickFolder()
-            }
+            self.onClickFolder()
         } label: {
             VStack(alignment: .leading) {
                 HStack {
@@ -33,7 +31,7 @@ struct FolderView: View {
             .padding()
             .background {
                 Color.accentColor.clipShape(
-                    RoundedRectangle(cornerSize: CGSize(width: 16, height: 16))
+                    RoundedRectangle(cornerRadius: 16)
                 )
             }
             .contextMenu {
@@ -80,13 +78,12 @@ struct FolderView: View {
                 .frame(width: 56, height: 56)
                 .blur(radius: 2)
                 .foregroundStyle(.white.opacity(0.3))
-            if (self.folder.icon == nil || self.folder.icon?.isEmpty == true) && self.folder.label.isEmpty {
+            if (self.folder.icon.isEmpty == true) && self.folder.label.isEmpty {
                 Image(systemName: "folder")
                     .foregroundStyle(.white)
             } else {
                 Text(
-                    self.folder.icon
-                    ?? self.folder.label.first?.uppercased()
+                    (self.folder.icon.isEmpty ? self.folder.label.first?.uppercased() : self.folder.icon)
                     ?? ""
                 ).font(.system(size: 32))
             }
@@ -123,9 +120,9 @@ struct FolderView: View {
     FolderView(
         folder: Folder(
             label: "Instagram",
+            icon: "📷",
             createdAt: .now,
-            bookmarks: [],
-            icon: "📷"
+            bookmarks: []
         ),
         isInPreviewMode: false,
         onClickFolder: {

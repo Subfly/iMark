@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CreationSheetContentView<Content: View>: View {
-    let onCreateButtonLabel: String
+    let buttonLabel: String
     let onCreateContent: () -> Void
     let onDismissRequest: () -> Void
     @ViewBuilder let content: () -> Content
@@ -23,7 +23,7 @@ struct CreationSheetContentView<Content: View>: View {
             Button {
                 self.onCreateContent()
             } label: {
-                Text(self.onCreateButtonLabel)
+                Text(self.buttonLabel)
                     .fontWeight(.medium)
                     .font(.system(size: 16))
                     .foregroundStyle(.white)
@@ -45,7 +45,7 @@ struct CreationSheetContentView<Content: View>: View {
 
 #Preview {
     CreationSheetContentView(
-        onCreateButtonLabel: "Label") {
+        buttonLabel: "Label") {
             // Do Nothing
         } onDismissRequest: {
             // Do Nothing

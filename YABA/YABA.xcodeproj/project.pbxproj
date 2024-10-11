@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		96C57E212CB6C414009A48D2 /* Flow in Frameworks */ = {isa = PBXBuildFile; productRef = 96C57E202CB6C414009A48D2 /* Flow */; };
+		96A0A3432CB883BD00B6E41F /* Flow in Frameworks */ = {isa = PBXBuildFile; productRef = 96A0A3422CB883BD00B6E41F /* Flow */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96C57E212CB6C414009A48D2 /* Flow in Frameworks */,
+				96A0A3432CB883BD00B6E41F /* Flow in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,7 +71,7 @@
 			);
 			name = YABA;
 			packageProductDependencies = (
-				96C57E202CB6C414009A48D2 /* Flow */,
+				96A0A3422CB883BD00B6E41F /* Flow */,
 			);
 			productName = YABA;
 			productReference = 96C57BFE2CB50FCC009A48D2 /* YABA.app */;
@@ -102,7 +102,7 @@
 			mainGroup = 96C57BF52CB50FCC009A48D2;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				96C57E1F2CB6C414009A48D2 /* XCRemoteSwiftPackageReference "SwiftUI-Flow" */,
+				96A0A3412CB883BD00B6E41F /* XCRemoteSwiftPackageReference "SwiftUI-Flow" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 96C57BFF2CB50FCC009A48D2 /* Products */;
@@ -358,7 +358,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		96C57E1F2CB6C414009A48D2 /* XCRemoteSwiftPackageReference "SwiftUI-Flow" */ = {
+		96A0A3412CB883BD00B6E41F /* XCRemoteSwiftPackageReference "SwiftUI-Flow" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/tevelee/SwiftUI-Flow";
 			requirement = {
@@ -369,9 +369,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		96C57E202CB6C414009A48D2 /* Flow */ = {
+		96A0A3422CB883BD00B6E41F /* Flow */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 96C57E1F2CB6C414009A48D2 /* XCRemoteSwiftPackageReference "SwiftUI-Flow" */;
+			package = 96A0A3412CB883BD00B6E41F /* XCRemoteSwiftPackageReference "SwiftUI-Flow" */;
 			productName = Flow;
 		};
 /* End XCSwiftPackageProductDependency section */

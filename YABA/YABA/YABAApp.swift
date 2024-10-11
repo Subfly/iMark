@@ -28,17 +28,32 @@ struct YABAApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationStack(path: $navigationManager.routes) {
+            NavigationStack(path: self.$navigationManager.routes) {
                 HomeScreen()
             }
-            .sheet(isPresented: $navigationManager.createBookmarkSheetActive) {
-                CreateBookmarkSheetContent()
+            .sheet(isPresented: self.$navigationManager.createBookmarkSheetActive) {
+                CreateBookmarkSheetContent(
+                    bookmark: self.navigationManager.selectedBookmark,
+                    onDismiss: {
+                        self.navigationManager.onDismissBookmarkCreationSheet()
+                    }
+                )
             }
-            .sheet(isPresented: $navigationManager.createFolderSheetActive) {
-                CreateFolderSheetContent()
+            .sheet(isPresented: self.$navigationManager.createFolderSheetActive) {
+                CreateFolderSheetContent(
+                    folder: self.navigationManager.selectedFolder,
+                    onDismiss: {
+                        self.navigationManager.onDismissFolderCreationSheet()
+                    }
+                )
             }
-            .sheet(isPresented: $navigationManager.createTagSheetActive) {
-                CreateTagSheetContent()
+            .sheet(isPresented: self.$navigationManager.createTagSheetActive) {
+                CreateTagSheetContent(
+                    tag: self.navigationManager.selectedTag,
+                    onDismiss: {
+                        self.navigationManager.onDismissTagCreationSheet()
+                    }
+                )
             }
         }
         .modelContainer(sharedModelContainer)

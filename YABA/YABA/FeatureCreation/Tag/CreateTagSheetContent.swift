@@ -9,23 +9,32 @@ import Foundation
 import SwiftUI
 
 struct CreateTagSheetContent: View {
-    @Environment(NavigationManager.self)
-    private var navigationManager
-
     @Environment(\.modelContext)
     private var modelContext
 
-    @Bindable
-    var createTagVM: CreateTagVM = .init()
+    @State
+    var createTagVM: CreateTagVM
+    
+    let onDismiss: () -> Void
+    
+    init(
+        tag: Tag?,
+        onDismiss: @escaping () -> Void
+    ) {
+        self.createTagVM = .init(tag: tag)
+        self.onDismiss = onDismiss
+    }
 
     var body: some View {
         NavigationView {
-            CreationSheetContentView(onCreateButtonLabel: "Create Tag") {
-                let createdTag = self.createTagVM.getTag()
-                self.modelContext.insert(createdTag)
-                self.navigationManager.onDismissTagCreationSheet()
+            CreationSheetContentView(
+                buttonLabel: self.createTagVM.isEditMode ? "Edit Tag" : "Create Tag"
+            ) {
+                // TASK: VALIDATE BEFORE SAVE
+                self.modelContext.insert(self.createTagVM.tag)
+                self.onDismiss()
             } onDismissRequest: {
-                self.navigationManager.onDismissTagCreationSheet()
+                self.onDismiss()
             } content: {
                 Form {
                     self.previewSection
@@ -33,12 +42,12 @@ struct CreateTagSheetContent: View {
                     self.iconSection
                 }
             }
-            .navigationTitle("Create Tag")
+            .navigationTitle(self.createTagVM.isEditMode ? "Edit Tag" : "Create Tag")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        self.navigationManager.onDismissTagCreationSheet()
+                        self.onDismiss()
                     } label: {
                         Text("Cancel")
                     }
@@ -53,11 +62,7 @@ struct CreateTagSheetContent: View {
     private var previewSection: some View {
         Section("Preview") {
             TagView(
-                tag: Tag(
-                    label: self.createTagVM.labelText,
-                    createdAt: .now,
-                    icon: self.createTagVM.selectedIcon
-                ),
+                tag: self.createTagVM.tag,
                 isInPreviewMode: true,
                 onPressed: {},
                 onEditPressed: {},
@@ -73,8 +78,8 @@ struct CreateTagSheetContent: View {
         Section {
             TextField(
                 "Tag Name",
-                text: self.$createTagVM.labelText
-            ).onChange(of: self.createTagVM.labelText) { _, newValue in
+                text: self.$createTagVM.tag.label
+            ).onChange(of: self.createTagVM.tag.label) { _, newValue in
                 self.createTagVM.onChaneLabel(newValue)
             }
         } header: {
@@ -89,9 +94,9 @@ struct CreateTagSheetContent: View {
     private var iconSection: some View {
         Section {
             EmojiTextField(
-                text: self.$createTagVM.selectedIcon,
+                text: self.$createTagVM.tag.icon,
                 placeholder: "Tag Icon"
-            ).onChange(of: self.createTagVM.selectedIcon) { _, newValue in
+            ).onChange(of: self.createTagVM.tag.icon) { _, newValue in
                 self.createTagVM.onChangeIcon(newValue)
             }
         } header: {
@@ -101,5 +106,8 @@ struct CreateTagSheetContent: View {
 }
 
 #Preview {
-    CreateTagSheetContent()
+    CreateTagSheetContent(
+        tag: .empty(),
+        onDismiss: {}
+    )
 }

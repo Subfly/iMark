@@ -22,12 +22,10 @@ struct BookmarkView: View {
                     Text(
                         self.bookmark.label.isEmpty ? "Bookmark Title" : self.bookmark.label
                     ).font(.headline)
-                    if let description = self.bookmark.bookmarkDescription {
-                        if !description.isEmpty {
-                            Text(description)
-                                .lineLimit(2)
-                                .font(.subheadline)
-                        }
+                    if !self.bookmark.bookmarkDescription.isEmpty {
+                        Text(self.bookmark.bookmarkDescription)
+                            .lineLimit(2)
+                            .font(.subheadline)
                     }
                 }
             }
@@ -59,9 +57,9 @@ struct BookmarkView: View {
 
     @ViewBuilder
     private var bookmarkIconBuilder: some View {
-        if self.bookmark.imageUrl != nil {
+        if !self.bookmark.imageUrl.isEmpty {
             AsyncImage(
-                url: URL(string: self.bookmark.imageUrl ?? "")
+                url: URL(string: self.bookmark.imageUrl)
             ) { phase in
                 switch phase {
                 case .empty:
@@ -79,7 +77,7 @@ struct BookmarkView: View {
             .frame(width: 80, height: 80)
             .clipShape(RoundedRectangle(cornerRadius: 16))
         } else if self.bookmark.folder != nil {
-            if self.bookmark.folder?.icon != nil || self.bookmark.folder?.icon?.isEmpty == false {
+            if self.bookmark.folder?.icon != nil || self.bookmark.folder?.icon.isEmpty == false {
                 Text(self.bookmark.folder?.icon ?? "")
             } else {
                 self.bookmarkIcon
@@ -103,10 +101,10 @@ struct BookmarkView: View {
         bookmark: Bookmark(
             link: "https://www.avanderlee.com",
             label: "Best SwiftUI Source",
-            createdAt: .now,
-            tags: [],
             bookmarkDescription: "A source site that contains awesome SwiftUI content",
             imageUrl: "https://www.avanderlee.com/wp-content/uploads/2020/04/avatar_126@3x-min.jpg",
+            createdAt: .now,
+            tags: [],
             folder: nil
         ),
         isInPreviewMode: false,
