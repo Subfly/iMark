@@ -11,6 +11,7 @@ struct BookmarkView: View {
     let bookmark: Bookmark
     let isInPreviewMode: Bool
     let onPressed: () -> Void
+    let onSharePressed: () -> Void
     let onEditPressed: () -> Void
     let onDeletePressed: () -> Void
 
@@ -45,6 +46,11 @@ struct BookmarkView: View {
             self.onEditPressed()
         } label: {
             Label("Edit", systemImage: "pencil")
+        }
+        Button {
+            self.onSharePressed()
+        } label: {
+            Label("Share", systemImage: "square.and.arrow.up")
         }
         Divider()
         Button(role: .destructive) {
@@ -109,6 +115,7 @@ struct BookmarkView: View {
         ),
         isInPreviewMode: false,
         onPressed: {},
+        onSharePressed: {},
         onEditPressed: {},
         onDeletePressed: {}
     )

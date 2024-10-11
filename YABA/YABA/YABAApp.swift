@@ -30,6 +30,7 @@ struct YABAApp: App {
         WindowGroup {
             NavigationStack(path: self.$navigationManager.routes) {
                 HomeScreen()
+                    .navigationDestination(for: Destination.self, destination: { $0.getView() })
             }
             .sheet(isPresented: self.$navigationManager.createBookmarkSheetActive) {
                 CreateBookmarkSheetContent(

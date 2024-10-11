@@ -28,11 +28,11 @@ struct HomeScreen: View {
     var body: some View {
         ZStack {
             ScrollView {
-                tagsView
+                self.tagsView
                 Spacer().frame(height: 32)
-                foldersView
+                self.foldersView
             }
-            fabArea
+            self.fabArea
         }
         .navigationTitle("Home")
         .searchable(
@@ -40,7 +40,7 @@ struct HomeScreen: View {
             prompt: "Search in Bookmarks..."
         )
         .alert(self.homeVM.deletingContentLabel, isPresented: self.$homeVM.shouldShowDeleteDialog) {
-            alertButtons
+            self.alertButtons
         }
     }
     
@@ -89,7 +89,7 @@ struct HomeScreen: View {
                         self.homeVM.toggleCreateMenu()
                     }
                 }
-            ).padding(.bottom)
+            )
         }
     }
     
@@ -134,8 +134,8 @@ It seems like you have not created any folder yet! Tap the button below to creat
 """,
             allowFolderAddition: false,
             isInPreviewMode: false,
-            onClickFolder: { _ in
-                // TASK: NAVIGATE TO FOLDER DETAIL
+            onClickFolder: { folder in
+                self.navigationManager.navigate(to: .folder(folder: folder))
             },
             onEditFolder: { folder in
                 self.navigationManager.showFolderCreationSheet(folder: folder)
