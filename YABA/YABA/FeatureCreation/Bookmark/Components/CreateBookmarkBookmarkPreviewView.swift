@@ -23,7 +23,7 @@ struct CreateBookmarkBookmarkPreviewView: View {
             .padding(.horizontal)
             .frame(maxWidth: .infinity, minHeight: 90, alignment: .center)
             .background {
-                Color.secondary.opacity(0.5).clipShape(
+                Color(.secondarySystemGroupedBackground).clipShape(
                     RoundedRectangle(cornerRadius: 16)
                 )
             }
