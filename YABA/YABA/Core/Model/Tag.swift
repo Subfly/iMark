@@ -11,12 +11,16 @@ import SwiftData
 @Model
 final class Tag {
     var label: String
+    var icon: String
     var createdAt: Date
-    var icon: String?
 
-    init(label: String, createdAt: Date, icon: String? = nil) {
+    init(label: String, icon: String, createdAt: Date) {
         self.label = label
-        self.createdAt = createdAt
         self.icon = icon
+        self.createdAt = createdAt
+    }
+    
+    static func empty() -> Tag {
+        Tag(label: "", icon: "", createdAt: .now)
     }
 }

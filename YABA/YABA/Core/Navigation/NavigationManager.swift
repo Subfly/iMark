@@ -14,6 +14,10 @@ class NavigationManager {
     var createBookmarkSheetActive: Bool = false
     var createFolderSheetActive: Bool = false
     var createTagSheetActive: Bool = false
+    
+    var selectedFolder: Folder?
+    var selectedTag: Tag?
+    var selectedBookmark: Bookmark?
 
     func navigate(to destination: Destination) {
         self.routes.append(destination)
@@ -29,26 +33,30 @@ class NavigationManager {
     }
 
     func showBookmarkCreationSheet() {
-        createBookmarkSheetActive = true
+        self.createBookmarkSheetActive = true
     }
 
     func onDismissBookmarkCreationSheet() {
-        createBookmarkSheetActive = false
+        self.createBookmarkSheetActive = false
     }
 
-    func showFolderCreationSheet() {
-        createFolderSheetActive = true
+    func showFolderCreationSheet(folder: Folder?) {
+        self.selectedFolder = folder
+        self.createFolderSheetActive = true
     }
 
     func onDismissFolderCreationSheet() {
-        createFolderSheetActive = false
+        self.selectedFolder = nil
+        self.createFolderSheetActive = false
     }
 
-    func showTagCreationSheet() {
-        createTagSheetActive = true
+    func showTagCreationSheet(tag: Tag?) {
+        self.selectedTag = tag
+        self.createTagSheetActive = true
     }
 
     func onDismissTagCreationSheet() {
-        createTagSheetActive = false
+        self.selectedTag = nil
+        self.createTagSheetActive = false
     }
 }

@@ -20,18 +20,18 @@ struct CreateContentFAB: View {
                     .foregroundStyle(.secondary.opacity(0.5))
                     .blur(radius: 24)
                     .onTapGesture {
-                        onDismissRequest()
+                        self.onDismissRequest()
                     }
             }
         }.overlay(alignment: .bottom) {
             VStack(spacing: 15) {
-                clickableMiniFab(type: .bookmark)
-                clickableMiniFab(type: .folder)
-                clickableMiniFab(type: .tag)
+                self.clickableMiniFab(type: .bookmark)
+                self.clickableMiniFab(type: .folder)
+                self.clickableMiniFab(type: .tag)
                 Button {
-                    onClickAction(.main)
+                    self.onClickAction(.main)
                 } label: {
-                    fab(isMini: false, type: .main)
+                    self.fab(isMini: false, type: .main)
                 }
             }
         }
@@ -66,13 +66,13 @@ struct CreateContentFAB: View {
         }
 
         Button {
-            onClickAction(type)
+            self.onClickAction(type)
         } label: {
-            fab(isMini: true, type: type)
+            self.fab(isMini: true, type: type)
         }
-        .scaleEffect(isActive ? 1 : 0)
-        .opacity(isActive ? 1 : 0)
-        .animation(.easeInOut.delay(duration), value: isActive)
+        .scaleEffect(self.isActive ? 1 : 0)
+        .opacity(self.isActive ? 1 : 0)
+        .animation(.easeInOut.delay(duration), value: self.isActive)
         .transition(.slide)
     }
 }

@@ -12,27 +12,39 @@ import SwiftData
 final class Bookmark {
     var link: String
     var label: String
+    var bookmarkDescription: String
+    var imageUrl: String
     var createdAt: Date
     var tags: [Tag]
-    var bookmarkDescription: String?
-    var imageUrl: String?
     var folder: Folder?
 
     init(
         link: String,
         label: String,
+        bookmarkDescription: String,
+        imageUrl: String,
         createdAt: Date,
         tags: [Tag],
-        bookmarkDescription: String? = nil,
-        imageUrl: String? = nil,
-        folder: Folder? = nil
+        folder: Folder?
     ) {
         self.link = link
         self.label = label
-        self.createdAt = createdAt
-        self.tags = tags
         self.bookmarkDescription = bookmarkDescription
         self.imageUrl = imageUrl
+        self.createdAt = createdAt
+        self.tags = tags
         self.folder = folder
+    }
+    
+    static func empty() -> Bookmark {
+        Bookmark(
+            link: "",
+            label: "",
+            bookmarkDescription: "",
+            imageUrl: "",
+            createdAt: .now,
+            tags: [],
+            folder: nil
+        )
     }
 }

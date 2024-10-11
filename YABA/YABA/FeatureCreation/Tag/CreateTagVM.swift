@@ -10,38 +10,32 @@ import SwiftUI
 
 @Observable
 class CreateTagVM {
+    let isEditMode: Bool
     let labelLimit = 15
     let iconLimit = 1
 
-    var labelText: String = ""
     var labelCounterText: String
     var labelHasError: Bool = false
+    
+    var tag: Tag
 
-    var selectedIcon: String = ""
-
-    init() {
+    init(tag: Tag?) {
         self.labelCounterText = "0\\\(labelLimit)"
+        self.tag = tag ?? .empty()
+        self.isEditMode = tag != nil
     }
 
     func onChaneLabel(_ text: String) {
-        if self.labelText.count > self.labelLimit {
-            self.labelText = String(text.prefix(self.labelLimit))
+        if self.tag.label.count > self.labelLimit {
+            self.tag.label = String(text.prefix(self.labelLimit))
         }
-        self.labelCounterText = "\(self.labelText.count)\\\(self.labelLimit)"
-        self.labelHasError = self.labelText.count == self.labelLimit
+        self.labelCounterText = "\(self.tag.label.count)\\\(self.labelLimit)"
+        self.labelHasError = self.tag.label.count == self.labelLimit
     }
 
     func onChangeIcon(_ icon: String) {
-        if self.selectedIcon.count > self.iconLimit {
-            self.selectedIcon = String(icon.suffix(iconLimit))
+        if self.tag.icon.count > self.iconLimit {
+            self.tag.icon = String(icon.suffix(iconLimit))
         }
-    }
-
-    func getTag() -> Tag {
-        Tag(
-            label: self.labelText,
-            createdAt: .now,
-            icon: self.selectedIcon
-        )
     }
 }

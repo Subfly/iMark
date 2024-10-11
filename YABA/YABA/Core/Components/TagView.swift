@@ -16,16 +16,14 @@ struct TagView: View {
 
     var body: some View {
         Button {
-            if !self.isInPreviewMode {
-                onPressed()
-            }
+            self.onPressed()
         } label: {
             HStack {
-                if self.tag.icon == nil || self.tag.icon?.isEmpty == true {
+                if self.tag.icon.isEmpty {
                     Image(systemName: "tag")
                         .foregroundStyle(.white)
                 } else {
-                    Text(self.tag.icon ?? "")
+                    Text(self.tag.icon)
                 }
                 Text(
                     self.tag.label.isEmpty
@@ -71,8 +69,8 @@ struct TagView: View {
     TagView(
         tag: Tag(
             label: "Cats",
-            createdAt: .now,
-            icon: "🐈"
+            icon: "🐈",
+            createdAt: .now
         ),
         isInPreviewMode: false,
         onPressed: {
