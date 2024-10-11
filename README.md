@@ -47,11 +47,11 @@ Every platform has its own bookmarking system but has limited capabilities. For 
 
 ## Analysis
 
-![Analysis Design](./assets/analysis_diagram.svg) 
+![Analysis Design](./assets/analysis_diagram.png) 
 
 ## System Design
 
-![System Design](./assets/system_design.svg) 
+![System Design](./assets/system_design.png) 
 
 ## Product Backlog
 
