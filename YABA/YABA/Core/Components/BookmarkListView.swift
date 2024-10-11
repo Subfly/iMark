@@ -23,7 +23,7 @@ struct BookmarkListView: View {
                 description: Text(
                     self.searchQuery.isEmpty
                     ? """
-It seems that you have not added any bookmarks to this folder yet. You can create on by using the '+' icon above.
+It seems that you have not added any bookmarks to here yet. You can create on by using the '+' icon above.
 """ : "No bookmarks matching '\(self.searchQuery)' found."
                 )
             )
@@ -33,7 +33,7 @@ It seems that you have not added any bookmarks to this folder yet. You can creat
                     bookmark: bookmark,
                     isInPreviewMode: false,
                     onPressed: {
-                        // TASK: NAVIGATE TO BOOKMARK DETAIL
+                        self.onPressBookmark(bookmark)
                     },
                     onSharePressed: {
                         self.onShareBookmark(bookmark)

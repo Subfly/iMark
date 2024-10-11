@@ -10,7 +10,7 @@ import SwiftData
 
 struct TagDetailScreen: View {
     @AppStorage("tagSorting")
-    private var folderDefaultSorting: Sorting = .date
+    private var tagDefaultSorting: Sorting = .date
     
     @Environment(\.modelContext)
     private var modelContext
@@ -71,7 +71,7 @@ struct TagDetailScreen: View {
     private var bookmarkList: some View {
         let filteredBookmarks = self.tagDetailVM.onFilterBookmarks(
             bookmarks: self.bookmarks,
-            sorting: self.folderDefaultSorting,
+            sorting: self.tagDefaultSorting,
             searchQuery: self.searchQuery
         )
         BookmarkListView(
@@ -138,12 +138,12 @@ struct TagDetailScreen: View {
         Menu {
             ForEach(Sorting.allCases, id: \.rawValue) { sorting in
                 Button {
-                    self.folderDefaultSorting = sorting
+                    self.tagDefaultSorting = sorting
                 } label: {
                     HStack {
                         Text(sorting.getNaming())
                         Spacer()
-                        if sorting == self.folderDefaultSorting {
+                        if sorting == self.tagDefaultSorting {
                             Image(systemName: "checkmark")
                         }
                     }
