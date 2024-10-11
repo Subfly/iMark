@@ -37,6 +37,7 @@ struct HomeScreen: View {
         .navigationTitle("Home")
         .searchable(
             text: self.$homeVM.searchQuery,
+            placement: .navigationBarDrawer(displayMode: .always),
             prompt: "Search in Bookmarks..."
         )
         .alert(self.homeVM.deletingContentLabel, isPresented: self.$homeVM.shouldShowDeleteDialog) {
@@ -96,7 +97,8 @@ struct HomeScreen: View {
     @ViewBuilder
     private var tagsView: some View {
         Text("Tags")
-            .font(.title)
+            .font(.title2)
+            .fontWeight(.medium)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
             .padding(.bottom)
@@ -107,8 +109,8 @@ It seems like you have not created any tags yet! Tap the button below to create 
 """,
             allowTagAddition: false,
             isInPreviewMode: false,
-            onPressTag: { _ in
-                // TASK: NAVIGATE TO TAG DETAIL
+            onPressTag: { tag in
+                self.navigationManager.navigate(to: .tag(tag: tag))
             },
             onEditTag: { tag in
                 self.navigationManager.showTagCreationSheet(tag: tag)
@@ -123,7 +125,8 @@ It seems like you have not created any tags yet! Tap the button below to create 
     @ViewBuilder
     private var foldersView: some View {
         Text("Folders")
-            .font(.title)
+            .font(.title2)
+            .fontWeight(.medium)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
             .padding(.bottom)

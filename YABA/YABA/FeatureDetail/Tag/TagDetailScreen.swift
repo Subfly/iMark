@@ -1,15 +1,15 @@
 //
-//  FolderDetailScreen.swift
+//  TagDetailScreen.swift
 //  YABA
 //
-//  Created by Ali Taha on 8.10.2024.
+//  Created by Ali Taha on 11.10.2024.
 //
 
 import SwiftUI
 import SwiftData
 
-struct FolderDetailScreen: View {
-    @AppStorage("folderSorting")
+struct TagDetailScreen: View {
+    @AppStorage("tagSorting")
     private var folderDefaultSorting: Sorting = .date
     
     @Environment(\.modelContext)
@@ -22,20 +22,20 @@ struct FolderDetailScreen: View {
     private var bookmarks: [Bookmark]
     
     @State
-    private var folderDetailVM: FolderDetailVM
+    private var tagDetailVM: TagDetailVM
     
     @State
     private var searchQuery: String = ""
     
-    init(folder: Folder) {
-        self.folderDetailVM = .init(folder: folder)
+    init(tag: Tag) {
+        self.tagDetailVM = .init(tag: tag)
     }
     
     var body: some View {
         List {
             self.bookmarkList
         }
-        .navigationTitle(self.folderDetailVM.folder.label)
+        .navigationTitle(self.tagDetailVM.tag.label)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -48,28 +48,28 @@ struct FolderDetailScreen: View {
                 self.contextMenu
             }
         }
-        .sheet(isPresented: self.$folderDetailVM.showBookmarkCreationSheet) {
+        .sheet(isPresented: self.$tagDetailVM.showBookmarkCreationSheet) {
             self.bookmarkCreationContent
         }
-        .sheet(isPresented: self.$folderDetailVM.showShareSheet) {
+        .sheet(isPresented: self.$tagDetailVM.showShareSheet) {
             self.shareSheetContent
         }
         .alert(
-            self.folderDetailVM.deletingContentLabel,
-            isPresented: self.$folderDetailVM.showBookmarkDeleteDialog
+            self.tagDetailVM.deletingContentLabel,
+            isPresented: self.$tagDetailVM.showBookmarkDeleteDialog
         ) {
             self.alertButtons
         }
         .searchable(
             text: self.$searchQuery,
             placement: .navigationBarDrawer(displayMode: .always),
-            prompt: "Search for bookmarks in \(self.folderDetailVM.folder.label)"
+            prompt: "Search for bookmarks in \(self.tagDetailVM.tag.label)"
         )
     }
     
     @ViewBuilder
     private var bookmarkList: some View {
-        let filteredBookmarks = self.folderDetailVM.onFilterBookmarks(
+        let filteredBookmarks = self.tagDetailVM.onFilterBookmarks(
             bookmarks: self.bookmarks,
             sorting: self.folderDefaultSorting,
             searchQuery: self.searchQuery
@@ -81,13 +81,13 @@ struct FolderDetailScreen: View {
                 // TASK: NAVIGATE TO BOOKMARK DETAIL
             },
             onShareBookmark: { bookmark in
-                self.folderDetailVM.onShowShareSheet(bookmark: bookmark)
+                self.tagDetailVM.onShowShareSheet(bookmark: bookmark)
             },
             onEditBookmark: { bookmark in
-                self.folderDetailVM.onShowBookmarkCreationSheet(bookmark: bookmark)
+                self.tagDetailVM.onShowBookmarkCreationSheet(bookmark: bookmark)
             },
             onDeleteBookmark: { bookmark in
-                self.folderDetailVM.onShowBookmarkDeleteDialog(bookmark: bookmark)
+                self.tagDetailVM.onShowBookmarkDeleteDialog(bookmark: bookmark)
             }
         )
     }
@@ -95,22 +95,22 @@ struct FolderDetailScreen: View {
     @ViewBuilder
     private var bookmarkCreationContent: some View {
         CreateBookmarkSheetContent(
-            bookmark: self.folderDetailVM.selectedBookmark,
+            bookmark: self.tagDetailVM.selectedBookmark,
             onDismiss: {
-                self.folderDetailVM.onCloseBookmarkCreationSheet()
+                self.tagDetailVM.onCloseBookmarkCreationSheet()
             }
         )
     }
     
     @ViewBuilder
     private var shareSheetContent: some View {
-        if let bookmark = self.folderDetailVM.selectedBookmark {
+        if let bookmark = self.tagDetailVM.selectedBookmark {
             if let link = URL(string: bookmark.link) {
                 ShareSheet(bookmarkLink: link)
                     .presentationDetents([.medium])
                     .presentationDragIndicator(.visible)
                     .onDisappear {
-                        self.folderDetailVM.onCloseShareSheet()
+                        self.tagDetailVM.onCloseShareSheet()
                     }
             }
         }
@@ -119,15 +119,15 @@ struct FolderDetailScreen: View {
     @ViewBuilder
     private var alertButtons: some View {
         Button(role: .destructive) {
-            if let bookmark = self.folderDetailVM.deletingBookmark {
+            if let bookmark = self.tagDetailVM.deletingBookmark {
                 self.modelContext.delete(bookmark)
             }
-            self.folderDetailVM.onCloseBookmarkDeleteDialog()
+            self.tagDetailVM.onCloseBookmarkDeleteDialog()
         } label: {
             Text("Delete")
         }
         Button(role: .cancel) {
-            self.folderDetailVM.onCloseBookmarkDeleteDialog()
+            self.tagDetailVM.onCloseBookmarkDeleteDialog()
         } label: {
             Text("Cancel")
         }
@@ -152,10 +152,14 @@ struct FolderDetailScreen: View {
             }
         } label: {
             Button {
-                self.folderDetailVM.showSortingMenu.toggle()
+                self.tagDetailVM.showSortingMenu.toggle()
             } label: {
                 Image(systemName: "line.3.horizontal.decrease.circle")
             }
         }
     }
+}
+
+#Preview {
+    TagDetailScreen(tag: .empty())
 }

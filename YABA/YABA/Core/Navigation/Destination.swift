@@ -18,6 +18,8 @@ enum Destination: Hashable {
         switch self {
         case .home:
             HomeScreen()
+        case .tag(tag: let tag):
+            TagDetailScreen(tag: tag)
         case .folder(folder: let folder):
             FolderDetailScreen(folder: folder)
         default:
