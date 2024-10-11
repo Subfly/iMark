@@ -18,7 +18,9 @@ struct CreateBookmarkFolderSelectionPopover: View {
             ScrollView {
                 FolderListView(
                     folders: self.folders,
-                    noContentMessage: "No folders found.",
+                    noContentMessage: """
+It seems like you have not created any folder yet! Tap the button below to create your first folder.
+""",
                     allowFolderAddition: true,
                     isInPreviewMode: true,
                     onClickFolder: { folder in

@@ -102,7 +102,9 @@ struct HomeScreen: View {
             .padding(.bottom)
         TagsFlowView(
             tags: self.tags,
-            noContentMessage: "No tags yet. Press + button to create your first folder.",
+            noContentMessage: """
+It seems like you have not created any tags yet! Tap the button below to create your first tag.
+""",
             allowTagAddition: false,
             isInPreviewMode: false,
             onPressTag: { _ in
@@ -127,7 +129,9 @@ struct HomeScreen: View {
             .padding(.bottom)
         FolderListView(
             folders: self.folders,
-            noContentMessage: "No folders yet. Press + button to create your first folder.",
+            noContentMessage: """
+It seems like you have not created any folder yet! Tap the button below to create your first folder.
+""",
             allowFolderAddition: false,
             isInPreviewMode: false,
             onClickFolder: { _ in

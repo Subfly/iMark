@@ -58,7 +58,11 @@ struct CreateBookmarkTagSelectionPopoverContent: View {
                 .padding(.bottom)
              TagsFlowView(
                  tags: tags,
-                 noContentMessage: isSelectables ? "No tags found" : "No tags selected, tap one of them below",
+                 noContentMessage: isSelectables
+                 ? """
+It seems like you have not created any tag yet! Tap the button below to create your first tag.
+"""
+                 : "No tags selected, tap one of them below to select",
                  allowTagAddition: isSelectables,
                  isInPreviewMode: true,
                  onPressTag: { tag in

@@ -29,19 +29,21 @@ struct TagsFlowView: View {
     @ViewBuilder
     private var noContentArea: some View {
         VStack {
-            NoContentView(
-                iconName: "tag",
-                message: self.noContentMessage
-            ).padding(.bottom, 16)
-            if allowTagAddition {
-                DottedTagView(
-                    label: "Create Tag",
-                    onClicked: {
-                        if let onClickCreateTag = self.onClickTagCreation {
-                            onClickCreateTag()
+            ContentUnavailableView {
+                Label("No Tags Found", systemImage: "tag")
+            } description: {
+                Text(self.noContentMessage)
+            } actions: {
+                if allowTagAddition {
+                    DottedTagView(
+                        label: "Create Tag",
+                        onClicked: {
+                            if let onClickCreateTag = self.onClickTagCreation {
+                                onClickCreateTag()
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
     }

@@ -30,19 +30,21 @@ struct FolderListView: View {
     @ViewBuilder
     private var noContentArea: some View {
         VStack {
-            NoContentView(
-                iconName: "folder",
-                message: self.noContentMessage
-            )
-            if allowFolderAddition {
-                DottedFolderView(
-                    label: "Create Folder",
-                    onClicked: {
-                        if let onClickCreateFolder = self.onClickCreateFolder {
-                            onClickCreateFolder()
+            ContentUnavailableView {
+                Label("No Folders Found", systemImage: "folder")
+            } description: {
+                Text(self.noContentMessage)
+            } actions: {
+                if allowFolderAddition {
+                    DottedFolderView(
+                        label: "Create Folder",
+                        onClicked: {
+                            if let onClickCreateFolder = self.onClickCreateFolder {
+                                onClickCreateFolder()
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
     }
