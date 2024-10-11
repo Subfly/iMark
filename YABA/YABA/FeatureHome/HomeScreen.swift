@@ -105,7 +105,7 @@ struct HomeScreen: View {
             noContentMessage: "No tags yet. Press + button to create your first folder.",
             allowTagAddition: false,
             isInPreviewMode: false,
-            onPressTag: { tag in
+            onPressTag: { _ in
                 // TASK: NAVIGATE TO TAG DETAIL
             },
             onEditTag: { tag in
@@ -130,7 +130,7 @@ struct HomeScreen: View {
             noContentMessage: "No folders yet. Press + button to create your first folder.",
             allowFolderAddition: false,
             isInPreviewMode: false,
-            onClickFolder: { folder in
+            onClickFolder: { _ in
                 // TASK: NAVIGATE TO FOLDER DETAIL
             },
             onEditFolder: { folder in
