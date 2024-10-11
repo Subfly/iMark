@@ -31,7 +31,7 @@ struct HomeScreen: View {
                 self.tagsView
                 Spacer().frame(height: 32)
                 self.foldersView
-            }
+            }.padding(.bottom, 100)
             self.fabArea
         }
         .navigationTitle("Home")
