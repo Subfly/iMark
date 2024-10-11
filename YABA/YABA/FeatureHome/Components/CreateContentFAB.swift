@@ -14,15 +14,14 @@ struct CreateContentFAB: View {
 
     var body: some View {
         ZStack {
-            if isActive {
-                Rectangle()
-                    .fill()
-                    .foregroundStyle(.secondary.opacity(0.5))
-                    .blur(radius: 24)
-                    .onTapGesture {
-                        self.onDismissRequest()
-                    }
-            }
+            Rectangle()
+                .fill()
+                .foregroundStyle(Material.ultraThin)
+                .blur(radius: 8)
+                .opacity(self.isActive ? 0.6 : 0)
+                .onTapGesture {
+                    self.onDismissRequest()
+                }
         }.overlay(alignment: .bottom) {
             VStack(spacing: 15) {
                 self.clickableMiniFab(type: .bookmark)
@@ -33,7 +32,7 @@ struct CreateContentFAB: View {
                 } label: {
                     self.fab(isMini: false, type: .main)
                 }
-            }
+            }.padding(.bottom)
         }
     }
 
@@ -49,7 +48,9 @@ struct CreateContentFAB: View {
                 .foregroundStyle(.white)
                 .fontWeight(.bold)
                 .font(.system(size: isMini ? 18 : 24))
-        }.rotationEffect(Angle(degrees: isMini ? 0 : self.isActive ? 45 : 0))
+        }
+        .shadow(radius: 4)
+        .rotationEffect(Angle(degrees: isMini ? 0 : self.isActive ? 45 : 0))
     }
 
     @ViewBuilder
@@ -69,6 +70,7 @@ struct CreateContentFAB: View {
             self.onClickAction(type)
         } label: {
             self.fab(isMini: true, type: type)
+                .shadow(radius: 2)
         }
         .scaleEffect(self.isActive ? 1 : 0)
         .opacity(self.isActive ? 1 : 0)

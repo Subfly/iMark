@@ -16,6 +16,7 @@ struct CreateBookmarkBookmarkPreviewView: View {
                 bookmark: self.bookmark,
                 isInPreviewMode: true,
                 onPressed: {},
+                onSharePressed: {},
                 onEditPressed: {},
                 onDeletePressed: {}
             )
