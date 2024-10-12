@@ -22,8 +22,8 @@ enum Destination: Hashable {
             TagDetailScreen(tag: tag)
         case .folder(folder: let folder):
             FolderDetailScreen(folder: folder)
-        default:
-            EmptyView()
+        case .bookmark(bookmark: let bookmark):
+            BookmarkDetailScreen(bookmark: bookmark)
         }
     }
 }

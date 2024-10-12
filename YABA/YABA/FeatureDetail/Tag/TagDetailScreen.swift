@@ -77,8 +77,8 @@ struct TagDetailScreen: View {
         BookmarkListView(
             bookmarks: filteredBookmarks,
             searchQuery: self.searchQuery,
-            onPressBookmark: { _ in
-                // TASK: NAVIGATE TO BOOKMARK DETAIL
+            onPressBookmark: { bookmark in
+                self.navigationManager.navigate(to: .bookmark(bookmark: bookmark))
             },
             onShareBookmark: { bookmark in
                 self.tagDetailVM.onShowShareSheet(bookmark: bookmark)
