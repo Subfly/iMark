@@ -1,5 +1,5 @@
 //
-//  FolderDetailVM.swift
+//  TagDetailVM.swift
 //  YABA
 //
 //  Created by Ali Taha on 11.10.2024.
@@ -8,8 +8,8 @@
 import SwiftUI
 
 @Observable
-class FolderDetailVM {
-    var folder: Folder
+class TagDetailVM {
+    var tag: Tag
     var selectedBookmark: Bookmark?
     var deletingBookmark: Bookmark?
     
@@ -20,8 +20,8 @@ class FolderDetailVM {
     var showShareSheet: Bool = false
     var showSortingMenu: Bool = false
     
-    init(folder: Folder) {
-        self.folder = folder
+    init(tag: Tag) {
+        self.tag = tag
     }
     
     func onFilterBookmarks(
@@ -32,7 +32,10 @@ class FolderDetailVM {
         let isQueryEmpty = searchQuery.isEmpty
         
         let filteredBookmarks = bookmarks.filter { bookmark in
-            let bookmarkContained = bookmark.folder?.id == self.folder.id
+            // MARK: O(N*M) HERE. MAYBE REQUIRE A BETTER SOLUTION?
+            let bookmarkContained = bookmark.tags.contains(
+                where: { $0.id == self.tag.id }
+            )
             let labelContainsQuery = bookmark.label
                 .localizedCaseInsensitiveContains(searchQuery)
             let labelContainsDescription = bookmark.bookmarkDescription

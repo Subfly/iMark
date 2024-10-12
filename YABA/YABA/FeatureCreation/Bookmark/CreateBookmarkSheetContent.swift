@@ -31,7 +31,9 @@ struct CreateBookmarkSheetContent: View {
 
     var body: some View {
         NavigationView {
-            CreationSheetContentView(buttonLabel: "Create Bookmark") {
+            CreationSheetContentView(
+                buttonLabel: self.createBookmarkVM.isEditMode ? "Update Bookmark" : "Create Bookmark"
+            ) {
                 // TASK: VALIDATE BEFORE SAVE
                 self.modelContext.insert(self.createBookmarkVM.bookmark)
                 self.onDismiss()
@@ -40,7 +42,7 @@ struct CreateBookmarkSheetContent: View {
             } content: {
                 self.formContent
             }
-            .navigationTitle("Create Bookmark")
+            .navigationTitle(self.createBookmarkVM.isEditMode ? "Update Bookmark" : "Create Bookmark")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {

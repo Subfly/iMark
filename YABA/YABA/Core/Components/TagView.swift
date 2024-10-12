@@ -40,6 +40,7 @@ struct TagView: View {
                     RoundedRectangle(cornerSize: CGSize(width: 16, height: 16))
                 )
             }
+            .shadow(radius: 2)
             .contextMenu {
                 if !self.isInPreviewMode {
                     self.menuContext

@@ -13,7 +13,7 @@ struct CreateBookmarkTagSelectionView: View {
     
     var body: some View {
         Section("Tags") {
-            self.dynamicTagSelectionView.padding(.bottom, 100)
+            self.dynamicTagSelectionView
         }.listRowBackground(Color(.systemGroupedBackground))
     }
     

@@ -34,6 +34,7 @@ struct FolderView: View {
                     RoundedRectangle(cornerRadius: 16)
                 )
             }
+            .shadow(radius: 2)
             .contextMenu {
                 if !self.isInPreviewMode {
                     self.menuContext
