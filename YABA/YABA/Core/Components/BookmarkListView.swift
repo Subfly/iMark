@@ -42,7 +42,7 @@ It seems that you have not added any bookmarks to here yet. You can create on by
                         self.onEditBookmark(bookmark)
                     },
                     onDeletePressed: {
-                        self.onEditBookmark(bookmark)
+                        self.onDeleteBookmark(bookmark)
                     }
                 )
                 .swipeActions(edge: .leading, allowsFullSwipe: true) {
@@ -59,7 +59,7 @@ It seems that you have not added any bookmarks to here yet. You can create on by
                         Label("Edit", systemImage: "pencil")
                     }.tint(.orange)
                     Button(role: .destructive) {
-                        self.onEditBookmark(bookmark)
+                        self.onDeleteBookmark(bookmark)
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }.tint(.red)

@@ -16,28 +16,32 @@ struct BookmarkView: View {
     let onDeletePressed: () -> Void
 
     var body: some View {
-        HStack {
+        Button {
+            self.onPressed()
+        } label: {
             HStack {
-                self.bookmarkIconBuilder
-                VStack(alignment: .leading) {
-                    Text(
-                        self.bookmark.label.isEmpty ? "Bookmark Title" : self.bookmark.label
-                    ).font(.headline)
-                    if !self.bookmark.bookmarkDescription.isEmpty {
-                        Text(self.bookmark.bookmarkDescription)
-                            .lineLimit(2)
-                            .font(.subheadline)
+                HStack {
+                    self.bookmarkIconBuilder
+                    VStack(alignment: .leading) {
+                        Text(
+                            self.bookmark.label.isEmpty ? "Bookmark Title" : self.bookmark.label
+                        ).font(.headline)
+                        if !self.bookmark.bookmarkDescription.isEmpty {
+                            Text(self.bookmark.bookmarkDescription)
+                                .lineLimit(2)
+                                .font(.subheadline)
+                        }
                     }
                 }
+                Spacer()
+                Image(systemName: "chevron.right")
             }
-            Spacer()
-            Image(systemName: "chevron.right")
-        }
-        .contextMenu {
-            if !self.isInPreviewMode {
-                self.menuContext
+            .contextMenu {
+                if !self.isInPreviewMode {
+                    self.menuContext
+                }
             }
-        }
+        }.buttonStyle(.plain)
     }
 
     @ViewBuilder
