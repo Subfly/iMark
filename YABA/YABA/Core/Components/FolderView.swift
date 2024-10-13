@@ -30,9 +30,8 @@ struct FolderView: View {
             }
             .padding()
             .background {
-                Color.accentColor.clipShape(
-                    RoundedRectangle(cornerRadius: 16)
-                )
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(self.getGradient())
             }
             .shadow(radius: 2)
             .contextMenu {
@@ -118,6 +117,18 @@ struct FolderView: View {
         .foregroundStyle(.white)
         .lineLimit(1)
     }
+    
+    private func getGradient() -> LinearGradient {
+        LinearGradient(
+            colors: [
+                self.folder.primaryColor.getUIColor(),
+                self.folder.secondaryColor.getUIColor(),
+                self.folder.primaryColor.getUIColor(),
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
 }
 
 #Preview {
@@ -126,7 +137,9 @@ struct FolderView: View {
             label: "Instagram",
             icon: "📷",
             createdAt: .now,
-            bookmarks: []
+            bookmarks: [],
+            primaryColor: .green,
+            secondaryColor: .cyan
         ),
         isInPreviewMode: false,
         onClickFolder: {

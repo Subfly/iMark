@@ -21,7 +21,9 @@ struct BookmarkView: View {
                 self.bookmarkIconBuilder
                 VStack(alignment: .leading) {
                     Text(
-                        self.bookmark.label.isEmpty ? "Bookmark Title" : self.bookmark.label
+                        self.bookmark.label.isEmpty
+                        ? "Bookmark Title"
+                        : self.bookmark.label
                     )
                     .font(.headline)
                     .lineLimit(1)

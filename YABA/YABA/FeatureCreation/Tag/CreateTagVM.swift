@@ -16,7 +16,10 @@ class CreateTagVM {
 
     var labelCounterText: String
     var labelHasError: Bool = false
-    
+
+    var showPrimaryColorPicker: Bool = false
+    var showSecondaryColorPicker: Bool = false
+
     var tag: Tag
 
     init(tag: Tag?) {
@@ -37,5 +40,21 @@ class CreateTagVM {
         if self.tag.icon.count > self.iconLimit {
             self.tag.icon = String(icon.suffix(iconLimit))
         }
+    }
+    
+    func onShowPrimaryColorPicker() {
+        self.showPrimaryColorPicker = true
+    }
+
+    func onClosePrimaryColorPicker() {
+        self.showPrimaryColorPicker = false
+    }
+
+    func onShowSecondaryColorPicker() {
+        self.showSecondaryColorPicker = true
+    }
+
+    func onCloseSecondaryColorPicker() {
+        self.showSecondaryColorPicker = false
     }
 }

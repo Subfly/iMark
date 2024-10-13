@@ -17,7 +17,10 @@ struct TagDetailScreen: View {
     
     @Environment(NavigationManager.self)
     private var navigationManager
-    
+
+    @Environment(\.colorScheme)
+    private var colorScheme
+
     @Query
     private var bookmarks: [Bookmark]
     
@@ -26,6 +29,9 @@ struct TagDetailScreen: View {
     
     @State
     private var searchQuery: String = ""
+
+    @State
+    private var animateGradient: Bool = false
     
     init(tag: Tag) {
         self.tagDetailVM = .init(tag: tag)
@@ -34,6 +40,10 @@ struct TagDetailScreen: View {
     var body: some View {
         List {
             self.bookmarkList
+        }
+        .scrollContentBackground(.hidden)
+        .background {
+            self.background
         }
         .navigationTitle(self.tagDetailVM.tag.label)
         .toolbar {
@@ -65,6 +75,24 @@ struct TagDetailScreen: View {
             placement: .navigationBarDrawer(displayMode: .always),
             prompt: "Search for bookmarks in \(self.tagDetailVM.tag.label)"
         )
+    }
+    
+    @ViewBuilder
+    private var background: some View {
+        Rectangle()
+            .fill(
+                LinearGradient(
+                    colors: self.getBackgroundGradientColors(),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .ignoresSafeArea()
+            .onAppear {
+                withAnimation(.smooth(duration: 2.0).repeatForever(autoreverses: true)) {
+                    self.animateGradient.toggle()
+                }
+            }
     }
     
     @ViewBuilder
@@ -157,6 +185,23 @@ struct TagDetailScreen: View {
                 Image(systemName: "line.3.horizontal.decrease.circle")
             }
         }
+    }
+    
+    private func getBackgroundGradientColors() -> [Color] {
+        return [
+            Color(UIColor.systemBackground),
+            Color(UIColor.systemBackground),
+            self.animateGradient
+            ? self.tagDetailVM.tag.secondaryColor.getUIColor()
+                .opacity(self.colorScheme == .dark ? 0.2 : 0.2)
+            : self.tagDetailVM.tag.primaryColor.getUIColor()
+                .opacity(self.colorScheme == .dark ? 0.2 : 0.2),
+            self.animateGradient
+            ? self.tagDetailVM.tag.primaryColor.getUIColor()
+                .opacity(self.colorScheme == .dark ? 0.2 : 0.2)
+            : self.tagDetailVM.tag.secondaryColor.getUIColor()
+                .opacity(self.colorScheme == .dark ? 0.2 : 0.2),
+        ]
     }
 }
 

@@ -13,9 +13,15 @@ struct BookmarkDetailScreen: View {
     
     @Environment(NavigationManager.self)
     private var navigationManager
+
+    @Environment(\.colorScheme)
+    private var colorScheme
     
     @State
     private var bookmarkDetailVM: BookmarkDetailVM
+
+    @State
+    private var animateGradient: Bool = false
     
     init(bookmark: Bookmark) {
         self.bookmarkDetailVM = .init(bookmark: bookmark)
@@ -26,6 +32,10 @@ struct BookmarkDetailScreen: View {
             self.linkSection
             self.infoSection
             self.tagsSection
+        }
+        .scrollContentBackground(.hidden)
+        .background {
+            self.background
         }
         .navigationTitle("Bookmark Detail")
         .navigationBarTitleDisplayMode(.inline)
@@ -61,6 +71,24 @@ struct BookmarkDetailScreen: View {
     }
     
     @ViewBuilder
+    private var background: some View {
+        Rectangle()
+            .fill(
+                LinearGradient(
+                    colors: self.getBackgroundGradientColors(),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .ignoresSafeArea()
+            .onAppear {
+                withAnimation(.smooth(duration: 2.0).repeatForever(autoreverses: true)) {
+                    self.animateGradient.toggle()
+                }
+            }
+    }
+    
+    @ViewBuilder
     private var linkSection: some View {
         BookmarkDetailLinkSection(
             bookmark: self.bookmarkDetailVM.bookmark,
@@ -73,140 +101,40 @@ struct BookmarkDetailScreen: View {
     
     @ViewBuilder
     private var infoSection: some View {
-        Section {
-            self.folderInfoItem
-            self.generateInfoItem(
-                label: "Title",
-                content: self.bookmarkDetailVM.bookmark.label,
-                iconSystemName: "t.square"
-            )
-            self.generateInfoItem(
-                label: "Description",
-                content: self.bookmarkDetailVM.bookmark.bookmarkDescription,
-                iconSystemName: "text.document"
-            )
-            self.generateInfoItem(
-                label: "Creation Date",
-                content: self.bookmarkDetailVM.bookmark.createdAt.formatted(),
-                iconSystemName: "calendar.badge.clock"
-            )
-        } header: {
-            HStack {
-                Image(systemName: "info.circle")
-                Text("Info")
+        BookmarkDetailInfoSection(
+            bookmark: self.bookmarkDetailVM.bookmark,
+            onClickFolder: { folder in
+                self.navigationManager.navigate(to: .folder(folder: folder))
             }
-        }
-    }
-    
-    @ViewBuilder
-    private func generateInfoItem(
-        label: String,
-        content: String,
-        iconSystemName: String
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Image(systemName: iconSystemName)
-                Text(label).fontWeight(.semibold)
-            }
-            Text(content).font(.callout)
-        }
-    }
-    
-    @ViewBuilder
-    private var folderInfoItem: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image(systemName: "folder")
-                Text("Folder").fontWeight(.semibold)
-            }
-            if let folder = self.bookmarkDetailVM.bookmark.folder {
-                FolderView(
-                    folder: folder,
-                    isInPreviewMode: true,
-                    onClickFolder: {
-                        self.navigationManager.navigate(to: .folder(folder: folder))
-                    },
-                    onEditPressed: {
-                        /* Do Nothing */
-                    },
-                    onDeletePressed: {
-                        /* Do Nothing */
-                    }
-                )
-                .frame(width: 200, alignment: .center)
-                .frame(maxWidth: .infinity, alignment: .center)
-            }
-        }
+        )
     }
     
     @ViewBuilder
     private var tagsSection: some View {
-        Section {
-            TagsFlowView(
-                tags: self.bookmarkDetailVM.bookmark.tags,
-                noContentMessage:
-                    "No tags are added to this bookmark yet. You can add some by editing the bookmark.",
-                allowTagAddition: false,
-                isInPreviewMode: true,
-                onPressTag: { tag in
-                    self.navigationManager.navigate(to: .tag(tag: tag))
-                },
-                onEditTag: { _ in
-                    /* Do Nothing */
-                },
-                onDeleteTag: { _ in
-                    /* Do Nothing */
-                },
-                onClickTagCreation: {
-                    /* Do Nothing */
-                }
-            )
-        } header: {
-            HStack {
-                Image(systemName: "tag")
-                Text("Tags")
+        BookmarkDetailTagsSection(
+            tags: self.bookmarkDetailVM.bookmark.tags,
+            onClickTag: { tag in
+                self.navigationManager.navigate(to: .tag(tag: tag))
             }
-        }
+        )
     }
     
     @ViewBuilder
     private var contextMenu: some View {
-        Menu {
-            Button {
+        BookmarkDetailContextMenu(
+            onShowShareSheet: {
                 self.bookmarkDetailVM.onShowShareSheet()
-            } label: {
-                Label {
-                    Text("Share")
-                } icon: {
-                    Image(systemName: "square.and.arrow.up")
-                }
-            }
-            Button {
+            },
+            onRefreshBookmark: {
                 Task {
                     await self.bookmarkDetailVM.onRefreshBookmark()
                     self.modelContext.insert(self.bookmarkDetailVM.bookmark)
                 }
-            } label: {
-                Label {
-                    Text("Refresh Preview")
-                } icon: {
-                    Image(systemName: "arrow.clockwise")
-                }
-            }
-            Divider()
-            Button(role: .destructive) {
+            },
+            onShowBookmarkDeleteDialog: {
                 self.bookmarkDetailVM.onShowBookmarkDeleteDialog()
-            } label: {
-                Label {
-                    Text("Delete")
-                } icon: {
-                    Image(systemName: "trash")
-                }
             }
-        } label: {
-            Image(systemName: "ellipsis.circle")
-        }
+        )
     }
     
     @ViewBuilder
@@ -235,5 +163,48 @@ struct BookmarkDetailScreen: View {
         } label: {
             Text("Cancel")
         }
+    }
+    
+    private func getBackgroundGradientColors() -> [Color] {
+        var base = [
+            Color(UIColor.systemBackground),
+            Color(UIColor.systemBackground),
+        ]
+
+        if let folder = self.bookmarkDetailVM.bookmark.folder {
+            base.append(
+                contentsOf: [
+                    self.animateGradient
+                    ? folder.secondaryColor.getUIColor()
+                        .opacity(self.colorScheme == .dark ? 0.2 : 0.2)
+                    : folder.primaryColor.getUIColor()
+                        .opacity(self.colorScheme == .dark ? 0.2 : 0.2),
+                    self.animateGradient
+                    ? folder.primaryColor.getUIColor()
+                        .opacity(self.colorScheme == .dark ? 0.2 : 0.2)
+                    : folder.secondaryColor.getUIColor()
+                        .opacity(self.colorScheme == .dark ? 0.2 : 0.2),
+                ]
+            )
+        }
+        
+        for tag in self.bookmarkDetailVM.bookmark.tags {
+            base.append(
+                contentsOf: [
+                    self.animateGradient
+                    ? tag.secondaryColor.getUIColor()
+                        .opacity(self.colorScheme == .dark ? 0.2 : 0.2)
+                    : tag.primaryColor.getUIColor()
+                        .opacity(self.colorScheme == .dark ? 0.2 : 0.2),
+                    self.animateGradient
+                    ? tag.primaryColor.getUIColor()
+                        .opacity(self.colorScheme == .dark ? 0.2 : 0.2)
+                    : tag.secondaryColor.getUIColor()
+                        .opacity(self.colorScheme == .dark ? 0.2 : 0.2),
+                ]
+            )
+        }
+
+        return base
     }
 }
