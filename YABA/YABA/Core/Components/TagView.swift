@@ -36,9 +36,8 @@ struct TagView: View {
             }
             .padding()
             .background {
-                Color.accentColor.clipShape(
-                    RoundedRectangle(cornerSize: CGSize(width: 16, height: 16))
-                )
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(self.getGradient())
             }
             .shadow(radius: 2)
             .contextMenu {
@@ -64,6 +63,18 @@ struct TagView: View {
                 .foregroundStyle(.red)
         }
     }
+    
+    private func getGradient() -> LinearGradient {
+        LinearGradient(
+            colors: [
+                self.tag.primaryColor.getUIColor(),
+                self.tag.secondaryColor.getUIColor(),
+                self.tag.primaryColor.getUIColor(),
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
 }
 
 #Preview {
@@ -71,7 +82,9 @@ struct TagView: View {
         tag: Tag(
             label: "Cats",
             icon: "🐈",
-            createdAt: .now
+            createdAt: .now,
+            primaryColor: .green,
+            secondaryColor: .teal
         ),
         isInPreviewMode: false,
         onPressed: {

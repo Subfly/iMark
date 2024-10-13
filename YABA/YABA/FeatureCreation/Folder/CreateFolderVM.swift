@@ -17,6 +17,9 @@ class CreateFolderVM {
     var labelCounterText: String
     var labelHasError: Bool = false
     
+    var showPrimaryColorPicker: Bool = false
+    var showSecondaryColorPicker: Bool = false
+    
     var folder: Folder
 
     init(folder: Folder?) {
@@ -37,5 +40,21 @@ class CreateFolderVM {
         if self.folder.icon.count > self.iconLimit {
             self.folder.icon = String(icon.suffix(iconLimit))
         }
+    }
+
+    func onShowPrimaryColorPicker() {
+        self.showPrimaryColorPicker = true
+    }
+
+    func onClosePrimaryColorPicker() {
+        self.showPrimaryColorPicker = false
+    }
+
+    func onShowSecondaryColorPicker() {
+        self.showSecondaryColorPicker = true
+    }
+
+    func onCloseSecondaryColorPicker() {
+        self.showSecondaryColorPicker = false
     }
 }

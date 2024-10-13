@@ -40,6 +40,7 @@ struct CreateTagSheetContent: View {
                     self.previewSection
                     self.nameSection
                     self.iconSection
+                    self.colorSelectionSection
                 }
             }
             .navigationTitle(self.createTagVM.isEditMode ? "Edit Tag" : "Create Tag")
@@ -54,8 +55,23 @@ struct CreateTagSheetContent: View {
                 }
             }
         }
-        .presentationDetents([.fraction(0.8)])
         .presentationDragIndicator(.visible)
+        .sheet(isPresented: self.$createTagVM.showPrimaryColorPicker) {
+            self.generateColorSelectionPicker(
+                selection: self.$createTagVM.tag.primaryColor,
+                onDismiss: {
+                    self.createTagVM.onClosePrimaryColorPicker()
+                }
+            )
+        }
+        .sheet(isPresented: self.$createTagVM.showSecondaryColorPicker) {
+            self.generateColorSelectionPicker(
+                selection: self.$createTagVM.tag.secondaryColor,
+                onDismiss: {
+                    self.createTagVM.onCloseSecondaryColorPicker()
+                }
+            )
+        }
     }
     
     @ViewBuilder
@@ -114,6 +130,92 @@ struct CreateTagSheetContent: View {
                 Text("Icon")
             }
         }
+    }
+    
+    @ViewBuilder
+    private var colorSelectionSection: some View {
+        Section {
+            self.generateColorSelectionTile(
+                label: "Primary Color",
+                color: self.createTagVM.tag.primaryColor
+            )
+            .onTapGesture {
+                self.createTagVM.onShowPrimaryColorPicker()
+            }
+            self.generateColorSelectionTile(
+                label: "Secondary Color",
+                color: self.createTagVM.tag.secondaryColor
+            )
+            .onTapGesture {
+                self.createTagVM.onShowSecondaryColorPicker()
+            }
+        } header: {
+            HStack {
+                Image(systemName: "paintpalette")
+                Text("Color")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func generateColorSelectionTile(label: String, color: YabaColor) -> some View {
+        HStack {
+            Text(label)
+            Spacer()
+            HStack(spacing: 8) {
+                HStack {
+                    Circle()
+                        .foregroundStyle(color.getUIColor())
+                        .frame(width: 12, height: 12, alignment: .center)
+                    Text(color.getUIText())
+                }
+                Image(systemName: "chevron.right")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func generateColorSelectionPicker(
+        selection: Binding<YabaColor>,
+        onDismiss: @escaping () -> Void
+    ) -> some View {
+        NavigationView {
+            Picker(
+                selection: selection,
+                content: {
+                    ForEach(YabaColor.allCases, id: \.self) { color in
+                        HStack {
+                            Circle()
+                                .foregroundStyle(color.getUIColor())
+                                .frame(width: 12, height: 12, alignment: .center)
+                            Text(color.getUIText())
+                        }
+                    }
+                },
+                label: {
+                    Label {
+                        Text("Select a color")
+                    } icon: {
+                        Image(systemName: "paintpalette")
+                    }
+                }
+            )
+            .pickerStyle(.wheel)
+            .navigationTitle("Select a color")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Button {
+                    onDismiss()
+                } label: {
+                    Text("Done")
+                }
+            }
+            .onDisappear {
+                onDismiss()
+            }
+        }
+        .presentationDetents([.fraction(0.3)])
+        .presentationDragIndicator(.visible)
     }
 }
 

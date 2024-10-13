@@ -17,6 +17,9 @@ struct FolderDetailScreen: View {
     
     @Environment(NavigationManager.self)
     private var navigationManager
+
+    @Environment(\.colorScheme)
+    private var colorScheme
     
     @Query
     private var bookmarks: [Bookmark]
@@ -26,6 +29,9 @@ struct FolderDetailScreen: View {
     
     @State
     private var searchQuery: String = ""
+
+    @State
+    private var animateGradient: Bool = false
     
     init(folder: Folder) {
         self.folderDetailVM = .init(folder: folder)
@@ -35,7 +41,12 @@ struct FolderDetailScreen: View {
         List {
             self.bookmarkList
         }
+        .scrollContentBackground(.hidden)
+        .background {
+            self.background
+        }
         .navigationTitle(self.folderDetailVM.folder.label)
+        .toolbarBackgroundVisibility(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -65,6 +76,24 @@ struct FolderDetailScreen: View {
             placement: .navigationBarDrawer(displayMode: .always),
             prompt: "Search for bookmarks in \(self.folderDetailVM.folder.label)"
         )
+    }
+    
+    @ViewBuilder
+    private var background: some View {
+        Rectangle()
+            .fill(
+                LinearGradient(
+                    colors: self.getBackgroundGradientColors(),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .ignoresSafeArea()
+            .onAppear {
+                withAnimation(.smooth(duration: 2.0).repeatForever(autoreverses: true)) {
+                    self.animateGradient.toggle()
+                }
+            }
     }
     
     @ViewBuilder
@@ -157,5 +186,22 @@ struct FolderDetailScreen: View {
                 Image(systemName: "line.3.horizontal.decrease.circle")
             }
         }
+    }
+    
+    private func getBackgroundGradientColors() -> [Color] {
+        return [
+            Color(UIColor.systemBackground),
+            Color(UIColor.systemBackground),
+            self.animateGradient
+            ? self.folderDetailVM.folder.secondaryColor.getUIColor()
+                .opacity(self.colorScheme == .dark ? 0.2 : 0.2)
+            : self.folderDetailVM.folder.primaryColor.getUIColor()
+                .opacity(self.colorScheme == .dark ? 0.2 : 0.2),
+            self.animateGradient
+            ? self.folderDetailVM.folder.primaryColor.getUIColor()
+                .opacity(self.colorScheme == .dark ? 0.2 : 0.2)
+            : self.folderDetailVM.folder.secondaryColor.getUIColor()
+                .opacity(self.colorScheme == .dark ? 0.2 : 0.2),
+        ]
     }
 }
