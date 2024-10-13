@@ -32,11 +32,13 @@ class NavigationManager {
         self.routes.append(Destination.home)
     }
 
-    func showBookmarkCreationSheet() {
+    func showBookmarkCreationSheet(bookmark: Bookmark?) {
+        self.selectedBookmark = bookmark
         self.createBookmarkSheetActive = true
     }
 
     func onDismissBookmarkCreationSheet() {
+        self.selectedBookmark = nil
         self.createBookmarkSheetActive = false
     }
 

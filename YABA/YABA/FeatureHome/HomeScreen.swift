@@ -16,8 +16,17 @@ struct HomeScreen: View {
     @Environment(NavigationManager.self)
     private var navigationManager
 
-    @Bindable
-    var homeVM: HomeVM = .init()
+    @FocusState
+    private var isSearching: Bool
+
+    @State
+    private var homeVM: HomeVM = .init()
+    
+    @State
+    private var searchQuery: String = ""
+    
+    @Query(sort: \Bookmark.createdAt, order: .forward)
+    private var bookmarks: [Bookmark]
 
     @Query(sort: \Folder.createdAt, order: .forward)
     private var folders: [Folder]
@@ -27,19 +36,27 @@ struct HomeScreen: View {
 
     var body: some View {
         ZStack {
-            ScrollView {
-                self.tagsView
-                Spacer().frame(height: 32)
-                self.foldersView
-            }.padding(.bottom, 100)
-            self.fabArea
+            if self.isSearching {
+                self.searchView
+            } else {
+                ScrollView {
+                    self.tagsView
+                    Spacer().frame(height: 32)
+                    self.foldersView
+                }.padding(.bottom, 100)
+                self.fabArea
+            }
         }
         .navigationTitle("Home")
         .searchable(
-            text: self.$homeVM.searchQuery,
+            text: self.$searchQuery,
             placement: .navigationBarDrawer(displayMode: .always),
             prompt: "Search in Bookmarks..."
         )
+        .searchFocused(self.$isSearching)
+        .sheet(isPresented: self.$homeVM.showShareSheet) {
+            self.shareSheetContent
+        }
         .alert(self.homeVM.deletingContentLabel, isPresented: self.$homeVM.shouldShowDeleteDialog) {
             self.alertButtons
         }
@@ -53,6 +70,9 @@ struct HomeScreen: View {
             }
             if let tag = self.homeVM.deletingTag {
                 self.modelContext.delete(tag)
+            }
+            if let bookmark = self.homeVM.deletingBookmark {
+                self.modelContext.delete(bookmark)
             }
             self.homeVM.onCloseDialog()
         } label: {
@@ -74,7 +94,7 @@ struct HomeScreen: View {
                 onClickAction: { type in
                     switch type {
                     case .bookmark:
-                        self.navigationManager.showBookmarkCreationSheet()
+                        self.navigationManager.showBookmarkCreationSheet(bookmark: nil)
                     case .folder:
                         self.navigationManager.showFolderCreationSheet(folder: nil)
                     case .tag:
@@ -148,5 +168,44 @@ It seems like you have not created any folder yet! Tap the button below to creat
             },
             onClickCreateFolder: nil
         )
+    }
+    
+    @ViewBuilder
+    private var searchView: some View {
+        List {
+            BookmarkListView(
+                bookmarks: self.homeVM.onFilterBookmarks(
+                    bookmarks: self.bookmarks,
+                    searchQuery: self.searchQuery
+                ),
+                searchQuery: self.searchQuery,
+                onPressBookmark: { bookmark in
+                    self.navigationManager.navigate(to: .bookmark(bookmark: bookmark))
+                },
+                onShareBookmark: { bookmark in
+                    self.homeVM.onShowShareSheet(bookmark: bookmark)
+                },
+                onEditBookmark: { bookmark in
+                    self.navigationManager.showBookmarkCreationSheet(bookmark: bookmark)
+                },
+                onDeleteBookmark: { bookmark in
+                    self.homeVM.onShowDeleteDialog(bookmark: bookmark)
+                }
+            )
+        }
+    }
+    
+    @ViewBuilder
+    private var shareSheetContent: some View {
+        if let bookmark = self.homeVM.selectedBookmark {
+            if let link = URL(string: bookmark.link) {
+                ShareSheet(bookmarkLink: link)
+                    .presentationDetents([.medium])
+                    .presentationDragIndicator(.visible)
+                    .onDisappear {
+                        self.homeVM.onCloseShareSheet()
+                    }
+            }
+        }
     }
 }

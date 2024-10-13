@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CreateBookmarkFolderSelectionView: View {
     let selectedFolder: Folder?
+    let hasError: Bool
+    let errorText: String
     let onClickSelectFolder: () -> Void
     
     var body: some View {
@@ -20,6 +22,21 @@ struct CreateBookmarkFolderSelectionView: View {
             HStack {
                 Image(systemName: "folder")
                 Text("Folder")
+            }.foregroundStyle(
+                self.hasError
+                ? .red
+                : .secondary
+            )
+        } footer: {
+            if self.hasError {
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                    Text(self.errorText)
+                }.foregroundStyle(
+                    self.hasError
+                    ? .red
+                    : .secondary
+                )
             }
         }
         .listRowBackground(Color(.systemGroupedBackground))
@@ -30,10 +47,11 @@ struct CreateBookmarkFolderSelectionView: View {
         if self.selectedFolder == nil {
             DottedFolderView(
                 label: "Select a folder",
+                hasError: self.hasError,
                 onClicked: {
                     self.onClickSelectFolder()
                 }
-            ).padding(.top, 8)
+            ).padding(.vertical, 8)
         } else {
             if let folder = self.selectedFolder {
                 FolderView(
@@ -57,6 +75,8 @@ struct CreateBookmarkFolderSelectionView: View {
 #Preview {
     CreateBookmarkFolderSelectionView(
         selectedFolder: .empty(),
+        hasError: false,
+        errorText: "",
         onClickSelectFolder: {}
     )
 }

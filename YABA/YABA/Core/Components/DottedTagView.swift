@@ -27,7 +27,7 @@ struct DottedTagView: View {
                 .overlay {
                     RoundedRectangle(cornerRadius: 16)
                             .stroke(style: StrokeStyle(lineWidth: 2, dash: [10]))
-                            .foregroundColor(.accentColor)
+                            .tint(.accentColor)
                 }
             }
         }

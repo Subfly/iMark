@@ -50,7 +50,7 @@ struct FolderDetailScreen: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    self.navigationManager.showBookmarkCreationSheet()
+                    self.navigationManager.showBookmarkCreationSheet(bookmark: nil)
                 } label: {
                     Image(systemName: "plus")
                 }

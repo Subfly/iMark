@@ -11,7 +11,7 @@ import SwiftUI
 @Observable
 class CreateFolderVM {
     let isEditMode: Bool
-    let labelLimit = 15
+    let labelLimit = 20
     let iconLimit = 1
 
     var labelCounterText: String
@@ -19,11 +19,14 @@ class CreateFolderVM {
     
     var showPrimaryColorPicker: Bool = false
     var showSecondaryColorPicker: Bool = false
+
+    var validationError: Bool = false
     
     var folder: Folder
 
     init(folder: Folder?) {
-        self.labelCounterText = "0\\\(labelLimit)"
+        let labelSize = folder?.label.count ?? 0
+        self.labelCounterText = "\(labelSize)\\\(labelLimit)"
         self.folder = folder ?? .empty()
         self.isEditMode = folder != nil
     }
@@ -34,6 +37,7 @@ class CreateFolderVM {
         }
         self.labelCounterText = "\(self.folder.label.count)\\\(self.labelLimit)"
         self.labelHasError = self.folder.label.count == self.labelLimit
+        self.validationError = false
     }
 
     func onChangeIcon(_ icon: String) {
@@ -56,5 +60,15 @@ class CreateFolderVM {
 
     func onCloseSecondaryColorPicker() {
         self.showSecondaryColorPicker = false
+    }
+
+    func validate() -> Bool {
+        if self.folder.label.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            self.validationError = true
+            self.labelHasError = true
+            self.labelCounterText = "Can not be empty"
+            return false
+        }
+        return true
     }
 }

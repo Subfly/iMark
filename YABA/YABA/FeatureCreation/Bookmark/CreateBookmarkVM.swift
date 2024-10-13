@@ -18,8 +18,14 @@ class CreateBookmarkVM {
     let descriptionLimit = 120
 
     var urlErrorText: String
+    var labelErrorText: String
+    var folderErrorText: String
+    
     var urlHasError: Bool = false
     var urlHasWarning: Bool = false
+    var labelHasValidationError: Bool = false
+    var folderHasValidationError: Bool = false
+    var validationError: Bool = false
     
     var shouldShowFolderSelectionPopover: Bool = false
     var shouldShowCreateFolderSheet: Bool = false
@@ -36,6 +42,8 @@ class CreateBookmarkVM {
 
     init(bookmark: Bookmark?) {
         self.urlErrorText = ""
+        self.labelErrorText = ""
+        self.folderErrorText = ""
         self.bookmark = bookmark ?? .empty()
         self.isEditMode = bookmark != nil
     }
@@ -45,7 +53,9 @@ class CreateBookmarkVM {
         self.bookmark.link = text
 
         if text.isEmpty {
-            self.clearWarningsAndErrors()
+            self.urlErrorText = "Can not be empty"
+            self.urlHasError = true
+            self.urlHasWarning = false
             self.unfurling = false
             return
         }
@@ -59,7 +69,6 @@ class CreateBookmarkVM {
                 return
             }
 
-            self.clearWarningsAndErrors()
             self.fillSuccess(with: prefillContent)
         } catch UnfurlError.urlNotValid(let errorMessage) {
             self.fillAsError(with: errorMessage)
@@ -77,8 +86,21 @@ class CreateBookmarkVM {
         self.unfurling = false
     }
     
+    func onChangeLabel(_ text: String) {
+        self.bookmark.label = text
+        if text.isEmpty {
+            self.labelErrorText = "Can not be empty"
+            self.labelHasValidationError = true
+        } else {
+            self.labelErrorText = ""
+            self.labelHasValidationError = false
+        }
+    }
+    
     func onSelectFolder(folder: Folder) {
         self.bookmark.folder = folder
+        self.folderErrorText = ""
+        self.folderHasValidationError = false
     }
     
     func onSelectTag(tag: Tag) {
@@ -125,6 +147,42 @@ class CreateBookmarkVM {
         self.shouldShowCreateTagSheet = false
     }
     
+    func validate() -> Bool {
+        var isValid: Bool = true
+        
+        let linkEmpty = self.bookmark.link
+            .trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let linkCorrect = !linkEmpty && !self.urlHasWarning && !self.urlHasError
+
+        let labelEmpty = self.bookmark.label
+            .trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+
+        let folderNotSelected = self.bookmark.folder == nil
+
+        if !linkCorrect {
+            self.urlErrorText = "Can not be empty or invalid"
+            self.urlHasError = true
+            self.validationError = true
+            isValid = false
+        }
+
+        if labelEmpty {
+            self.labelErrorText = "Can not be empty"
+            self.labelHasValidationError = true
+            self.validationError = true
+            isValid = false
+        }
+
+        if folderNotSelected {
+            self.folderErrorText = "A folder should be selected"
+            self.folderHasValidationError = true
+            self.validationError = true
+            isValid = false
+        }
+
+        return isValid
+    }
+    
     private func fillAsWarning(with errorMessage: String) {
         self.urlErrorText = errorMessage
         self.urlHasError = false
@@ -153,9 +211,7 @@ class CreateBookmarkVM {
         if self.bookmark.domain.isEmpty {
             self.bookmark.domain = preview.siteName
         }
-    }
-    
-    private func clearWarningsAndErrors() {
+        
         self.urlErrorText = ""
         self.urlHasError = false
         self.urlHasWarning = false
