@@ -10,7 +10,9 @@ import SwiftData
 
 @main
 struct YABAApp: App {
-    @Bindable var navigationManager: NavigationManager = .init()
+    @State
+    var navigationManager: NavigationManager = .init()
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Folder.self,

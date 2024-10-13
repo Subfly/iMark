@@ -12,9 +12,15 @@ struct CreateBookmarkTagSelectionView: View {
     let onPressTag: () -> Void
     
     var body: some View {
-        Section("Tags") {
+        Section {
             self.dynamicTagSelectionView
-        }.listRowBackground(Color(.systemGroupedBackground))
+        } header: {
+            HStack {
+                Image(systemName: "tag")
+                Text("Tags")
+            }
+        }
+        .listRowBackground(Color(.systemGroupedBackground))
     }
     
     @ViewBuilder

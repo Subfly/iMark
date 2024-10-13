@@ -14,6 +14,7 @@ final class Bookmark {
     var label: String
     var bookmarkDescription: String
     var imageUrl: String
+    var domain: String
     var createdAt: Date
     var tags: [Tag]
     var folder: Folder?
@@ -23,6 +24,7 @@ final class Bookmark {
         label: String,
         bookmarkDescription: String,
         imageUrl: String,
+        domain: String,
         createdAt: Date,
         tags: [Tag],
         folder: Folder?
@@ -31,6 +33,7 @@ final class Bookmark {
         self.label = label
         self.bookmarkDescription = bookmarkDescription
         self.imageUrl = imageUrl
+        self.domain = domain
         self.createdAt = createdAt
         self.tags = tags
         self.folder = folder
@@ -42,6 +45,7 @@ final class Bookmark {
             label: "",
             bookmarkDescription: "",
             imageUrl: "",
+            domain: "",
             createdAt: .now,
             tags: [],
             folder: nil

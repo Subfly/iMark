@@ -86,7 +86,9 @@ struct FolderView: View {
                 Text(
                     (self.folder.icon.isEmpty ? self.folder.label.first?.uppercased() : self.folder.icon)
                     ?? ""
-                ).font(.system(size: 32))
+                )
+                .font(.system(size: 32))
+                .foregroundStyle(.white)
             }
         }
     }
@@ -114,6 +116,7 @@ struct FolderView: View {
         .font(.title2)
         .fontWeight(.semibold)
         .foregroundStyle(.white)
+        .lineLimit(1)
     }
 }
 

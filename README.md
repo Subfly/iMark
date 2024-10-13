@@ -57,16 +57,16 @@ Every platform has its own bookmarking system but has limited capabilities. For 
 
 ## Product Backlog
 
-| Code    | Requirement                            | Severity       | Progress    |
-|---------|--:-------------------------------------|--:-------------|--:----------|
-| YABA-1  | Add folder creation                    | Very Important | Done        |
-| YABA-2  | Add tag creation                       | Very Important | Done        |
-| YABA-3  | Add bookmark creation                  | Very Important | Done        |
-| YABA-4  | Add bookmark and folder detail screens | Very Important | Not Started |
-| YABA-5  | Add bookmark search                    | Very Important | Not Started |
-| YABA-6  | Add create bookmark from share modal   | Very Important | Not Started |
-| YABA-7  | Add link previews                      | Important      | Not Started |
-| YABA-8  | Add folder colors                      | Nice to have   | Not Started |
-| YABA-9  | Add tag colors                         | Nice to have   | Not Started |
-| YABA-10 | Add move bookmark to another folder    | Nice to have   | Not Started |
-| YABA-11 | Fix validation issues during creation  | Very Important | Not Started |
+| Code    | Requirement                            | Severity       | Progress     |
+|---------|--:-------------------------------------|--:-------------|--:-----------|
+| YABA-1  | Add folder creation                    | Very Important | Done         |
+| YABA-2  | Add tag creation                       | Very Important | Done         |
+| YABA-3  | Add bookmark creation                  | Very Important | Done         |
+| YABA-4  | Add bookmark and folder detail screens | Very Important | Done         |
+| YABA-5  | Add bookmark search                    | Very Important | Working On   |
+| YABA-6  | Add create bookmark from share modal   | Very Important | Not Started  |
+| YABA-7  | Add link previews                      | Important      | Done         |
+| YABA-8  | Add folder colors                      | Nice to have   | Working On   |
+| YABA-9  | Add tag colors                         | Nice to have   | Working On   |
+| YABA-10 | Add move bookmark to another folder    | Nice to have   | Requires Fix |
+| YABA-11 | Fix validation issues during creation  | Very Important | Working On   |

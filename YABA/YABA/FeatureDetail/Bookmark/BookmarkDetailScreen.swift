@@ -61,58 +61,19 @@ struct BookmarkDetailScreen: View {
     }
     
     @ViewBuilder
-    private var linkImageView: some View {
-        AsyncImage(
-            url: URL(
-                string: "https://i.sstatic.net/oABdG.png"
-            )
-        ) { phase in
-            switch phase {
-            case .empty:
-                ProgressView()
-            case .success(let image):
-                image
-                    .resizable()
-                    .scaledToFill()
-            case .failure:
-                self.imageUnavailableView
-            @unknown default:
-                self.imageUnavailableView
+    private var linkSection: some View {
+        BookmarkDetailLinkSection(
+            bookmark: self.bookmarkDetailVM.bookmark,
+            isLoading: self.bookmarkDetailVM.unfurling,
+            onTapPreview: {
+                self.bookmarkDetailVM.onClickOpenLink()
             }
-        }
-        .frame(idealHeight: 256, alignment: .center)
-    }
-    
-    @ViewBuilder
-    private var imageUnavailableView: some View {
-        ContentUnavailableView(
-            "Image not Found",
-            systemImage: "photo.badge.exclamationmark",
-            description: Text(
-                "The image of the bookmark can not be fetched currently, maybe it is removed or blocked?"
-            )
         )
     }
     
     @ViewBuilder
-    private var linkSection: some View {
-        Section {
-            self.linkImageView
-        }
-        header: {
-            Text("Link").padding(.leading)
-        } footer: {
-            HStack {
-                Image(systemName: "link.circle.fill")
-                Text(self.bookmarkDetailVM.bookmark.link)
-                    .lineLimit(2)
-            }.padding(.leading)
-        }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-    }
-    
-    @ViewBuilder
     private var infoSection: some View {
-        Section("Info") {
+        Section {
             self.folderInfoItem
             self.generateInfoItem(
                 label: "Title",
@@ -129,6 +90,11 @@ struct BookmarkDetailScreen: View {
                 content: self.bookmarkDetailVM.bookmark.createdAt.formatted(),
                 iconSystemName: "calendar.badge.clock"
             )
+        } header: {
+            HStack {
+                Image(systemName: "info.circle")
+                Text("Info")
+            }
         }
     }
     
@@ -176,7 +142,7 @@ struct BookmarkDetailScreen: View {
     
     @ViewBuilder
     private var tagsSection: some View {
-        Section("Tags") {
+        Section {
             TagsFlowView(
                 tags: self.bookmarkDetailVM.bookmark.tags,
                 noContentMessage:
@@ -196,6 +162,11 @@ struct BookmarkDetailScreen: View {
                     /* Do Nothing */
                 }
             )
+        } header: {
+            HStack {
+                Image(systemName: "tag")
+                Text("Tags")
+            }
         }
     }
     
@@ -209,6 +180,18 @@ struct BookmarkDetailScreen: View {
                     Text("Share")
                 } icon: {
                     Image(systemName: "square.and.arrow.up")
+                }
+            }
+            Button {
+                Task {
+                    await self.bookmarkDetailVM.onRefreshBookmark()
+                    self.modelContext.insert(self.bookmarkDetailVM.bookmark)
+                }
+            } label: {
+                Label {
+                    Text("Refresh Preview")
+                } icon: {
+                    Image(systemName: "arrow.clockwise")
                 }
             }
             Divider()
