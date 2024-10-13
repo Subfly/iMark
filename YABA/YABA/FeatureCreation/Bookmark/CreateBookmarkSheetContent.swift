@@ -93,16 +93,43 @@ struct CreateBookmarkSheetContent: View {
         CreateBookmarkBookmarkPreviewView(
             bookmark: self.createBookmarkVM.bookmark
         )
+        .redacted(
+            reason: self.createBookmarkVM.unfurling
+            ? .placeholder
+            : []
+        )
+        .listRowInsets(EdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4))
     }
     
     @ViewBuilder
     private var linkSection: some View {
-        Section("Link") {
+        Section {
             TextField(
                 "Bookmark Link",
                 text: self.$createBookmarkVM.bookmark.link
-            ).onChange(of: self.createBookmarkVM.bookmark.link) { _, newValue in
-                self.createBookmarkVM.onChangeLink(newValue)
+            )
+            .keyboardType(.URL)
+            .onChange(of: self.createBookmarkVM.bookmark.link) { _, newValue in
+                Task {
+                    await self.createBookmarkVM.onChangeLink(newValue)
+                }
+            }
+        } header: {
+            HStack {
+                Image(systemName: "link")
+                Text("Link")
+            }
+        } footer: {
+            if self.createBookmarkVM.urlHasError {
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                    Text(self.createBookmarkVM.urlErrorText)
+                }.foregroundStyle(.red)
+            } else if self.createBookmarkVM.urlHasWarning {
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                    Text(self.createBookmarkVM.urlErrorText)
+                }.foregroundStyle(.yellow)
             }
         }
     }
@@ -113,14 +140,12 @@ struct CreateBookmarkSheetContent: View {
             TextField(
                 "Bookmark Title",
                 text: self.$createBookmarkVM.bookmark.label
-            ).onChange(of: self.createBookmarkVM.bookmark.label) { _, newValue in
-                self.createBookmarkVM.onChaneLabel(newValue)
-            }
+            )
         } header: {
-            Text("Title")
-        } footer: {
-            Text(self.createBookmarkVM.labelCounterText)
-                .foregroundStyle(self.createBookmarkVM.labelHasError ? .red : .secondary)
+            HStack {
+                Image(systemName: "t.square")
+                Text("Title")
+            }
         }
     }
     
@@ -132,15 +157,11 @@ struct CreateBookmarkSheetContent: View {
                 text: self.$createBookmarkVM.bookmark.bookmarkDescription,
                 axis: .vertical
             )
-            .lineLimit(2...5)
-            .onChange(of: self.createBookmarkVM.bookmark.bookmarkDescription) { _, newValue in
-                self.createBookmarkVM.onChaneDescription(newValue)
-            }
         } header: {
-            Text("Description")
-        } footer: {
-            Text(self.createBookmarkVM.descriptionCounterText)
-                .foregroundStyle(self.createBookmarkVM.descriptionHasError ? .red : .secondary)
+            HStack {
+                Image(systemName: "text.document")
+                Text("Description")
+            }
         }
     }
     

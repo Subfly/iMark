@@ -12,11 +12,17 @@ struct CreateBookmarkFolderSelectionView: View {
     let onClickSelectFolder: () -> Void
     
     var body: some View {
-        Section("Folder") {
+        Section {
             self.dynamicFolderView
                 .frame(width: 200, alignment: .center)
                 .frame(maxWidth: .infinity, alignment: .center)
-        }.listRowBackground(Color(.systemGroupedBackground))
+        } header: {
+            HStack {
+                Image(systemName: "folder")
+                Text("Folder")
+            }
+        }
+        .listRowBackground(Color(.systemGroupedBackground))
     }
     
     @ViewBuilder
@@ -27,7 +33,7 @@ struct CreateBookmarkFolderSelectionView: View {
                 onClicked: {
                     self.onClickSelectFolder()
                 }
-            )
+            ).padding(.top, 8)
         } else {
             if let folder = self.selectedFolder {
                 FolderView(

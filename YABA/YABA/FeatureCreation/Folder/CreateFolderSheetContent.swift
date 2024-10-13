@@ -61,7 +61,7 @@ struct CreateFolderSheetContent: View {
     
     @ViewBuilder
     private var previewSection: some View {
-        Section("Preview") {
+        Section {
             FolderView(
                 folder: self.createFolderVM.folder,
                 isInPreviewMode: true,
@@ -71,7 +71,13 @@ struct CreateFolderSheetContent: View {
             )
             .frame(width: 200, alignment: .center)
             .frame(maxWidth: .infinity, alignment: .center)
-        }.listRowBackground(Color(.systemGroupedBackground))
+        } header: {
+            HStack {
+                Image(systemName: "rectangle.and.text.magnifyingglass")
+                Text("Preview")
+            }
+        }
+        .listRowBackground(Color(.systemGroupedBackground))
     }
     
     @ViewBuilder
@@ -84,7 +90,10 @@ struct CreateFolderSheetContent: View {
                 self.createFolderVM.onChaneLabel(newValue)
             }
         } header: {
-            Text("Info")
+            HStack {
+                Image(systemName: "t.square")
+                Text("Name")
+            }
         } footer: {
             Text(self.createFolderVM.labelCounterText)
                 .foregroundStyle(self.createFolderVM.labelHasError ? .red : .secondary)
@@ -101,7 +110,10 @@ struct CreateFolderSheetContent: View {
                 self.createFolderVM.onChangeIcon(newValue)
             }
         } header: {
-            Text("Icon")
+            HStack {
+                Image(systemName: "app")
+                Text("Icon")
+            }
         }
     }
 }

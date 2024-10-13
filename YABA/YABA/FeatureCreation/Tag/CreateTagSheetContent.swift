@@ -60,7 +60,7 @@ struct CreateTagSheetContent: View {
     
     @ViewBuilder
     private var previewSection: some View {
-        Section("Preview") {
+        Section {
             TagView(
                 tag: self.createTagVM.tag,
                 isInPreviewMode: true,
@@ -70,7 +70,13 @@ struct CreateTagSheetContent: View {
             )
             .frame(width: 200, alignment: .center)
             .frame(maxWidth: .infinity, alignment: .center)
-        }.listRowBackground(Color(.systemGroupedBackground))
+        } header: {
+            HStack {
+                Image(systemName: "rectangle.and.text.magnifyingglass")
+                Text("Preview")
+            }
+        }
+        .listRowBackground(Color(.systemGroupedBackground))
     }
     
     @ViewBuilder
@@ -83,7 +89,10 @@ struct CreateTagSheetContent: View {
                 self.createTagVM.onChaneLabel(newValue)
             }
         } header: {
-            Text("Info")
+            HStack {
+                Image(systemName: "t.square")
+                Text("Name")
+            }
         } footer: {
             Text(self.createTagVM.labelCounterText)
                 .foregroundStyle(self.createTagVM.labelHasError ? .red : .secondary)
@@ -100,7 +109,10 @@ struct CreateTagSheetContent: View {
                 self.createTagVM.onChangeIcon(newValue)
             }
         } header: {
-            Text("Icon")
+            HStack {
+                Image(systemName: "app")
+                Text("Icon")
+            }
         }
     }
 }

@@ -16,32 +16,33 @@ struct BookmarkView: View {
     let onDeletePressed: () -> Void
 
     var body: some View {
-        Button {
-            self.onPressed()
-        } label: {
+        HStack {
             HStack {
-                HStack {
-                    self.bookmarkIconBuilder
-                    VStack(alignment: .leading) {
-                        Text(
-                            self.bookmark.label.isEmpty ? "Bookmark Title" : self.bookmark.label
-                        ).font(.headline)
-                        if !self.bookmark.bookmarkDescription.isEmpty {
-                            Text(self.bookmark.bookmarkDescription)
-                                .lineLimit(2)
-                                .font(.subheadline)
-                        }
+                self.bookmarkIconBuilder
+                VStack(alignment: .leading) {
+                    Text(
+                        self.bookmark.label.isEmpty ? "Bookmark Title" : self.bookmark.label
+                    )
+                    .font(.headline)
+                    .lineLimit(1)
+                    if !self.bookmark.bookmarkDescription.isEmpty {
+                        Text(self.bookmark.bookmarkDescription)
+                            .font(.subheadline)
+                            .lineLimit(2)
                     }
                 }
-                Spacer()
-                Image(systemName: "chevron.right")
             }
-            .contextMenu {
-                if !self.isInPreviewMode {
-                    self.menuContext
-                }
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+        .onTapGesture {
+            self.onPressed()
+        }
+        .contextMenu {
+            if !self.isInPreviewMode {
+                self.menuContext
             }
-        }.buttonStyle(.plain)
+        }
     }
 
     @ViewBuilder
@@ -113,6 +114,7 @@ struct BookmarkView: View {
             label: "Best SwiftUI Source",
             bookmarkDescription: "A source site that contains awesome SwiftUI content",
             imageUrl: "https://www.avanderlee.com/wp-content/uploads/2020/04/avatar_126@3x-min.jpg",
+            domain: "avanderlee.com",
             createdAt: .now,
             tags: [],
             folder: nil

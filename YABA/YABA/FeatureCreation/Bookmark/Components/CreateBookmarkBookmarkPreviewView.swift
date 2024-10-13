@@ -9,9 +9,9 @@ import SwiftUI
 
 struct CreateBookmarkBookmarkPreviewView: View {
     let bookmark: Bookmark
-    
+
     var body: some View {
-        Section("Preview") {
+        Section {
             BookmarkView(
                 bookmark: self.bookmark,
                 isInPreviewMode: true,
@@ -20,15 +20,13 @@ struct CreateBookmarkBookmarkPreviewView: View {
                 onEditPressed: {},
                 onDeletePressed: {}
             )
-            .padding(.horizontal)
-            .frame(maxWidth: .infinity, minHeight: 90, alignment: .center)
-            .background {
-                Color(.secondarySystemGroupedBackground).clipShape(
-                    RoundedRectangle(cornerRadius: 16)
-                )
-            }
-            .frame(maxWidth: .infinity, alignment: .center)
-        }.listRowBackground(Color(.systemGroupedBackground))
+            .padding()
+        } header: {
+            HStack {
+                Image(systemName: "rectangle.and.text.magnifyingglass")
+                Text("Preview")
+            }.padding(.leading)
+        }
     }
 }
 

@@ -11,15 +11,15 @@ import SwiftData
 
 @Observable
 class CreateBookmarkVM {
+    private let unfurler: Unfurler = .init()
+    
     let isEditMode: Bool
     let labelLimit = 25
     let descriptionLimit = 120
 
-    var labelCounterText: String
-    var labelHasError: Bool = false
-
-    var descriptionCounterText: String
-    var descriptionHasError: Bool = false
+    var urlErrorText: String
+    var urlHasError: Bool = false
+    var urlHasWarning: Bool = false
     
     var shouldShowFolderSelectionPopover: Bool = false
     var shouldShowCreateFolderSheet: Bool = false
@@ -27,37 +27,54 @@ class CreateBookmarkVM {
     var shouldShowTagSelectionPopover: Bool = false
     var shouldShowCreateTagSheet: Bool = false
     
+    var unfurling: Bool = false
+    
     var creationFolder: Folder?
     var creationTag: Tag?
     
     var bookmark: Bookmark
 
     init(bookmark: Bookmark?) {
-        self.labelCounterText = "0\\\(labelLimit)"
-        self.descriptionCounterText = "0\\\(descriptionLimit)"
+        self.urlErrorText = ""
         self.bookmark = bookmark ?? .empty()
         self.isEditMode = bookmark != nil
     }
 
-    func onChangeLink(_ text: String) {
-        // TASK: SEND TO UNFURLING
+    func onChangeLink(_ text: String) async {
+        self.unfurling = true
         self.bookmark.link = text
-    }
 
-    func onChaneLabel(_ text: String) {
-        if self.bookmark.label.count > self.labelLimit {
-            self.bookmark.label = String(text.prefix(self.labelLimit))
+        if text.isEmpty {
+            self.clearWarningsAndErrors()
+            self.unfurling = false
+            return
         }
-        self.labelCounterText = "\(self.bookmark.label.count)\\\(self.labelLimit)"
-        self.labelHasError = self.bookmark.label.count == self.labelLimit
-    }
 
-    func onChaneDescription(_ text: String) {
-        if self.bookmark.bookmarkDescription.count > self.descriptionLimit {
-            self.bookmark.bookmarkDescription = String(text.prefix(self.descriptionLimit))
+        do {
+            let linkPreview = try await self.unfurler.unfurl(urlString: text)
+
+            guard let prefillContent = linkPreview else {
+                self.fillAsWarning(with: "Content of the link can not be fetched")
+                self.unfurling = false
+                return
+            }
+
+            self.clearWarningsAndErrors()
+            self.fillSuccess(with: prefillContent)
+        } catch UnfurlError.urlNotValid(let errorMessage) {
+            self.fillAsError(with: errorMessage)
+        } catch UnfurlError.cannotCreateURL(let errorMessage) {
+            self.fillAsError(with: errorMessage)
+        } catch UnfurlError.unableToUnfurl(let errorMessage) {
+            self.fillAsWarning(with: errorMessage)
+        } catch UnfurlError.clientError(let errorMessage) {
+            self.fillAsWarning(with: errorMessage)
+        } catch UnfurlError.serverError(let errorMessage) {
+            self.fillAsWarning(with: errorMessage)
+        } catch {
+            self.fillAsWarning(with: "Something went wrong, please try again later.")
         }
-        self.descriptionCounterText = "\(self.bookmark.bookmarkDescription.count)\\\(self.descriptionLimit)"
-        self.descriptionHasError = self.bookmark.bookmarkDescription.count == self.descriptionLimit
+        self.unfurling = false
     }
     
     func onSelectFolder(folder: Folder) {
@@ -106,5 +123,41 @@ class CreateBookmarkVM {
     func onCloseTagCreationSheet() {
         self.creationTag = nil
         self.shouldShowCreateTagSheet = false
+    }
+    
+    private func fillAsWarning(with errorMessage: String) {
+        self.urlErrorText = errorMessage
+        self.urlHasError = false
+        self.urlHasWarning = true
+    }
+    
+    private func fillAsError(with errorMessage: String) {
+        self.urlErrorText = errorMessage
+        self.urlHasError = true
+        self.urlHasWarning = false
+    }
+    
+    private func fillSuccess(with preview: LinkPreview) {
+        if self.bookmark.label.isEmpty {
+            self.bookmark.label = preview.title
+        }
+        
+        if self.bookmark.bookmarkDescription.isEmpty {
+            self.bookmark.bookmarkDescription = preview.description
+        }
+        
+        if self.bookmark.imageUrl.isEmpty {
+            self.bookmark.imageUrl = preview.imageUrl
+        }
+        
+        if self.bookmark.domain.isEmpty {
+            self.bookmark.domain = preview.siteName
+        }
+    }
+    
+    private func clearWarningsAndErrors() {
+        self.urlErrorText = ""
+        self.urlHasError = false
+        self.urlHasWarning = false
     }
 }
