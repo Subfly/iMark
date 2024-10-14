@@ -10,23 +10,17 @@ import SwiftData
 
 @main
 struct YABAApp: App {
+    @AppStorage("notPassedOnboarding")
+    private var notPassedOnboarding: Bool = true
+
     @State
     var navigationManager: NavigationManager = .init()
-
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Folder.self,
-            Bookmark.self,
-            Tag.self
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+    
+    var modelContainer: ModelContainer
+    
+    init() {
+        self.modelContainer = ModelConfigurator.configureAndGetContainer()
+    }
 
     var body: some Scene {
         WindowGroup {
@@ -40,31 +34,55 @@ struct YABAApp: App {
                     )
             }
             .sheet(isPresented: self.$navigationManager.createBookmarkSheetActive) {
-                CreateBookmarkSheetContent(
-                    bookmark: self.navigationManager.selectedBookmark,
-                    onDismiss: {
-                        self.navigationManager.onDismissBookmarkCreationSheet()
-                    }
-                )
+                self.createBookmarkSheetContent
             }
             .sheet(isPresented: self.$navigationManager.createFolderSheetActive) {
-                CreateFolderSheetContent(
-                    folder: self.navigationManager.selectedFolder,
-                    onDismiss: {
-                        self.navigationManager.onDismissFolderCreationSheet()
-                    }
-                )
+                self.createFolderSheetContent
             }
             .sheet(isPresented: self.$navigationManager.createTagSheetActive) {
-                CreateTagSheetContent(
-                    tag: self.navigationManager.selectedTag,
-                    onDismiss: {
-                        self.navigationManager.onDismissTagCreationSheet()
-                    }
-                )
+                self.createTagSheetContent
             }
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(modelContainer)
         .environment(navigationManager)
+    }
+    
+    @ViewBuilder
+    private var createBookmarkSheetContent: some View {
+        CreateBookmarkSheetContent(
+            bookmark: self.navigationManager.selectedBookmark,
+            onDismiss: {
+                self.navigationManager.onDismissBookmarkCreationSheet()
+            }
+        )
+    }
+    
+    @ViewBuilder
+    private var createFolderSheetContent: some View {
+        CreateFolderSheetContent(
+            folder: self.navigationManager.selectedFolder,
+            onDismiss: {
+                self.navigationManager.onDismissFolderCreationSheet()
+            }
+        )
+    }
+    
+    @ViewBuilder
+    private var createTagSheetContent: some View {
+        CreateTagSheetContent(
+            tag: self.navigationManager.selectedTag,
+            onDismiss: {
+                self.navigationManager.onDismissTagCreationSheet()
+            }
+        )
+    }
+    
+    @ViewBuilder
+    private var onboardingPopoverContent: some View {
+        OnboardingView(
+            onEndOnboarding: {
+                // TASK: CHANGE passedOnboarding TO TRUE
+            }
+        )
     }
 }

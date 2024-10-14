@@ -1,8 +1,8 @@
 //
-//  CreateBookmarkSheetContent.swift
-//  YABA
+//  CreateBookmarkView.swift
+//  YABAShare
 //
-//  Created by Ali Taha on 8.10.2024.
+//  Created by Ali Taha on 13.10.2024.
 //
 
 import Foundation
@@ -24,10 +24,14 @@ struct CreateBookmarkSheetContent: View {
     
     let onDismiss: () -> Void
     
-    init(bookmark: Bookmark?, onDismiss: @escaping () -> Void) {
+    init(
+        bookmark: Bookmark?,
+        isOpeningFromShareSheet: Bool,
+        onDismiss: @escaping () -> Void
+    ) {
         self.createBookmarkVM = .init(
             bookmark: bookmark,
-            isOpeningFromShareSheet: false
+            isOpeningFromShareSheet: isOpeningFromShareSheet
         )
         self.onDismiss = onDismiss
     }
@@ -242,7 +246,7 @@ struct CreateBookmarkSheetContent: View {
             }
         )
     }
-
+    
     @ViewBuilder
     private var tagSelectionPopover: some View {
         CreateBookmarkTagSelectionPopoverContent(
@@ -269,11 +273,4 @@ struct CreateBookmarkSheetContent: View {
             }
         )
     }
-}
-
-#Preview {
-    CreateBookmarkSheetContent(
-        bookmark: .empty(),
-        onDismiss: {}
-    )
 }

@@ -51,4 +51,17 @@ final class Bookmark {
             folder: nil
         )
     }
+    
+    static func empty(withLink link: String) -> Bookmark {
+        Bookmark(
+            link: link,
+            label: "",
+            bookmarkDescription: "",
+            imageUrl: "",
+            domain: "",
+            createdAt: .now,
+            tags: [],
+            folder: nil
+        )
+    }
 }
