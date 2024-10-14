@@ -68,6 +68,7 @@ struct CreateContentFAB: View {
 
         Button {
             self.onClickAction(type)
+            self.onDismissRequest()
         } label: {
             self.fab(isMini: true, type: type)
                 .shadow(radius: 2)

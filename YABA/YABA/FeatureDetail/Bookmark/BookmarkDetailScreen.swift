@@ -129,6 +129,8 @@ struct BookmarkDetailScreen: View {
                 Task {
                     await self.bookmarkDetailVM.onRefreshBookmark()
                     self.modelContext.insert(self.bookmarkDetailVM.bookmark)
+                    try? await Task.sleep(for: .milliseconds(1))
+                    try? self.modelContext.save()
                 }
             },
             onShowBookmarkDeleteDialog: {

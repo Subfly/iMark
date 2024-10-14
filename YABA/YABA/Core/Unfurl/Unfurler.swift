@@ -12,11 +12,13 @@ class Unfurler {
     private let logger = Logger()
 
     func unfurl(urlString: String) async throws -> LinkPreview? {
+        // Try to create the URL
         guard let url = URL(string: urlString) else {
             self.logger.log(level: .error, "[UNFURLER] Cannot create url for: \(urlString)")
             throw UnfurlError.cannotCreateURL("Can not create the URL from the link")
         }
 
+        // Set agent to googlebot to force websites preload headers
         var request = URLRequest(url: url)
         request.setValue("googlebot", forHTTPHeaderField: "user-agent")
 
@@ -26,6 +28,7 @@ class Unfurler {
             
             self.logger.log(level: .info, "[UNFURLER] HTTP Response Code: \(responseCode)")
             
+            // Check status code for UI errors
             if responseCode >= 400 {
                 throw UnfurlError.clientError(
                     "Can not autofill the content. Either too many request or server blocked the request."
@@ -97,6 +100,9 @@ class Unfurler {
         )
     }
     
+    /**
+        Get all meta tags in the header of a given html
+     */
     private func findMetaTags(in html: String) -> [String] {
         let pattern = "<meta[^>]+>"
         var metaTags: [String] = []
@@ -134,6 +140,8 @@ class Unfurler {
             let contentKey = nsTag.range(of: "content=")
 
             var key: String?
+            
+            // Parse string with the given values
             if propertyKey.location != NSNotFound {
                 key = self.extractValue(from: nsTag, at: propertyKey)
             } else if nameKey.location != NSNotFound {
@@ -153,6 +161,9 @@ class Unfurler {
         return metadata
     }
 
+    /**
+        Find the given tag inside a meta tag and parse the value
+     */
     private func extractValue(from tag: NSString, at range: NSRange) -> String? {
         let start = range.location + range.length
         let quoteRange = tag.range(

@@ -33,8 +33,12 @@ struct CreateFolderSheetContent: View {
                 hasError: self.createFolderVM.validationError
             ) {
                 if self.createFolderVM.validate() {
-                    self.modelContext.insert(self.createFolderVM.folder)
-                    self.onDismiss()
+                    Task {
+                        self.modelContext.insert(self.createFolderVM.folder)
+                        try? await Task.sleep(for: .milliseconds(1))
+                        try? self.modelContext.save()
+                        self.onDismiss()
+                    }
                 }
             } onDismissRequest: {
                 self.onDismiss()

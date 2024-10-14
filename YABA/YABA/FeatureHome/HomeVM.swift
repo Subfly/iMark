@@ -68,16 +68,21 @@ class HomeVM {
         searchQuery: String
     ) -> [Bookmark] {
         let isQueryEmpty = searchQuery.isEmpty
-
+        
+        // Search through every label and description with the query
         let filteredBookmarks = bookmarks.filter { bookmark in
             // MARK: O(N*M) HERE. MAYBE REQUIRE A BETTER SOLUTION?
             let labelContainsQuery = bookmark.label
                 .localizedCaseInsensitiveContains(searchQuery)
             let labelContainsDescription = bookmark.bookmarkDescription
                 .localizedCaseInsensitiveContains(searchQuery)
+            
+            // If query empty, just include the bookmark
+            // Or else, query should be available in label or description
             return isQueryEmpty ? true : (labelContainsQuery || labelContainsDescription)
         }
 
+        // Sort by newest content first
         let sortedBookmarks = filteredBookmarks.sorted {
             $0.createdAt < $1.createdAt
         }

@@ -4,6 +4,7 @@
 //
 //  Created by Ali Taha on 13.10.2024.
 //
+// swiftlint:disable all
 
 import Foundation
 import SwiftUI
@@ -43,8 +44,7 @@ struct CreateBookmarkSheetContent: View {
                 hasError: self.createBookmarkVM.validationError
             ) {
                 if self.createBookmarkVM.validate() {
-                    self.modelContext.insert(self.createBookmarkVM.bookmark)
-                    self.onDismiss()
+                    self.onSaveBookmark()
                 }
             } onDismissRequest: {
                 self.onDismiss()
@@ -272,5 +272,14 @@ struct CreateBookmarkSheetContent: View {
                 self.createBookmarkVM.onCloseTagCreationSheet()
             }
         )
+    }
+    
+    private func onSaveBookmark() {
+        Task {
+            self.modelContext.insert(self.createBookmarkVM.bookmark)
+            try? await Task.sleep(for: .milliseconds(1))
+            try? self.modelContext.save()
+            self.onDismiss()
+        }
     }
 }
