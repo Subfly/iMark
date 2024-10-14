@@ -40,12 +40,23 @@ class CreateBookmarkVM {
     
     var bookmark: Bookmark
 
-    init(bookmark: Bookmark?) {
+    init(
+        bookmark: Bookmark?,
+        isOpeningFromShareSheet: Bool
+    ) {
         self.urlErrorText = ""
         self.labelErrorText = ""
         self.folderErrorText = ""
         self.bookmark = bookmark ?? .empty()
-        self.isEditMode = bookmark != nil
+        self.isEditMode = bookmark != nil && !isOpeningFromShareSheet
+    
+        if isOpeningFromShareSheet {
+            if let link = bookmark?.link {
+                Task {
+                    await self.onChangeLink(link)
+                }
+            }
+        }
     }
 
     func onChangeLink(_ text: String) async {

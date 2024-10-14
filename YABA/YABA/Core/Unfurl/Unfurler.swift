@@ -83,17 +83,17 @@ class Unfurler {
         let data2 = metaData["twitter:data2"] ?? ""
 
         return LinkPreview(
-            imageUrl: imageUrl,
-            title: title,
-            description: description,
-            url: url,
-            siteName: siteName,
-            domain: domain,
-            creator: creator,
-            label1: label1,
-            label2: label2,
-            data1: data1,
-            data2: data2
+            imageUrl: imageUrl.trimmingCharacters(in: .whitespacesAndNewlines),
+            title: title.trimmingCharacters(in: .whitespacesAndNewlines),
+            description: description.trimmingCharacters(in: .whitespacesAndNewlines),
+            url: url.trimmingCharacters(in: .whitespacesAndNewlines),
+            siteName: siteName.trimmingCharacters(in: .whitespacesAndNewlines),
+            domain: domain.trimmingCharacters(in: .whitespacesAndNewlines),
+            creator: creator.trimmingCharacters(in: .whitespacesAndNewlines),
+            label1: label1.trimmingCharacters(in: .whitespacesAndNewlines),
+            label2: label2.trimmingCharacters(in: .whitespacesAndNewlines),
+            data1: data1.trimmingCharacters(in: .whitespacesAndNewlines),
+            data2: data2.trimmingCharacters(in: .whitespacesAndNewlines)
         )
     }
     

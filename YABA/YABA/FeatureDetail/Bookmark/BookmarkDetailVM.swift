@@ -49,7 +49,7 @@ class BookmarkDetailVM: ObservableObject {
         self.deletingBookmarkLabel = ""
         self.showBookmarkDeleteDialog = false
     }
-    
+
     func onClickOpenLink() {
         if let url = URL(string: self.bookmark.link) {
             if UIApplication.shared.canOpenURL(url) {

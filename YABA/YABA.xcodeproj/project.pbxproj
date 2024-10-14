@@ -7,22 +7,108 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9694D3182CBC507800F822A9 /* YABAShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 9694D30E2CBC507800F822A9 /* YABAShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		96A0A3432CB883BD00B6E41F /* Flow in Frameworks */ = {isa = PBXBuildFile; productRef = 96A0A3422CB883BD00B6E41F /* Flow */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		9694D3162CBC507800F822A9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 96C57BF62CB50FCC009A48D2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9694D30D2CBC507800F822A9;
+			remoteInfo = YABAShare;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9694D31D2CBC507800F822A9 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				9694D3182CBC507800F822A9 /* YABAShare.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		9694D30E2CBC507800F822A9 /* YABAShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = YABAShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		96C57BFE2CB50FCC009A48D2 /* YABA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YABA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		9694D3192CBC507800F822A9 /* Exceptions for "YABAShare" folder in "YABAShare" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 9694D30D2CBC507800F822A9 /* YABAShare */;
+		};
+		9694D3552CBC5F1700F822A9 /* Exceptions for "YABA" folder in "YABAShare" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Core/Components/BookmarkView.swift,
+				Core/Components/DottedFolderView.swift,
+				Core/Components/DottedTagView.swift,
+				Core/Components/EmojiTextView.swift,
+				Core/Components/FolderListView.swift,
+				Core/Components/FolderView.swift,
+				Core/Components/TagView.swift,
+				Core/Model/Bookmark.swift,
+				Core/Model/Folder.swift,
+				Core/Model/Tag.swift,
+				Core/Model/YabaColor.swift,
+				Core/Unfurl/LinkPreview.swift,
+				Core/Unfurl/Unfurler.swift,
+				Core/Unfurl/UnfurlError.swift,
+				Core/Util/CreationType.swift,
+				Core/Util/ModelConfigurator.swift,
+				Core/Util/OnboardingPageType.swift,
+				FeatureCreation/Bookmark/Components/CreateBookmarkBookmarkPreviewView.swift,
+				FeatureCreation/Bookmark/Components/CreateBookmarkFolderSelectionPopover.swift,
+				FeatureCreation/Bookmark/Components/CreateBookmarkFolderSelectionView.swift,
+				FeatureCreation/Bookmark/CreateBookmarkVM.swift,
+				FeatureCreation/Components/CreationSheetContentView.swift,
+				FeatureCreation/Folder/CreateFolderSheetContent.swift,
+				FeatureCreation/Folder/CreateFolderVM.swift,
+				FeatureCreation/Tag/CreateTagSheetContent.swift,
+				FeatureCreation/Tag/CreateTagVM.swift,
+			);
+			target = 9694D30D2CBC507800F822A9 /* YABAShare */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		9694D30F2CBC507800F822A9 /* YABAShare */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9694D3192CBC507800F822A9 /* Exceptions for "YABAShare" folder in "YABAShare" target */,
+			);
+			path = YABAShare;
+			sourceTree = "<group>";
+		};
 		96C57C002CB50FCC009A48D2 /* YABA */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9694D3552CBC5F1700F822A9 /* Exceptions for "YABA" folder in "YABAShare" target */,
+			);
 			path = YABA;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9694D30B2CBC507800F822A9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		96C57BFB2CB50FCC009A48D2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -38,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				96C57C002CB50FCC009A48D2 /* YABA */,
+				9694D30F2CBC507800F822A9 /* YABAShare */,
 				96C57BFF2CB50FCC009A48D2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -46,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				96C57BFE2CB50FCC009A48D2 /* YABA.app */,
+				9694D30E2CBC507800F822A9 /* YABAShare.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -53,6 +141,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		9694D30D2CBC507800F822A9 /* YABAShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9694D31A2CBC507800F822A9 /* Build configuration list for PBXNativeTarget "YABAShare" */;
+			buildPhases = (
+				9694D30A2CBC507800F822A9 /* Sources */,
+				9694D30B2CBC507800F822A9 /* Frameworks */,
+				9694D30C2CBC507800F822A9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				9694D30F2CBC507800F822A9 /* YABAShare */,
+			);
+			name = YABAShare;
+			packageProductDependencies = (
+			);
+			productName = YABAShare;
+			productReference = 9694D30E2CBC507800F822A9 /* YABAShare.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		96C57BFD2CB50FCC009A48D2 /* YABA */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 96C57C0E2CB50FCD009A48D2 /* Build configuration list for PBXNativeTarget "YABA" */;
@@ -61,10 +171,12 @@
 				96C57BFB2CB50FCC009A48D2 /* Frameworks */,
 				96C57BFC2CB50FCC009A48D2 /* Resources */,
 				96C57C6B2CB54954009A48D2 /* ShellScript */,
+				9694D31D2CBC507800F822A9 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				9694D3172CBC507800F822A9 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				96C57C002CB50FCC009A48D2 /* YABA */,
@@ -87,6 +199,9 @@
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					9694D30D2CBC507800F822A9 = {
+						CreatedOnToolsVersion = 16.0;
+					};
 					96C57BFD2CB50FCC009A48D2 = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -110,11 +225,19 @@
 			projectRoot = "";
 			targets = (
 				96C57BFD2CB50FCC009A48D2 /* YABA */,
+				9694D30D2CBC507800F822A9 /* YABAShare */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		9694D30C2CBC507800F822A9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		96C57BFC2CB50FCC009A48D2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -145,6 +268,13 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		9694D30A2CBC507800F822A9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		96C57BFA2CB50FCC009A48D2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -154,7 +284,67 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		9694D3172CBC507800F822A9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9694D30D2CBC507800F822A9 /* YABAShare */;
+			targetProxy = 9694D3162CBC507800F822A9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		9694D31B2CBC507800F822A9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = YABAShare/YABAShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N4D5RP839C;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = YABAShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = YABAShare;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.subfly.YABA.YABAShare;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9694D31C2CBC507800F822A9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = YABAShare/YABAShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N4D5RP839C;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = YABAShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = YABAShare;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.subfly.YABA.YABAShare;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		96C57C0C2CB50FCD009A48D2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -279,6 +469,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = YABA/YABA.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"YABA/Preview Content\"";
@@ -309,6 +500,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = YABA/YABA.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"YABA/Preview Content\"";
@@ -337,6 +529,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9694D31A2CBC507800F822A9 /* Build configuration list for PBXNativeTarget "YABAShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9694D31B2CBC507800F822A9 /* Debug */,
+				9694D31C2CBC507800F822A9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		96C57BF92CB50FCC009A48D2 /* Build configuration list for PBXProject "YABA" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
