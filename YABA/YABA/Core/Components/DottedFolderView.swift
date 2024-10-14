@@ -26,7 +26,15 @@ struct DottedFolderView: View {
                     }
                     Spacer()
                     Text(self.label)
-                        .font(.title2)
+                        // TASK: REMOVE WHEN IPRAKTIKUM IS OVER .font(.title2)
+                        .font(
+                            .custom(
+                                "Quicksand-Regular",
+                                size: UIFont.preferredFont(
+                                    forTextStyle: .title2
+                                ).pointSize
+                            )
+                        )
                         .fontWeight(.semibold)
                 }
                 .padding()
