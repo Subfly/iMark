@@ -38,6 +38,7 @@ struct FolderListView: View {
                 if allowFolderAddition {
                     DottedFolderView(
                         label: "Create Folder",
+                        hasError: false,
                         onClicked: {
                             if let onClickCreateFolder = self.onClickCreateFolder {
                                 onClickCreateFolder()
@@ -58,6 +59,7 @@ struct FolderListView: View {
             if allowFolderAddition {
                 DottedFolderView(
                     label: "Create Folder",
+                    hasError: false,
                     onClicked: {
                         if let onClickCreateFolder = self.onClickCreateFolder {
                             onClickCreateFolder()

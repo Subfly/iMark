@@ -28,11 +28,13 @@ struct CreateTagSheetContent: View {
     var body: some View {
         NavigationView {
             CreationSheetContentView(
-                buttonLabel: self.createTagVM.isEditMode ? "Edit Tag" : "Create Tag"
+                buttonLabel: self.createTagVM.isEditMode ? "Edit Tag" : "Create Tag",
+                hasError: self.createTagVM.validationError
             ) {
-                // TASK: VALIDATE BEFORE SAVE
-                self.modelContext.insert(self.createTagVM.tag)
-                self.onDismiss()
+                if self.createTagVM.validate() {
+                    self.modelContext.insert(self.createTagVM.tag)
+                    self.onDismiss()
+                }
             } onDismissRequest: {
                 self.onDismiss()
             } content: {
@@ -108,10 +110,14 @@ struct CreateTagSheetContent: View {
             HStack {
                 Image(systemName: "t.square")
                 Text("Name")
-            }
+            }.foregroundStyle(self.createTagVM.labelHasError ? .red : .secondary)
         } footer: {
-            Text(self.createTagVM.labelCounterText)
-                .foregroundStyle(self.createTagVM.labelHasError ? .red : .secondary)
+            HStack {
+                if self.createTagVM.labelHasError {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                }
+                Text(self.createTagVM.labelCounterText)
+            }.foregroundStyle(self.createTagVM.labelHasError ? .red : .secondary)
         }
     }
     

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CreationSheetContentView<Content: View>: View {
     let buttonLabel: String
+    let hasError: Bool
     let onCreateContent: () -> Void
     let onDismissRequest: () -> Void
     @ViewBuilder let content: () -> Content
@@ -32,6 +33,11 @@ struct CreationSheetContentView<Content: View>: View {
                         .padding(.horizontal)
                         .padding(.bottom)
                 }
+                .offset(x: self.hasError ? -8 : 0)
+                .animation(
+                    Animation.default.repeatCount(3, autoreverses: true).speed(6),
+                    value: self.hasError
+                )
             }
             .frame(maxWidth: .infinity)
             .presentationDragIndicator(.visible)
@@ -42,8 +48,7 @@ struct CreationSheetContentView<Content: View>: View {
 }
 
 #Preview {
-    CreationSheetContentView(
-        buttonLabel: "Label") {
+    CreationSheetContentView(buttonLabel: "Label", hasError: false) {
             // Do Nothing
         } onDismissRequest: {
             // Do Nothing

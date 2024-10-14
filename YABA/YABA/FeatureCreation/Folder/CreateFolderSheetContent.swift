@@ -29,11 +29,13 @@ struct CreateFolderSheetContent: View {
     var body: some View {
         NavigationView {
             CreationSheetContentView(
-                buttonLabel: self.createFolderVM.isEditMode ? "Edit Folder" : "Create Folder"
+                buttonLabel: self.createFolderVM.isEditMode ? "Edit Folder" : "Create Folder",
+                hasError: self.createFolderVM.validationError
             ) {
-                // TASK: VALIDATE BEFORE SAVE
-                self.modelContext.insert(self.createFolderVM.folder)
-                self.onDismiss()
+                if self.createFolderVM.validate() {
+                    self.modelContext.insert(self.createFolderVM.folder)
+                    self.onDismiss()
+                }
             } onDismissRequest: {
                 self.onDismiss()
             } content: {
@@ -109,10 +111,14 @@ struct CreateFolderSheetContent: View {
             HStack {
                 Image(systemName: "t.square")
                 Text("Name")
-            }
+            }.foregroundStyle(self.createFolderVM.labelHasError ? .red : .secondary)
         } footer: {
-            Text(self.createFolderVM.labelCounterText)
-                .foregroundStyle(self.createFolderVM.labelHasError ? .red : .secondary)
+            HStack {
+                if self.createFolderVM.labelHasError {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                }
+                Text(self.createFolderVM.labelCounterText)
+            }.foregroundStyle(self.createFolderVM.labelHasError ? .red : .secondary)
         }
     }
     

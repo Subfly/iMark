@@ -63,10 +63,10 @@ Every platform has its own bookmarking system but has limited capabilities. For 
 | YABA-2  | Add tag creation                       | Very Important | Done         |
 | YABA-3  | Add bookmark creation                  | Very Important | Done         |
 | YABA-4  | Add bookmark and folder detail screens | Very Important | Done         |
-| YABA-5  | Add bookmark search                    | Very Important | Working On   |
-| YABA-6  | Add create bookmark from share modal   | Very Important | Not Started  |
+| YABA-5  | Add bookmark search                    | Very Important | Done         |
+| YABA-6  | Add create bookmark from share modal   | Very Important | In Progress  |
 | YABA-7  | Add link previews                      | Important      | Done         |
 | YABA-8  | Add folder colors                      | Nice to have   | Done         |
 | YABA-9  | Add tag colors                         | Nice to have   | Done         |
 | YABA-10 | Add move bookmark to another folder    | Nice to have   | Requires Fix |
-| YABA-11 | Fix validation issues during creation  | Very Important | Working On   |
+| YABA-11 | Fix validation issues during creation  | Very Important | Done         |

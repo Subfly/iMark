@@ -32,11 +32,13 @@ struct CreateBookmarkSheetContent: View {
     var body: some View {
         NavigationView {
             CreationSheetContentView(
-                buttonLabel: self.createBookmarkVM.isEditMode ? "Update Bookmark" : "Create Bookmark"
+                buttonLabel: self.createBookmarkVM.isEditMode ? "Update Bookmark" : "Create Bookmark",
+                hasError: self.createBookmarkVM.validationError
             ) {
-                // TASK: VALIDATE BEFORE SAVE
-                self.modelContext.insert(self.createBookmarkVM.bookmark)
-                self.onDismiss()
+                if self.createBookmarkVM.validate() {
+                    self.modelContext.insert(self.createBookmarkVM.bookmark)
+                    self.onDismiss()
+                }
             } onDismissRequest: {
                 self.onDismiss()
             } content: {
@@ -114,11 +116,18 @@ struct CreateBookmarkSheetContent: View {
                     await self.createBookmarkVM.onChangeLink(newValue)
                 }
             }
+            .disabled(self.createBookmarkVM.isEditMode)
         } header: {
             HStack {
                 Image(systemName: "link")
                 Text("Link")
-            }
+            }.foregroundStyle(
+                self.createBookmarkVM.urlHasError
+                ? .red
+                : self.createBookmarkVM.urlHasWarning
+                ? .yellow
+                : .secondary
+            )
         } footer: {
             if self.createBookmarkVM.urlHasError {
                 HStack {
@@ -140,11 +149,28 @@ struct CreateBookmarkSheetContent: View {
             TextField(
                 "Bookmark Title",
                 text: self.$createBookmarkVM.bookmark.label
-            )
+            ).onChange(of: self.createBookmarkVM.bookmark.label) { _, newValue in
+                self.createBookmarkVM.onChangeLabel(newValue)
+            }
         } header: {
             HStack {
                 Image(systemName: "t.square")
                 Text("Title")
+            }.foregroundStyle(
+                self.createBookmarkVM.labelHasValidationError
+                ? .red
+                : .secondary
+            )
+        } footer: {
+            if self.createBookmarkVM.labelHasValidationError {
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                    Text(self.createBookmarkVM.labelErrorText)
+                }.foregroundStyle(
+                    self.createBookmarkVM.labelHasValidationError
+                    ? .red
+                    : .secondary
+                )
             }
         }
     }
@@ -169,6 +195,8 @@ struct CreateBookmarkSheetContent: View {
     private var folderSelection: some View {
         CreateBookmarkFolderSelectionView(
             selectedFolder: self.createBookmarkVM.bookmark.folder,
+            hasError: self.createBookmarkVM.folderHasValidationError,
+            errorText: self.createBookmarkVM.folderErrorText,
             onClickSelectFolder: {
                 self.createBookmarkVM.onShowFolderSelectionPopover()
             }

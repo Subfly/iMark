@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DottedFolderView: View {
     let label: String
+    let hasError: Bool
     let onClicked: () -> Void
 
     var body: some View {
@@ -32,9 +33,13 @@ struct DottedFolderView: View {
                 .overlay {
                     RoundedRectangle(cornerRadius: 16)
                             .stroke(style: StrokeStyle(lineWidth: 2, dash: [10]))
-                            .foregroundColor(.accentColor)
                 }
             }
+            .foregroundStyle(
+                self.hasError
+                ? .red
+                : .accentColor
+            )
         }
     }
 }
@@ -42,6 +47,7 @@ struct DottedFolderView: View {
 #Preview {
     DottedFolderView(
         label: "",
+        hasError: false,
         onClicked: {}
     )
 }
