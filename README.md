@@ -31,39 +31,42 @@ Every platform has its own bookmarking system but has limited capabilities. For 
 
 ### Functional
 
-- Users can save any type of link by providing a label to it.
+- Users can save any type of link by providing a label and a folder to it.
 - Users can create their own folders for easier categorization.
 - Users can create tags for easier categorization.
 - Users can save links to folder, in order to easily categorize them.
 - Users can add how many tags they want to a bookmark, as well as remove any tag.
 - Users can search their bookmarks by their label or description.
 - Users can be move their bookmarks to any other folder.
+- Users can change the color of their folders and tags for easier recognition.
 
 ### Nonfunctional
 
 - Users should see the unfurled version of their saved content. 
 - Unfurling the link should be lazily in order to preserve data usage.
+- Users can save any link that is shareable/copyable.
 - All bookmarks should be saved on device locally.
 
 ## Analysis
 
-![Analysis Design](./assets/analysis_diagram.svg) 
+![Analysis Design](./assets/analysis_diagram.png) 
 
 ## System Design
 
-![System Design](./assets/system_design.svg) 
+![System Design](./assets/system_design.png) 
 
 ## Product Backlog
 
-| Code    | Requirement                            | Severity       | Progress    |
-|---------|--:-:-----------------------------------|--:-------------|--:----------|
-| YABA-1  | Add folder creation                    | Very Important | Not Started |
-| YABA-2  | Add tag creation                       | Very Important | Not Started |
-| YABA-3  | Add bookmark creation                  | Very Important | Not Started |
-| YABA-4  | Add bookmark and folder detail screens | Very Important | Not Started |
-| YABA-5  | Add bookmark search                    | Very Important | Not Started |
-| YABA-6  | Add create bookmark from share modal   | Very Important | Not Started |
-| YABA-7  | Add link previews                      | Important      | Not Started |
-| YABA-8  | Add folder colors                      | Nice to have   | Not Started |
-| YABA-9  | Add tag colors                         | Nice to have   | Not Started |
-| YABA-10 | Add move bookmark to another folder    | Nice to have   | Not Started |
+| Code    | Requirement                            | Severity       | Progress     |
+|---------|--:-------------------------------------|--:-------------|--:-----------|
+| YABA-1  | Add folder creation                    | Very Important | Done         |
+| YABA-2  | Add tag creation                       | Very Important | Done         |
+| YABA-3  | Add bookmark creation                  | Very Important | Done         |
+| YABA-4  | Add bookmark and folder detail screens | Very Important | Done         |
+| YABA-5  | Add bookmark search                    | Very Important | Done         |
+| YABA-6  | Add create bookmark from share modal   | Very Important | Done         |
+| YABA-7  | Add link previews                      | Important      | Done         |
+| YABA-8  | Add folder colors                      | Nice to have   | Done         |
+| YABA-9  | Add tag colors                         | Nice to have   | Done         |
+| YABA-10 | Add move bookmark to another folder    | Nice to have   | Requires Fix |
+| YABA-11 | Fix validation issues during creation  | Very Important | Done         |
