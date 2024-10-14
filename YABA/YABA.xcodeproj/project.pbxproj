@@ -60,6 +60,7 @@
 				Core/Components/TagView.swift,
 				Core/Model/Bookmark.swift,
 				Core/Model/Folder.swift,
+				Core/Model/PreloadDataHolder.swift,
 				Core/Model/Tag.swift,
 				Core/Model/YabaColor.swift,
 				Core/Unfurl/LinkPreview.swift,
