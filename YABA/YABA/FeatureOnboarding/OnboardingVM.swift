@@ -36,17 +36,25 @@ class OnboardingVM {
     func preloadItems(
         onPreloadItems: @escaping ([Folder], [Tag]) -> Void
     ) {
+        // Show loading
         self.isCreatingItems = true
         
+        // Try to open the preload data
         if let url = Bundle.main.url(forResource: "preload_data", withExtension: "json") {
             do {
+                // Try to parse json
                 let data = try Data(contentsOf: url)
                 let decoder = JSONDecoder()
                 let jsonData = try decoder.decode(PreloadDataHolder.self, from: data)
+                
                 let folders = jsonData.getFolderModels()
                 let tags = jsonData.getTagModels()
+                
+                // Callback function for SwiftData to save on UI
+                // Well played SwiftData, well played...
                 onPreloadItems(folders, tags)
             } catch {
+                // In case of error, stop loading
                 self.logger.log(
                     level: .error,
                     "[PRELOADER] Preload failed."
@@ -55,6 +63,7 @@ class OnboardingVM {
                 return
             }
         } else {
+            // In case of error, stop loading
             self.logger.log(
                 level: .error,
                 "[PRELOADER] Cannot be able to open preload data file."
@@ -63,6 +72,7 @@ class OnboardingVM {
             return
         }
         
+        // Stop loading on succesful load
         self.isCreatingItems = false
         self.itemsCreationDone = true
     }

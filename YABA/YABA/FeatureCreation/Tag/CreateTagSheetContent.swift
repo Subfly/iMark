@@ -32,8 +32,12 @@ struct CreateTagSheetContent: View {
                 hasError: self.createTagVM.validationError
             ) {
                 if self.createTagVM.validate() {
-                    self.modelContext.insert(self.createTagVM.tag)
-                    self.onDismiss()
+                    Task {
+                        self.modelContext.insert(self.createTagVM.tag)
+                        try? await Task.sleep(for: .milliseconds(1))
+                        try? self.modelContext.save()
+                        self.onDismiss()
+                    }
                 }
             } onDismissRequest: {
                 self.onDismiss()

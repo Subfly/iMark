@@ -58,8 +58,6 @@ class ShareViewController: UIViewController {
     }
     
     private func createContentView(link: String) {
-        let modelContainer: ModelContainer = ModelConfigurator.configureAndGetContainer()
-
         let contentView = UIHostingController(
             rootView: CreateBookmarkSheetContent(
                 bookmark: .empty(withLink: link),
@@ -67,7 +65,13 @@ class ShareViewController: UIViewController {
                 onDismiss: {
                     self.close()
                 }
-            ).modelContainer(modelContainer)
+            )
+            .modelContainer(
+                for: [Bookmark.self, Folder.self, Tag.self],
+                inMemory: false,
+                isAutosaveEnabled: false,
+                isUndoEnabled: false
+            )
         )
         self.addChild(contentView)
         self.view.addSubview(contentView.view)

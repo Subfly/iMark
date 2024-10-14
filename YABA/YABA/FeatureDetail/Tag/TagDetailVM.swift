@@ -31,6 +31,7 @@ class TagDetailVM {
     ) -> [Bookmark] {
         let isQueryEmpty = searchQuery.isEmpty
         
+        // Search through every label and description with the query
         let filteredBookmarks = bookmarks.filter { bookmark in
             // MARK: O(N*M) HERE. MAYBE REQUIRE A BETTER SOLUTION?
             let bookmarkContained = bookmark.tags.contains(
@@ -40,9 +41,14 @@ class TagDetailVM {
                 .localizedCaseInsensitiveContains(searchQuery)
             let labelContainsDescription = bookmark.bookmarkDescription
                 .localizedCaseInsensitiveContains(searchQuery)
+            
+            // Bookmark should be a member of the given tag
+            // If query empty, just include the bookmark
+            // Or else, query should be available in label or description
             return bookmarkContained && (isQueryEmpty ? true : (labelContainsQuery || labelContainsDescription))
         }
         
+        // Sort by given sorting option
         let sortedBookmarks = filteredBookmarks.sorted {
             switch sorting {
             case .alphabetical:

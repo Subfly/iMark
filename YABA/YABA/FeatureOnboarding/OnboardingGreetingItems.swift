@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 struct OnboardingGreetingItems {
     private init() {}
     static func getItems() -> [OnboardingGreetingItem] {
@@ -44,6 +45,7 @@ Easily manage your bookmarks. Create folders and tags. No more hassle of searchi
         ]
     }
 }
+
 struct OnboardingGreetingItem: Identifiable {
     let id = UUID()
     let iconName: String

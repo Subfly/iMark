@@ -162,19 +162,27 @@ YABA can create some folders and tags for you, just to give you a headstart. Wou
             self.onboardingVM.onNextStep()
         } else {
             if self.onboardingVM.itemsCreationDone {
+                // Called when preload is succesful
                 self.onEndOnboarding()
             } else if self.onboardingVM.createFoldersAndTags {
+                // Call preloading but don't navigate to anywhere
                 self.onboardingVM.preloadItems { folders, tags in
+                    // Inline callback that saves each
+                    // folder and tag one by one
                     Task {
-                        folders.forEach { folder in
+                        for folder in folders {
                             self.modelContext.insert(folder)
+                            try? await Task.sleep(for: .milliseconds(1))
                         }
-                        tags.forEach { tag in
+                        for tag in tags {
                             self.modelContext.insert(tag)
+                            try? await Task.sleep(for: .milliseconds(1))
                         }
+                        try? self.modelContext.save()
                     }
                 }
             } else {
+                // Called when user skips preloading
                 self.onEndOnboarding()
             }
         }

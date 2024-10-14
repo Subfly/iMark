@@ -15,12 +15,6 @@ struct YABAApp: App {
 
     @State
     var navigationManager: NavigationManager = .init()
-    
-    var modelContainer: ModelContainer
-    
-    init() {
-        self.modelContainer = ModelConfigurator.configureAndGetContainer()
-    }
 
     var body: some Scene {
         WindowGroup {
@@ -46,7 +40,12 @@ struct YABAApp: App {
                 self.onboardingPopoverContent
             }
         }
-        .modelContainer(modelContainer)
+        .modelContainer(
+            for: [Bookmark.self, Folder.self, Tag.self],
+            inMemory: false,
+            isAutosaveEnabled: false,
+            isUndoEnabled: false
+        )
         .environment(navigationManager)
     }
     

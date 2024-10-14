@@ -72,15 +72,15 @@ class BookmarkDetailVM: ObservableObject {
             }
 
             self.fillSuccess(with: prefillContent)
-        } catch UnfurlError.urlNotValid(let errorMessage) {
+        } catch UnfurlError.urlNotValid(_) {
             // TASK: Show global error component
-        } catch UnfurlError.cannotCreateURL(let errorMessage) {
+        } catch UnfurlError.cannotCreateURL(_) {
             // TASK: Show global error component
-        } catch UnfurlError.unableToUnfurl(let errorMessage) {
+        } catch UnfurlError.unableToUnfurl(_) {
             // TASK: Show global error component
-        } catch UnfurlError.clientError(let errorMessage) {
+        } catch UnfurlError.clientError(_) {
             // TASK: Show global error component
-        } catch UnfurlError.serverError(let errorMessage) {
+        } catch UnfurlError.serverError(_) {
             // TASK: Show global error component
         } catch {
             // TASK: Show global error component
@@ -88,6 +88,9 @@ class BookmarkDetailVM: ObservableObject {
         self.unfurling = false
     }
 
+    /**
+     Helper function to prefill conent
+     */
     private func fillSuccess(with preview: LinkPreview) {
         if self.bookmark.bookmarkDescription.isEmpty {
             self.bookmark.bookmarkDescription = preview.description
