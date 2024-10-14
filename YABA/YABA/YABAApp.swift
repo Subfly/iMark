@@ -42,9 +42,6 @@ struct YABAApp: App {
             .sheet(isPresented: self.$navigationManager.createTagSheetActive) {
                 self.createTagSheetContent
             }
-            .popover(isPresented: self.$notPassedOnboarding) {
-                self.onboardingPopoverContent
-            }
         }
         .modelContainer(modelContainer)
         .environment(navigationManager)
