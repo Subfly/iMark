@@ -35,30 +35,35 @@ struct HomeScreen: View {
     private var tags: [Tag]
 
     var body: some View {
-        ZStack {
-            if self.isSearching {
-                self.searchView
-            } else {
+        self.viewSwitcher
+            .navigationTitle("Home")
+            .searchable(
+                text: self.$searchQuery,
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: "Search in Bookmarks..."
+            )
+            .searchFocused(self.$isSearching)
+            .sheet(isPresented: self.$homeVM.showShareSheet) {
+                self.shareSheetContent
+            }
+            .alert(self.homeVM.deletingContentLabel, isPresented: self.$homeVM.shouldShowDeleteDialog) {
+                self.alertButtons
+            }
+    }
+    
+    @ViewBuilder
+    private var viewSwitcher: some View {
+        if self.isSearching {
+            self.searchView
+        } else {
+            ZStack {
                 ScrollView {
                     self.tagsView
                     Spacer().frame(height: 32)
                     self.foldersView
-                }.padding(.bottom, 100)
+                }
                 self.fabArea
             }
-        }
-        .navigationTitle("Home")
-        .searchable(
-            text: self.$searchQuery,
-            placement: .navigationBarDrawer(displayMode: .always),
-            prompt: "Search in Bookmarks..."
-        )
-        .searchFocused(self.$isSearching)
-        .sheet(isPresented: self.$homeVM.showShareSheet) {
-            self.shareSheetContent
-        }
-        .alert(self.homeVM.deletingContentLabel, isPresented: self.$homeVM.shouldShowDeleteDialog) {
-            self.alertButtons
         }
     }
     
@@ -168,6 +173,7 @@ It seems like you have not created any folder yet! Tap the button below to creat
             },
             onClickCreateFolder: nil
         )
+        Spacer().frame(height: 120)
     }
     
     @ViewBuilder

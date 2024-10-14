@@ -60,6 +60,7 @@
 				Core/Components/TagView.swift,
 				Core/Model/Bookmark.swift,
 				Core/Model/Folder.swift,
+				Core/Model/PreloadDataHolder.swift,
 				Core/Model/Tag.swift,
 				Core/Model/YabaColor.swift,
 				Core/Unfurl/LinkPreview.swift,
@@ -80,6 +81,13 @@
 			);
 			target = 9694D30D2CBC507800F822A9 /* YABAShare */;
 		};
+		9694D6D32CBD66F300F822A9 /* Exceptions for "YABA" folder in "YABA" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 96C57BFD2CB50FCC009A48D2 /* YABA */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -94,6 +102,7 @@
 		96C57C002CB50FCC009A48D2 /* YABA */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				9694D6D32CBD66F300F822A9 /* Exceptions for "YABA" folder in "YABA" target */,
 				9694D3552CBC5F1700F822A9 /* Exceptions for "YABA" folder in "YABAShare" target */,
 			);
 			path = YABA;
@@ -477,6 +486,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = YABA/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -508,6 +518,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = YABA/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

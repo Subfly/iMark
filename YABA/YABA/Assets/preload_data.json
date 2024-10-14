@@ -1,0 +1,151 @@
+{
+    "folders": [
+        {
+            "label": "Instagram",
+            "icon": "📷",
+            "primary_color": 6,
+            "secondary_color": 8
+        },
+        {
+            "label": "X (Twitter)",
+            "icon": "🕊️",
+            "primary_color": 1,
+            "secondary_color": 12
+        },
+        {
+            "label": "Youtube",
+            "icon": "📺",
+            "primary_color": 11,
+            "secondary_color": 10
+        },
+        {
+            "label": "Facebook",
+            "icon": "📘",
+            "primary_color": 1,
+            "secondary_color": 7
+        },
+        {
+            "label": "Reddit",
+            "icon": "👽",
+            "primary_color": 8,
+            "secondary_color": 13
+        },
+        {
+            "label": "LinkedIn",
+            "icon": "💼",
+            "primary_color": 1,
+            "secondary_color": 3
+        },
+        {
+            "label": "Locations",
+            "icon": "📍",
+            "primary_color": 5,
+            "secondary_color": 7
+        },
+        {
+            "label": "Web",
+            "icon": "🌐",
+            "primary_color": 3,
+            "secondary_color": 12
+        }
+    ],
+    "tags": [
+        {
+            "label": "Aesthetic",
+            "icon": "🎨",
+            "primary_color": 6,
+            "secondary_color": 8
+        },
+        {
+            "label": "Inspiration",
+            "icon": "💡",
+            "primary_color": 6,
+            "secondary_color": 8
+        },
+        {
+            "label": "Trending",
+            "icon": "🔥",
+            "primary_color": 12,
+            "secondary_color": 1
+        },
+        {
+            "label": "Opinions",
+            "icon": "🗣️",
+            "primary_color": 3,
+            "secondary_color": 1
+        },
+        {
+            "label": "Tutorials",
+            "icon": "📚",
+            "primary_color": 11,
+            "secondary_color": 10
+        },
+        {
+            "label": "Entertainment",
+            "icon": "🎬",
+            "primary_color": 11,
+            "secondary_color": 3
+        },
+        {
+            "label": "Community",
+            "icon": "👥",
+            "primary_color": 1,
+            "secondary_color": 7
+        },
+        {
+            "label": "Memories",
+            "icon": "🕰️",
+            "primary_color": 1,
+            "secondary_color": 7
+        },
+        {
+            "label": "Discussions",
+            "icon": "💬",
+            "primary_color": 8,
+            "secondary_color": 13
+        },
+        {
+            "label": "Debates",
+            "icon": "⚔️",
+            "primary_color": 8,
+            "secondary_color": 13
+        },
+        {
+            "label": "Networking",
+            "icon": "🔗",
+            "primary_color": 1,
+            "secondary_color": 3
+        },
+        {
+            "label": "Opportunities",
+            "icon": "📈",
+            "primary_color": 1,
+            "secondary_color": 3
+        },
+        {
+            "label": "Travel",
+            "icon": "✈️",
+            "primary_color": 5,
+            "secondary_color": 7
+        },
+        {
+            "label": "Guides",
+            "icon": "🗺️",
+            "primary_color": 5,
+            "secondary_color": 7
+        },
+        {
+            "label": "Technology",
+            "icon": "💻",
+            "primary_color": 3,
+            "secondary_color": 12
+        },
+        {
+            "label": "Innovation",
+            "icon": "🚀",
+            "primary_color": 3,
+            "secondary_color": 12
+        }
+    ]
+}
+

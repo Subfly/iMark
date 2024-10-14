@@ -42,6 +42,9 @@ struct YABAApp: App {
             .sheet(isPresented: self.$navigationManager.createTagSheetActive) {
                 self.createTagSheetContent
             }
+            .popover(isPresented: self.$notPassedOnboarding) {
+                self.onboardingPopoverContent
+            }
         }
         .modelContainer(modelContainer)
         .environment(navigationManager)
@@ -81,7 +84,7 @@ struct YABAApp: App {
     private var onboardingPopoverContent: some View {
         OnboardingView(
             onEndOnboarding: {
-                // TASK: CHANGE passedOnboarding TO TRUE
+                self.notPassedOnboarding = false
             }
         )
     }
