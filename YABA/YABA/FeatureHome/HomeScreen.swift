@@ -37,6 +37,13 @@ struct HomeScreen: View {
     var body: some View {
         self.viewSwitcher
             .navigationTitle("Home")
+            .toolbar {
+                Button {
+                    self.navigationManager.navigate(to: .settings)
+                } label: {
+                    Image(systemName: "gearshape")
+                }
+            }
             .searchable(
                 text: self.$searchQuery,
                 placement: .navigationBarDrawer(displayMode: .always),

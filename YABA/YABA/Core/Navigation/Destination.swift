@@ -9,6 +9,7 @@ import SwiftUI
 
 enum Destination: Hashable {
     case home
+    case settings
     case tag(tag: Tag)
     case folder(folder: Folder)
     case bookmark(bookmark: Bookmark)
@@ -18,6 +19,8 @@ enum Destination: Hashable {
         switch self {
         case .home:
             HomeScreen()
+        case .settings:
+            SettingsScreen()
         case .tag(tag: let tag):
             TagDetailScreen(tag: tag)
         case .folder(folder: let folder):
