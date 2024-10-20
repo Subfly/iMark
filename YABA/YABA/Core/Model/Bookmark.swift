@@ -16,8 +16,8 @@ final class Bookmark {
     var imageUrl: String
     var domain: String
     var createdAt: Date
-    var tags: [Tag]
-    var folder: Folder?
+    var tags: [Tag] = []
+    var folder: Folder
 
     init(
         link: String,
@@ -27,7 +27,7 @@ final class Bookmark {
         domain: String,
         createdAt: Date,
         tags: [Tag],
-        folder: Folder?
+        folder: Folder
     ) {
         self.link = link
         self.label = label
@@ -48,7 +48,7 @@ final class Bookmark {
             domain: "",
             createdAt: .now,
             tags: [],
-            folder: nil
+            folder: .empty()
         )
     }
     
@@ -61,7 +61,7 @@ final class Bookmark {
             domain: "",
             createdAt: .now,
             tags: [],
-            folder: nil
+            folder: .empty()
         )
     }
 }

@@ -34,7 +34,7 @@ class FolderDetailVM {
         // Search through every label and description with the query
         let filteredBookmarks = bookmarks.filter { bookmark in
             // MARK: O(N*M) HERE. MAYBE REQUIRE A BETTER SOLUTION?
-            let bookmarkContained = bookmark.folder?.id == self.folder.id
+            let bookmarkContained = bookmark.folder.id == self.folder.id
             let labelContainsQuery = bookmark.label
                 .localizedCaseInsensitiveContains(searchQuery)
             let labelContainsDescription = bookmark.bookmarkDescription

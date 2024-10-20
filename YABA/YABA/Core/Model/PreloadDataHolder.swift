@@ -57,7 +57,8 @@ struct PreloadTag: Codable {
             icon: self.icon,
             createdAt: .now,
             primaryColor: self.primaryColor,
-            secondaryColor: self.secondaryColor
+            secondaryColor: self.secondaryColor,
+            bookmarks: []
         )
     }
 

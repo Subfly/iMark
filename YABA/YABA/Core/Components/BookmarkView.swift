@@ -89,12 +89,8 @@ struct BookmarkView: View {
             }
             .frame(width: 80, height: 80)
             .clipShape(RoundedRectangle(cornerRadius: 16))
-        } else if self.bookmark.folder != nil {
-            if self.bookmark.folder?.icon != nil || self.bookmark.folder?.icon.isEmpty == false {
-                Text(self.bookmark.folder?.icon ?? "")
-            } else {
-                self.bookmarkIcon
-            }
+        } else if !self.bookmark.folder.icon.isEmpty {
+            Text(self.bookmark.folder.icon)
         } else {
             self.bookmarkIcon
         }
@@ -119,7 +115,7 @@ struct BookmarkView: View {
             domain: "avanderlee.com",
             createdAt: .now,
             tags: [],
-            folder: nil
+            folder: .empty()
         ),
         isInPreviewMode: false,
         onPressed: {},

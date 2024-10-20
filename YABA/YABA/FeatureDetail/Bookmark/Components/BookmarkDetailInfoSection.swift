@@ -59,23 +59,21 @@ struct BookmarkDetailInfoSection: View {
                 Image(systemName: "folder")
                 Text("Folder").fontWeight(.semibold)
             }
-            if let folder = self.bookmark.folder {
-                FolderView(
-                    folder: folder,
-                    isInPreviewMode: true,
-                    onClickFolder: {
-                        self.onClickFolder(folder)
-                    },
-                    onEditPressed: {
-                        /* Do Nothing */
-                    },
-                    onDeletePressed: {
-                        /* Do Nothing */
-                    }
-                )
-                .frame(width: 200, alignment: .center)
-                .frame(maxWidth: .infinity, alignment: .center)
-            }
+            FolderView(
+                folder: self.bookmark.folder,
+                isInPreviewMode: true,
+                onClickFolder: {
+                    self.onClickFolder(self.bookmark.folder)
+                },
+                onEditPressed: {
+                    /* Do Nothing */
+                },
+                onDeletePressed: {
+                    /* Do Nothing */
+                }
+            )
+            .frame(width: 200, alignment: .center)
+            .frame(maxWidth: .infinity, alignment: .center)
         }
     }
 }

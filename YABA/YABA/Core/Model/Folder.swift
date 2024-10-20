@@ -10,8 +10,8 @@ import SwiftData
 
 @Model
 final class Folder {
-    @Relationship(deleteRule: .cascade)
-    var bookmarks: [Bookmark]
+    @Relationship(deleteRule: .cascade, inverse: \Bookmark.folder)
+    var bookmarks: [Bookmark] = []
 
     var label: String
     var icon: String

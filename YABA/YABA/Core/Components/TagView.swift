@@ -84,7 +84,8 @@ struct TagView: View {
             icon: "🐈",
             createdAt: .now,
             primaryColor: .green,
-            secondaryColor: .teal
+            secondaryColor: .teal,
+            bookmarks: []
         ),
         isInPreviewMode: false,
         onPressed: {

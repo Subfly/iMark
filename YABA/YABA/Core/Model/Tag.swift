@@ -10,6 +10,9 @@ import SwiftData
 
 @Model
 final class Tag {
+    @Relationship(deleteRule: .nullify, inverse: \Bookmark.tags)
+    var bookmarks: [Bookmark]
+    
     var label: String
     var icon: String
     var createdAt: Date
@@ -21,13 +24,15 @@ final class Tag {
         icon: String,
         createdAt: Date,
         primaryColor: YabaColor,
-        secondaryColor: YabaColor
+        secondaryColor: YabaColor,
+        bookmarks: [Bookmark]
     ) {
         self.label = label
         self.icon = icon
         self.createdAt = createdAt
         self.primaryColor = primaryColor
         self.secondaryColor = secondaryColor
+        self.bookmarks = bookmarks
     }
     
     static func empty() -> Tag {
@@ -36,7 +41,8 @@ final class Tag {
             icon: "",
             createdAt: .now,
             primaryColor: .none,
-            secondaryColor: .none
+            secondaryColor: .none,
+            bookmarks: []
         )
     }
 }

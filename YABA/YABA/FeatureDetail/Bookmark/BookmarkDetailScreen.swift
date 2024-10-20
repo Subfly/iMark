@@ -172,23 +172,21 @@ struct BookmarkDetailScreen: View {
             Color(UIColor.systemBackground),
             Color(UIColor.systemBackground),
         ]
-
-        if let folder = self.bookmarkDetailVM.bookmark.folder {
-            base.append(
-                contentsOf: [
-                    self.animateGradient
-                    ? folder.secondaryColor.getUIColor()
-                        .opacity(self.colorScheme == .dark ? 0.2 : 0.2)
-                    : folder.primaryColor.getUIColor()
-                        .opacity(self.colorScheme == .dark ? 0.2 : 0.2),
-                    self.animateGradient
-                    ? folder.primaryColor.getUIColor()
-                        .opacity(self.colorScheme == .dark ? 0.2 : 0.2)
-                    : folder.secondaryColor.getUIColor()
-                        .opacity(self.colorScheme == .dark ? 0.2 : 0.2),
-                ]
-            )
-        }
+        
+        base.append(
+            contentsOf: [
+                self.animateGradient
+                ? self.bookmarkDetailVM.bookmark.folder.secondaryColor.getUIColor()
+                    .opacity(self.colorScheme == .dark ? 0.2 : 0.2)
+                : self.bookmarkDetailVM.bookmark.folder.primaryColor.getUIColor()
+                    .opacity(self.colorScheme == .dark ? 0.2 : 0.2),
+                self.animateGradient
+                ? self.bookmarkDetailVM.bookmark.folder.primaryColor.getUIColor()
+                    .opacity(self.colorScheme == .dark ? 0.2 : 0.2)
+                : self.bookmarkDetailVM.bookmark.folder.secondaryColor.getUIColor()
+                    .opacity(self.colorScheme == .dark ? 0.2 : 0.2),
+            ]
+        )
         
         for tag in self.bookmarkDetailVM.bookmark.tags {
             base.append(

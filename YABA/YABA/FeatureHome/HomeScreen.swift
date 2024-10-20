@@ -4,12 +4,19 @@
 //
 //  Created by Ali Taha on 8.10.2024.
 //
+// swiftlint:disable all
 
 import SwiftUI
 import SwiftData
 import Flow
 
 struct HomeScreen: View {
+    @AppStorage("tagsOpen")
+    private var isTagsContentOpen: Bool = true
+    
+    @AppStorage("foldersOpen")
+    private var isFoldersContentOpen: Bool = true
+    
     @Environment(\.modelContext)
     private var modelContext
 
@@ -128,59 +135,91 @@ struct HomeScreen: View {
     
     @ViewBuilder
     private var tagsView: some View {
-        Text("Tags")
-            .font(.title2)
-            .fontWeight(.medium)
-            .frame(maxWidth: .infinity, alignment: .leading)
+        VStack {
+            HStack {
+                Text("Tags")
+                    .font(.title2)
+                    .fontWeight(.medium)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Spacer()
+                Button {
+                    withAnimation {
+                        self.isTagsContentOpen.toggle()
+                    }
+                } label: {
+                    Image(systemName: "chevron.down")
+                        .rotationEffect(.degrees(self.isTagsContentOpen ? -180 : 0))
+                }.buttonStyle(.plain)
+            }
             .padding(.horizontal)
             .padding(.bottom)
-        TagsFlowView(
-            tags: self.tags,
-            noContentMessage: """
-It seems like you have not created any tags yet! Tap the button below to create your first tag.
-""",
-            allowTagAddition: false,
-            isInPreviewMode: false,
-            onPressTag: { tag in
-                self.navigationManager.navigate(to: .tag(tag: tag))
-            },
-            onEditTag: { tag in
-                self.navigationManager.showTagCreationSheet(tag: tag)
-            },
-            onDeleteTag: { tag in
-                self.homeVM.onShowDeleteDailog(tag: tag)
-            },
-            onClickTagCreation: nil
-        )
+            
+            if self.isTagsContentOpen {
+                TagsFlowView(
+                    tags: self.tags,
+                    noContentMessage: """
+        It seems like you have not created any tags yet! Tap the button below to create your first tag.
+        """,
+                    allowTagAddition: false,
+                    isInPreviewMode: false,
+                    onPressTag: { tag in
+                        self.navigationManager.navigate(to: .tag(tag: tag))
+                    },
+                    onEditTag: { tag in
+                        self.navigationManager.showTagCreationSheet(tag: tag)
+                    },
+                    onDeleteTag: { tag in
+                        self.homeVM.onShowDeleteDailog(tag: tag)
+                    },
+                    onClickTagCreation: nil
+                )
+                .transition(.slide)
+            }
+        }
     }
     
     @ViewBuilder
     private var foldersView: some View {
-        Text("Folders")
-            .font(.title2)
-            .fontWeight(.medium)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal)
-            .padding(.bottom)
-        FolderListView(
-            folders: self.folders,
-            noContentMessage: """
-It seems like you have not created any folder yet! Tap the button below to create your first folder.
-""",
-            allowFolderAddition: false,
-            isInPreviewMode: false,
-            onClickFolder: { folder in
-                self.navigationManager.navigate(to: .folder(folder: folder))
-            },
-            onEditFolder: { folder in
-                self.navigationManager.showFolderCreationSheet(folder: folder)
-            },
-            onDeleteFolder: { folder in
-                self.homeVM.onShowDeleteDailog(folder: folder)
-            },
-            onClickCreateFolder: nil
-        )
-        Spacer().frame(height: 120)
+        HStack {
+            Text("Folders")
+                .font(.title2)
+                .fontWeight(.medium)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Spacer()
+            Button {
+                withAnimation {
+                    self.isFoldersContentOpen.toggle()
+                }
+            } label: {
+                Image(systemName: "chevron.down")
+                    .rotationEffect(.degrees(self.isFoldersContentOpen ? -180 : 0))
+            }.buttonStyle(.plain)
+        }
+        .padding(.horizontal)
+        .padding(.bottom)
+        if self.isFoldersContentOpen {
+            FolderListView(
+                folders: self.folders,
+                noContentMessage: """
+    It seems like you have not created any folder yet! Tap the button below to create your first folder.
+    """,
+                allowFolderAddition: false,
+                isInPreviewMode: false,
+                onClickFolder: { folder in
+                    self.navigationManager.navigate(to: .folder(folder: folder))
+                },
+                onEditFolder: { folder in
+                    self.navigationManager.showFolderCreationSheet(folder: folder)
+                },
+                onDeleteFolder: { folder in
+                    self.homeVM.onShowDeleteDailog(folder: folder)
+                },
+                onClickCreateFolder: nil
+            )
+            .animation(.bouncy, value: self.isFoldersContentOpen)
+            .transition(.slide)
+            Spacer().frame(height: 120)
+        }
     }
     
     @ViewBuilder

@@ -13,7 +13,9 @@ struct SettingsScreen: View {
 
     var body: some View {
         List {
-            
+            Section {
+                
+            }
         }
         .navigationTitle("Settings")
     }
