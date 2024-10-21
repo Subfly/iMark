@@ -148,10 +148,14 @@ struct FolderDetailScreen: View {
     @ViewBuilder
     private var alertButtons: some View {
         Button(role: .destructive) {
-            if let bookmark = self.folderDetailVM.deletingBookmark {
-                self.modelContext.delete(bookmark)
+            Task {
+                if let bookmark = self.folderDetailVM.deletingBookmark {
+                    self.modelContext.delete(bookmark)
+                    try? await Task.sleep(for: .milliseconds(1))
+                    try? self.modelContext.save()
+                }
+                self.folderDetailVM.onCloseBookmarkDeleteDialog()
             }
-            self.folderDetailVM.onCloseBookmarkDeleteDialog()
         } label: {
             Text("Delete")
         }

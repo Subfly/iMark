@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CreateBookmarkTagSelectionPopoverContent: View {
+struct CreateBookmarkTagSelectionContent: View {
     let selectedTags: [Tag]
     let tags: [Tag]
     let onPressTag: (Tag) -> Void

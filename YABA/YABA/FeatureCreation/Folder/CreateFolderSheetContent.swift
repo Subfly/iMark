@@ -17,13 +17,16 @@ struct CreateFolderSheetContent: View {
     private var createFolderVM: CreateFolderVM
 
     let onDismiss: () -> Void
+    let onCreationCallback: ((Folder) -> Void)?
     
     init(
         folder: Folder?,
-        onDismiss: @escaping () -> Void
+        onDismiss: @escaping () -> Void,
+        onCreationCallback: ((Folder) -> Void)? = nil
     ) {
         self.createFolderVM = .init(folder: folder)
         self.onDismiss = onDismiss
+        self.onCreationCallback = onCreationCallback
     }
 
     var body: some View {
@@ -32,14 +35,7 @@ struct CreateFolderSheetContent: View {
                 buttonLabel: self.createFolderVM.isEditMode ? "Edit Folder" : "Create Folder",
                 hasError: self.createFolderVM.validationError
             ) {
-                if self.createFolderVM.validate() {
-                    Task {
-                        self.modelContext.insert(self.createFolderVM.folder)
-                        try? await Task.sleep(for: .milliseconds(1))
-                        try? self.modelContext.save()
-                        self.onDismiss()
-                    }
-                }
+                self.onCreateFolder()
             } onDismissRequest: {
                 self.onDismiss()
             } content: {
@@ -87,6 +83,7 @@ struct CreateFolderSheetContent: View {
             FolderView(
                 folder: self.createFolderVM.folder,
                 isInPreviewMode: true,
+                isSelected: false,
                 onClickFolder: {},
                 onEditPressed: {},
                 onDeletePressed: {}
@@ -227,6 +224,20 @@ struct CreateFolderSheetContent: View {
         }
         .presentationDetents([.fraction(0.3)])
         .presentationDragIndicator(.visible)
+    }
+    
+    private func onCreateFolder() {
+        if self.createFolderVM.validate() {
+            Task {
+                self.modelContext.insert(self.createFolderVM.folder)
+                try? await Task.sleep(for: .milliseconds(1))
+                try? self.modelContext.save()
+                if let callback = self.onCreationCallback {
+                    callback(self.createFolderVM.folder)
+                }
+                self.onDismiss()
+            }
+        }
     }
 }
 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CreateBookmarkFolderSelectionView: View {
-    let selectedFolder: Folder?
+    let selectedFolder: Folder
     let hasError: Bool
     let errorText: String
     let onClickSelectFolder: () -> Void
@@ -44,7 +44,7 @@ struct CreateBookmarkFolderSelectionView: View {
     
     @ViewBuilder
     private var dynamicFolderView: some View {
-        if self.selectedFolder == nil {
+        if self.selectedFolder.label.isEmpty {
             DottedFolderView(
                 label: "Select a folder",
                 hasError: self.hasError,
@@ -53,21 +53,20 @@ struct CreateBookmarkFolderSelectionView: View {
                 }
             ).padding(.vertical, 8)
         } else {
-            if let folder = self.selectedFolder {
-                FolderView(
-                    folder: folder,
-                    isInPreviewMode: true,
-                    onClickFolder: {
-                        self.onClickSelectFolder()
-                    },
-                    onEditPressed: {
-                        /* Do Nothing */
-                    },
-                    onDeletePressed: {
-                        /* Do Nothing */
-                    }
-                )
-            }
+            FolderView(
+                folder: self.selectedFolder,
+                isInPreviewMode: true,
+                isSelected: false,
+                onClickFolder: {
+                    self.onClickSelectFolder()
+                },
+                onEditPressed: {
+                    /* Do Nothing */
+                },
+                onDeletePressed: {
+                    /* Do Nothing */
+                }
+            )
         }
     }
 }

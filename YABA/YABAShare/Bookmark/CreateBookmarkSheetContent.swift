@@ -21,7 +21,10 @@ struct CreateBookmarkSheetContent: View {
     private var tags: [Tag]
 
     @State
-    var createBookmarkVM: CreateBookmarkVM
+    private var createBookmarkVM: CreateBookmarkVM
+    
+    @State
+    private var createBookmarkNavigationManager: CreateBookmarkNavigationManager = .init()
     
     let onDismiss: () -> Void
     
@@ -38,37 +41,40 @@ struct CreateBookmarkSheetContent: View {
     }
 
     var body: some View {
-        NavigationView {
-            CreationSheetContentView(
-                buttonLabel: self.createBookmarkVM.isEditMode ? "Update Bookmark" : "Create Bookmark",
-                hasError: self.createBookmarkVM.validationError
-            ) {
-                if self.createBookmarkVM.validate() {
-                    self.onSaveBookmark()
+        NavigationStack(path: self.$createBookmarkNavigationManager.routes) {
+            NavigationView {
+                CreationSheetContentView(
+                    buttonLabel: self.createBookmarkVM.isEditMode ? "Update Bookmark" : "Create Bookmark",
+                    hasError: self.createBookmarkVM.validationError
+                ) {
+                    if self.createBookmarkVM.validate() {
+                        self.onSaveBookmark()
+                    }
+                } onDismissRequest: {
+                    self.onDismiss()
+                } content: {
+                    self.formContent
                 }
-            } onDismissRequest: {
-                self.onDismiss()
-            } content: {
-                self.formContent
-            }
-            .navigationTitle(self.createBookmarkVM.isEditMode ? "Update Bookmark" : "Create Bookmark")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    self.cancelButton
+                .navigationTitle(self.createBookmarkVM.isEditMode ? "Update Bookmark" : "Create Bookmark")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        self.cancelButton
+                    }
                 }
-            }
-            .popover(isPresented: self.$createBookmarkVM.shouldShowFolderSelectionPopover) {
-                self.folderSelectionPopover
-            }
-            .sheet(isPresented: self.$createBookmarkVM.shouldShowCreateFolderSheet) {
-                self.folderCreationSheetContent
-            }
-            .popover(isPresented: self.$createBookmarkVM.shouldShowTagSelectionPopover) {
-                self.tagSelectionPopover
-            }
-            .sheet(isPresented: self.$createBookmarkVM.shouldShowCreateTagSheet) {
-                self.createTagSheetContent
+            }.navigationDestination(for: CreateBookmarkDestination.self) { destination in
+                switch destination {
+                case .selectFolder:
+                    FolderSelectionContent(
+                        onDoneSelectionCallback: { selectedFolder in
+                            if let folder = selectedFolder {
+                                self.createBookmarkVM.onSelectFolder(folder: folder)
+                            }
+                        }
+                    )
+                case .selectTags:
+                    EmptyView()
+                }
             }
         }
         .presentationDragIndicator(.visible)
@@ -205,7 +211,7 @@ struct CreateBookmarkSheetContent: View {
             hasError: self.createBookmarkVM.folderHasValidationError,
             errorText: self.createBookmarkVM.folderErrorText,
             onClickSelectFolder: {
-                self.createBookmarkVM.onShowFolderSelectionPopover()
+                self.createBookmarkNavigationManager.navigate(to: .selectFolder)
             }
         )
     }
@@ -215,61 +221,7 @@ struct CreateBookmarkSheetContent: View {
         CreateBookmarkTagSelectionView(
             tags: self.createBookmarkVM.bookmark.tags,
             onPressTag: {
-                self.createBookmarkVM.onShowTagSelectionPopover()
-            }
-        )
-    }
-    
-    @ViewBuilder
-    private var folderSelectionPopover: some View {
-        CreateBookmarkFolderSelectionPopover(
-            folders: self.folders,
-            onClickFolder: { folder in
-                self.createBookmarkVM.onSelectFolder(folder: folder)
-                self.createBookmarkVM.onCloseFolderSelectionPopover()
-            },
-            onClickCreateFolder: {
-                self.createBookmarkVM.onShowFolderCreationSheet(folder: nil)
-            },
-            onDismiss: {
-                self.createBookmarkVM.onCloseFolderSelectionPopover()
-            }
-        )
-    }
-
-    @ViewBuilder
-    private var folderCreationSheetContent: some View {
-        CreateFolderSheetContent(
-            folder: self.createBookmarkVM.creationFolder,
-            onDismiss: {
-                self.createBookmarkVM.onCloseFolderCreationSheet()
-            }
-        )
-    }
-    
-    @ViewBuilder
-    private var tagSelectionPopover: some View {
-        CreateBookmarkTagSelectionPopoverContent(
-            selectedTags: self.createBookmarkVM.bookmark.tags,
-            tags: self.tags,
-            onPressTag: { tag in
-                self.createBookmarkVM.onSelectTag(tag: tag)
-            },
-            onPressTagCreation: {
-                self.createBookmarkVM.onShowTagCreationSheet(tag: nil)
-            },
-            onDismiss: {
-                self.createBookmarkVM.onCloseTagSelectionPopover()
-            }
-        )
-    }
-
-    @ViewBuilder
-    private var createTagSheetContent: some View {
-        CreateTagSheetContent(
-            tag: self.createBookmarkVM.creationTag,
-            onDismiss: {
-                self.createBookmarkVM.onCloseTagCreationSheet()
+                self.createBookmarkNavigationManager.navigate(to: .selectTags)
             }
         )
     }

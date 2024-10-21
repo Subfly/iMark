@@ -12,6 +12,7 @@ struct FolderListView: View {
     let noContentMessage: String
     let allowFolderAddition: Bool
     let isInPreviewMode: Bool
+    let currentSelectedFolder: Folder?
     let onClickFolder: (Folder) -> Void
     let onEditFolder: (Folder) -> Void
     let onDeleteFolder: (Folder) -> Void
@@ -71,6 +72,7 @@ struct FolderListView: View {
                 FolderView(
                     folder: folder,
                     isInPreviewMode: self.isInPreviewMode,
+                    isSelected: self.currentSelectedFolder?.persistentModelID == folder.persistentModelID,
                     onClickFolder: {
                         self.onClickFolder(folder)
                     },
@@ -92,6 +94,7 @@ struct FolderListView: View {
         noContentMessage: "",
         allowFolderAddition: false,
         isInPreviewMode: true,
+        currentSelectedFolder: nil,
         onClickFolder: { _ in },
         onEditFolder: { _ in },
         onDeleteFolder: { _ in },

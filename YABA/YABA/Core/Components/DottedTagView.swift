@@ -20,15 +20,7 @@ struct DottedTagView: View {
                 HStack {
                     Image(systemName: "tag")
                     Text(self.label)
-                        // TASK: REMOVE WHEN IPRAKTIKUM IS OVER .font(.subheadline)
-                        .font(
-                            .custom(
-                                "Quicksand-Regular",
-                                size: UIFont.preferredFont(
-                                    forTextStyle: .subheadline
-                                ).pointSize
-                            )
-                        )
+                        .font(.subheadline)
                         .fontWeight(.semibold)
                 }
                 .padding()

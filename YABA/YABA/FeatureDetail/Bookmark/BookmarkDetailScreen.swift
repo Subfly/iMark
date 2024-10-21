@@ -154,9 +154,13 @@ struct BookmarkDetailScreen: View {
     @ViewBuilder
     private var alertButtons: some View {
         Button(role: .destructive) {
-            self.modelContext.delete(self.bookmarkDetailVM.bookmark)
-            self.bookmarkDetailVM.onCloseBookmarkDeleteDialog()
-            self.navigationManager.pop()
+            Task {
+                self.modelContext.delete(self.bookmarkDetailVM.bookmark)
+                try? await Task.sleep(for: .milliseconds(1))
+                try? self.modelContext.save()
+                self.bookmarkDetailVM.onCloseBookmarkDeleteDialog()
+                self.navigationManager.pop()
+            }
         } label: {
             Text("Delete")
         }

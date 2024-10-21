@@ -62,6 +62,7 @@ struct BookmarkDetailInfoSection: View {
             FolderView(
                 folder: self.bookmark.folder,
                 isInPreviewMode: true,
+                isSelected: false,
                 onClickFolder: {
                     self.onClickFolder(self.bookmark.folder)
                 },

@@ -13,7 +13,6 @@ import SwiftData
 class CreateBookmarkVM {
     private let unfurler: Unfurler = .init()
     
-    let isEditMode: Bool
     let labelLimit = 25
     let descriptionLimit = 120
 
@@ -29,21 +28,11 @@ class CreateBookmarkVM {
     var folderHasValidationError: Bool = false
     var validationError: Bool = false
     
-    // Popover related
-    var shouldShowFolderSelectionPopover: Bool = false
-    var shouldShowCreateFolderSheet: Bool = false
-    
-    var shouldShowTagSelectionPopover: Bool = false
-    var shouldShowCreateTagSheet: Bool = false
-    
     // State variable for loading
     var unfurling: Bool = false
     
-    // Items to hold during editing
-    var creationFolder: Folder?
-    var creationTag: Tag?
-    
-    // Main bookmark variable
+    // Main bookmark variables
+    let isEditMode: Bool
     var bookmark: Bookmark
 
     init(
@@ -122,48 +111,8 @@ class CreateBookmarkVM {
         self.folderHasValidationError = false
     }
     
-    func onSelectTag(tag: Tag) {
-        if self.bookmark.tags.contains(tag) {
-            self.bookmark.tags.removeAll(where: { $0 == tag })
-        } else {
-            self.bookmark.tags.append(tag)
-        }
-    }
-    
-    func onShowFolderSelectionPopover() {
-        self.shouldShowFolderSelectionPopover = true
-    }
-    
-    func onCloseFolderSelectionPopover() {
-        self.shouldShowFolderSelectionPopover = false
-    }
-    
-    func onShowFolderCreationSheet(folder: Folder?) {
-        self.creationFolder = folder
-        self.shouldShowCreateFolderSheet = true
-    }
-    
-    func onCloseFolderCreationSheet() {
-        self.creationFolder = nil
-        self.shouldShowCreateFolderSheet = false
-    }
-    
-    func onShowTagSelectionPopover() {
-        self.shouldShowTagSelectionPopover = true
-    }
-    
-    func onCloseTagSelectionPopover() {
-        self.shouldShowTagSelectionPopover = false
-    }
-    
-    func onShowTagCreationSheet(tag: Tag?) {
-        self.creationTag = tag
-        self.shouldShowCreateTagSheet = true
-    }
-    
-    func onCloseTagCreationSheet() {
-        self.creationTag = nil
-        self.shouldShowCreateTagSheet = false
+    func onSelectTags(tags: [Tag]) {
+        self.bookmark.tags = tags
     }
     
     func validate() -> Bool {
@@ -178,7 +127,7 @@ class CreateBookmarkVM {
         let labelEmpty = self.bookmark.label
             .trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
 
-        let folderNotSelected = self.bookmark.folder == nil
+        let folderNotSelected = self.bookmark.folder.label.isEmpty
 
         // Link Rule: Link should not be empty
         if !linkCorrect {

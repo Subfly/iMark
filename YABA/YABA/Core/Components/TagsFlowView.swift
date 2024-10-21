@@ -52,8 +52,9 @@ struct TagsFlowView: View {
     private var tagsArea: some View {
         HFlow(horizontalAlignment: .center, verticalAlignment: .top) {
             if allowTagAddition {
+                // TODO: FIND A SOLUTION IN HERE
                 DottedTagView(
-                    label: "Create Tag",
+                    label: "Edit Tags",
                     onClicked: {
                         if let onClickCreateTag = self.onClickTagCreation {
                             onClickCreateTag()

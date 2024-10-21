@@ -10,6 +10,7 @@ import SwiftUI
 struct FolderView: View {
     let folder: Folder
     let isInPreviewMode: Bool
+    let isSelected: Bool
     let onClickFolder: () -> Void
     let onEditPressed: () -> Void
     let onDeletePressed: () -> Void
@@ -18,27 +19,40 @@ struct FolderView: View {
         Button {
             self.onClickFolder()
         } label: {
-            VStack(alignment: .leading) {
-                HStack {
-                    self.imageArea
+            ZStack {
+                VStack(alignment: .leading) {
+                    HStack {
+                        self.imageArea
+                        Spacer()
+                        self.optionsArea
+                    }
                     Spacer()
-                    self.optionsArea
+                        .frame(height: 18)
+                    self.textArea
                 }
-                Spacer()
-                    .frame(height: 18)
-                self.textArea
-            }
-            .padding()
-            .background {
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(self.getGradient())
-            }
-            .shadow(radius: 2)
-            .contextMenu {
-                if !self.isInPreviewMode {
-                    self.menuContext
+                .padding()
+                .background {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(self.getGradient())
+                }
+                .shadow(radius: 2)
+                .contextMenu {
+                    if !self.isInPreviewMode {
+                        self.menuContext
+                    }
+                }
+                if self.isInPreviewMode && self.isSelected {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(.thinMaterial.opacity(0.5))
+                        .overlay(alignment: .center) {
+                            Image(systemName: "checkmark.circle")
+                                .resizable()
+                                .frame(width: 32, height: 32)
+                        }
                 }
             }
+            .animation(.smooth, value: self.isSelected)
+            .transition(.blurReplace)
         }
         .buttonStyle(.plain)
     }
@@ -142,6 +156,7 @@ struct FolderView: View {
             secondaryColor: .cyan
         ),
         isInPreviewMode: false,
+        isSelected: false,
         onClickFolder: {
             // Do Nothing
         },

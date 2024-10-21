@@ -32,7 +32,9 @@ struct CreateContentFAB: View {
                 } label: {
                     self.fab(isMini: false, type: .main)
                 }
-            }.padding(.bottom)
+            }
+            .padding(.bottom)
+            .padding(.bottom)
         }
     }
 

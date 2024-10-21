@@ -12,7 +12,7 @@ import Flow
 
 struct HomeScreen: View {
     @AppStorage("tagsOpen")
-    private var isTagsContentOpen: Bool = true
+    private var isTagsContentOpen: Bool = false
     
     @AppStorage("foldersOpen")
     private var isFoldersContentOpen: Bool = true
@@ -72,28 +72,35 @@ struct HomeScreen: View {
         } else {
             ZStack {
                 ScrollView {
-                    self.tagsView
-                    Spacer().frame(height: 32)
+                    self.tagsView.padding(.bottom)
                     self.foldersView
                 }
-                self.fabArea
+                self.fabArea.ignoresSafeArea()
             }
+            .animation(.easeInOut, value: self.isTagsContentOpen)
+            .animation(.easeInOut, value: self.isFoldersContentOpen)
         }
     }
     
     @ViewBuilder
     private var alertButtons: some View {
         Button(role: .destructive) {
-            if let folder = self.homeVM.deletingFolder {
-                self.modelContext.delete(folder)
+            Task {
+                if let folder = self.homeVM.deletingFolder {
+                    self.modelContext.delete(folder)
+                    try? await Task.sleep(for: .milliseconds(1))
+                }
+                if let tag = self.homeVM.deletingTag {
+                    self.modelContext.delete(tag)
+                    try? await Task.sleep(for: .milliseconds(1))
+                }
+                if let bookmark = self.homeVM.deletingBookmark {
+                    self.modelContext.delete(bookmark)
+                    try? await Task.sleep(for: .milliseconds(1))
+                }
+                try? self.modelContext.save()
+                self.homeVM.onCloseDialog()
             }
-            if let tag = self.homeVM.deletingTag {
-                self.modelContext.delete(tag)
-            }
-            if let bookmark = self.homeVM.deletingBookmark {
-                self.modelContext.delete(bookmark)
-            }
-            self.homeVM.onCloseDialog()
         } label: {
             Text("Delete")
         }
@@ -135,46 +142,46 @@ struct HomeScreen: View {
     
     @ViewBuilder
     private var tagsView: some View {
-        VStack {
-            HStack {
-                Text("Tags")
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Spacer()
-                Button {
-                    withAnimation {
-                        self.isTagsContentOpen.toggle()
+        HStack {
+            Text("Tags")
+                .font(.title2)
+                .fontWeight(.medium)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Spacer()
+            Button {
+                withAnimation {
+                    self.isTagsContentOpen.toggle()
+                }
+            } label: {
+                Circle()
+                    .fill(.thinMaterial)
+                    .frame(width: 35, height: 35, alignment: .center)
+                    .overlay {
+                        Image(systemName: "chevron.down")
+                            .rotationEffect(.degrees(self.isTagsContentOpen ? -180 : 0))
                     }
-                } label: {
-                    Image(systemName: "chevron.down")
-                        .rotationEffect(.degrees(self.isTagsContentOpen ? -180 : 0))
-                }.buttonStyle(.plain)
-            }
-            .padding(.horizontal)
-            .padding(.bottom)
-            
-            if self.isTagsContentOpen {
-                TagsFlowView(
-                    tags: self.tags,
-                    noContentMessage: """
-        It seems like you have not created any tags yet! Tap the button below to create your first tag.
-        """,
-                    allowTagAddition: false,
-                    isInPreviewMode: false,
-                    onPressTag: { tag in
-                        self.navigationManager.navigate(to: .tag(tag: tag))
-                    },
-                    onEditTag: { tag in
-                        self.navigationManager.showTagCreationSheet(tag: tag)
-                    },
-                    onDeleteTag: { tag in
-                        self.homeVM.onShowDeleteDailog(tag: tag)
-                    },
-                    onClickTagCreation: nil
-                )
-                .transition(.slide)
-            }
+            }.buttonStyle(.plain)
+        }.padding(.horizontal)
+        
+        if self.isTagsContentOpen {
+            TagsFlowView(
+                tags: self.tags,
+                noContentMessage: """
+    It seems like you have not created any tags yet! Tap the button below to create your first tag.
+    """,
+                allowTagAddition: false,
+                isInPreviewMode: false,
+                onPressTag: { tag in
+                    self.navigationManager.navigate(to: .tag(tag: tag))
+                },
+                onEditTag: { tag in
+                    self.navigationManager.showTagCreationSheet(tag: tag)
+                },
+                onDeleteTag: { tag in
+                    self.homeVM.onShowDeleteDailog(tag: tag)
+                },
+                onClickTagCreation: nil
+            ).transition(.opacity.combined(with: .blurReplace))
         }
     }
     
@@ -191,12 +198,18 @@ struct HomeScreen: View {
                     self.isFoldersContentOpen.toggle()
                 }
             } label: {
-                Image(systemName: "chevron.down")
-                    .rotationEffect(.degrees(self.isFoldersContentOpen ? -180 : 0))
+                Circle()
+                    .fill(.thinMaterial)
+                    .frame(width: 35, height: 35, alignment: .center)
+                    .overlay {
+                        Image(systemName: "chevron.down")
+                            .rotationEffect(.degrees(self.isFoldersContentOpen ? -180 : 0))
+                    }
             }.buttonStyle(.plain)
         }
         .padding(.horizontal)
         .padding(.bottom)
+        
         if self.isFoldersContentOpen {
             FolderListView(
                 folders: self.folders,
@@ -205,6 +218,7 @@ struct HomeScreen: View {
     """,
                 allowFolderAddition: false,
                 isInPreviewMode: false,
+                currentSelectedFolder: nil,
                 onClickFolder: { folder in
                     self.navigationManager.navigate(to: .folder(folder: folder))
                 },
@@ -215,10 +229,8 @@ struct HomeScreen: View {
                     self.homeVM.onShowDeleteDailog(folder: folder)
                 },
                 onClickCreateFolder: nil
-            )
-            .animation(.bouncy, value: self.isFoldersContentOpen)
-            .transition(.slide)
-            Spacer().frame(height: 120)
+            ).transition(.opacity.combined(with: .blurReplace))
+            Spacer().frame(height: 100)
         }
     }
     
