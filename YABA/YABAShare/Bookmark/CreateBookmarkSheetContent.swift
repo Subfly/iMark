@@ -28,14 +28,10 @@ struct CreateBookmarkSheetContent: View {
     
     let onDismiss: () -> Void
     
-    init(
-        bookmark: Bookmark?,
-        isOpeningFromShareSheet: Bool,
-        onDismiss: @escaping () -> Void
-    ) {
+    init(bookmark: Bookmark?, onDismiss: @escaping () -> Void) {
         self.createBookmarkVM = .init(
             bookmark: bookmark,
-            isOpeningFromShareSheet: isOpeningFromShareSheet
+            isOpeningFromShareSheet: false
         )
         self.onDismiss = onDismiss
     }
@@ -51,7 +47,9 @@ struct CreateBookmarkSheetContent: View {
                         self.onSaveBookmark()
                     }
                 } onDismissRequest: {
-                    self.onDismiss()
+                    if self.createBookmarkNavigationManager.routes.isEmpty {
+                        self.protectedOnDismiss()
+                    }
                 } content: {
                     self.formContent
                 }
@@ -66,6 +64,7 @@ struct CreateBookmarkSheetContent: View {
                 switch destination {
                 case .selectFolder:
                     FolderSelectionContent(
+                        selectedFolder: self.createBookmarkVM.bookmark.folder,
                         onDoneSelectionCallback: { selectedFolder in
                             if let folder = selectedFolder {
                                 self.createBookmarkVM.onSelectFolder(folder: folder)
@@ -73,17 +72,23 @@ struct CreateBookmarkSheetContent: View {
                         }
                     )
                 case .selectTags:
-                    EmptyView()
+                    TagSelectionContent(
+                        selectedTags: self.createBookmarkVM.bookmark.tags,
+                        onDoneSelectionCallback: { tags in
+                            self.createBookmarkVM.onSelectTags(tags: tags)
+                        }
+                    )
                 }
             }
         }
         .presentationDragIndicator(.visible)
+        .environment(self.createBookmarkNavigationManager)
     }
     
     @ViewBuilder
     private var cancelButton: some View {
         Button {
-            self.onDismiss()
+            self.protectedOnDismiss()
         } label: {
             Text("Cancel")
         }
@@ -231,6 +236,18 @@ struct CreateBookmarkSheetContent: View {
             self.modelContext.insert(self.createBookmarkVM.bookmark)
             try? await Task.sleep(for: .milliseconds(1))
             try? self.modelContext.save()
+            self.createBookmarkVM.onSaveBookmark()
+            self.onDismiss()
+        }
+    }
+    
+    private func protectedOnDismiss() {
+        Task {
+            if !self.createBookmarkVM.isBookmarkSaved {
+                self.modelContext.delete(self.createBookmarkVM.bookmark)
+                try? await Task.sleep(for: .milliseconds(1))
+                try? self.modelContext.save()
+            }
             self.onDismiss()
         }
     }

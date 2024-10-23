@@ -75,6 +75,7 @@
 				FeatureCreation/Bookmark/Navigation/CreateBookmarkDestination.swift,
 				FeatureCreation/Bookmark/Navigation/CreateBookmarkNavigationManager.swift,
 				FeatureCreation/Bookmark/Selection/Folder/FolderSelectionContent.swift,
+				FeatureCreation/Bookmark/Selection/Tag/TagSelectionContent.swift,
 				FeatureCreation/Components/CreationSheetContentView.swift,
 				FeatureCreation/Folder/CreateFolderSheetContent.swift,
 				FeatureCreation/Folder/CreateFolderVM.swift,
