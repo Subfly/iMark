@@ -34,6 +34,7 @@ class CreateBookmarkVM {
     // Main bookmark variables
     let isEditMode: Bool
     var bookmark: Bookmark
+    var isBookmarkSaved: Bool = false
 
     init(
         bookmark: Bookmark?,
@@ -154,6 +155,10 @@ class CreateBookmarkVM {
         }
 
         return isValid
+    }
+    
+    func onSaveBookmark() {
+        self.isBookmarkSaved = true
     }
     
     

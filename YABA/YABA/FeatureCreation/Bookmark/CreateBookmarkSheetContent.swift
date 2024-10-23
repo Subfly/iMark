@@ -236,15 +236,18 @@ struct CreateBookmarkSheetContent: View {
             self.modelContext.insert(self.createBookmarkVM.bookmark)
             try? await Task.sleep(for: .milliseconds(1))
             try? self.modelContext.save()
+            self.createBookmarkVM.onSaveBookmark()
             self.onDismiss()
         }
     }
     
     private func protectedOnDismiss() {
         Task {
-            self.modelContext.delete(self.createBookmarkVM.bookmark)
-            try? await Task.sleep(for: .milliseconds(1))
-            try? self.modelContext.save()
+            if !self.createBookmarkVM.isBookmarkSaved {
+                self.modelContext.delete(self.createBookmarkVM.bookmark)
+                try? await Task.sleep(for: .milliseconds(1))
+                try? self.modelContext.save()
+            }
             self.onDismiss()
         }
     }
