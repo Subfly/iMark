@@ -35,12 +35,6 @@ struct HomeScreen: View {
     @Query(sort: \Bookmark.createdAt, order: .forward)
     private var bookmarks: [Bookmark]
 
-    @Query(sort: \Folder.createdAt, order: .forward)
-    private var folders: [Folder]
-
-    @Query(sort: \Tag.createdAt, order: .forward)
-    private var tags: [Tag]
-
     var body: some View {
         self.viewSwitcher
             .navigationTitle("Home")
@@ -72,8 +66,7 @@ struct HomeScreen: View {
         } else {
             ZStack {
                 ScrollView {
-                    self.tagsView.padding(.bottom)
-                    self.foldersView
+                    self.homeContent
                 }
                 self.fabArea.ignoresSafeArea()
             }
@@ -141,97 +134,39 @@ struct HomeScreen: View {
     }
     
     @ViewBuilder
-    private var tagsView: some View {
-        HStack {
-            Text("Tags")
-                .font(.title2)
-                .fontWeight(.medium)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            Spacer()
-            Button {
+    private var homeContent: some View {
+        HomeContent(
+            isTagsExpanded: self.isTagsContentOpen,
+            isFoldersExpanded: self.isFoldersContentOpen,
+            onExpandTags: {
                 withAnimation {
                     self.isTagsContentOpen.toggle()
                 }
-            } label: {
-                Circle()
-                    .fill(.thinMaterial)
-                    .frame(width: 35, height: 35, alignment: .center)
-                    .overlay {
-                        Image(systemName: "chevron.down")
-                            .rotationEffect(.degrees(self.isTagsContentOpen ? -180 : 0))
-                    }
-            }.buttonStyle(.plain)
-        }.padding(.horizontal)
-        
-        if self.isTagsContentOpen {
-            TagsFlowView(
-                tags: self.tags,
-                noContentMessage: """
-    It seems like you have not created any tags yet! Tap the button below to create your first tag.
-    """,
-                allowTagAddition: false,
-                isInPreviewMode: false,
-                onPressTag: { tag in
-                    self.navigationManager.navigate(to: .tag(tag: tag))
-                },
-                onEditTag: { tag in
-                    self.navigationManager.showTagCreationSheet(tag: tag)
-                },
-                onDeleteTag: { tag in
-                    self.homeVM.onShowDeleteDailog(tag: tag)
-                },
-                onClickTagCreation: nil
-            ).transition(.opacity.combined(with: .blurReplace))
-        }
-    }
-    
-    @ViewBuilder
-    private var foldersView: some View {
-        HStack {
-            Text("Folders")
-                .font(.title2)
-                .fontWeight(.medium)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            Spacer()
-            Button {
+            },
+            onExpandFolders: {
                 withAnimation {
                     self.isFoldersContentOpen.toggle()
                 }
-            } label: {
-                Circle()
-                    .fill(.thinMaterial)
-                    .frame(width: 35, height: 35, alignment: .center)
-                    .overlay {
-                        Image(systemName: "chevron.down")
-                            .rotationEffect(.degrees(self.isFoldersContentOpen ? -180 : 0))
-                    }
-            }.buttonStyle(.plain)
-        }
-        .padding(.horizontal)
-        .padding(.bottom)
-        
-        if self.isFoldersContentOpen {
-            FolderListView(
-                folders: self.folders,
-                noContentMessage: """
-    It seems like you have not created any folder yet! Tap the button below to create your first folder.
-    """,
-                allowFolderAddition: false,
-                isInPreviewMode: false,
-                currentSelectedFolder: nil,
-                onClickFolder: { folder in
-                    self.navigationManager.navigate(to: .folder(folder: folder))
-                },
-                onEditFolder: { folder in
-                    self.navigationManager.showFolderCreationSheet(folder: folder)
-                },
-                onDeleteFolder: { folder in
-                    self.homeVM.onShowDeleteDailog(folder: folder)
-                },
-                onClickCreateFolder: nil
-            ).transition(.opacity.combined(with: .blurReplace))
-            Spacer().frame(height: 100)
-        }
+            },
+            onClickFolder: { folder in
+                self.navigationManager.navigate(to: .folder(folder: folder))
+            },
+            onEditFolder: { folder in
+                self.navigationManager.showFolderCreationSheet(folder: folder)
+            },
+            onDeleteFolder: { folder in
+                self.homeVM.onShowDeleteDailog(folder: folder)
+            },
+            onPressTag: { tag in
+                self.navigationManager.navigate(to: .tag(tag: tag))
+            },
+            onEditTag: { tag in
+                self.navigationManager.showTagCreationSheet(tag: tag)
+            },
+            onDeleteTag: { tag in
+                self.homeVM.onShowDeleteDailog(tag: tag)
+            }
+        )
     }
     
     @ViewBuilder

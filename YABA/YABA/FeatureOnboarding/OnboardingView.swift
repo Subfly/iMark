@@ -23,7 +23,9 @@ struct OnboardingView: View {
             TabView(selection: self.$onboardingVM.currentPage) {
                 self.greetingPage.tag(OnboardingPageType.greeting)
                 self.finishPage.tag(OnboardingPageType.finish)
-            }.scrollDisabled(true)
+            }
+            .scrollDisabled(true)
+            .tabViewStyle(.page(indexDisplayMode: .never))
             Spacer()
             self.button
         }.padding()
