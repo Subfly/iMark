@@ -79,15 +79,9 @@ class CreateBookmarkVM {
             }
 
             self.fillSuccess(with: prefillContent)
-        } catch UnfurlError.urlNotValid(let errorMessage) {
-            self.fillAsError(with: errorMessage)
         } catch UnfurlError.cannotCreateURL(let errorMessage) {
             self.fillAsError(with: errorMessage)
         } catch UnfurlError.unableToUnfurl(let errorMessage) {
-            self.fillAsWarning(with: errorMessage)
-        } catch UnfurlError.clientError(let errorMessage) {
-            self.fillAsWarning(with: errorMessage)
-        } catch UnfurlError.serverError(let errorMessage) {
             self.fillAsWarning(with: errorMessage)
         } catch {
             self.fillAsWarning(with: "Something went wrong, please try again later.")
@@ -188,16 +182,21 @@ class CreateBookmarkVM {
             self.bookmark.label = preview.title
         }
         
-        if self.bookmark.bookmarkDescription.isEmpty {
-            self.bookmark.bookmarkDescription = preview.description
+        if self.bookmark.imageData == nil {
+            // TASK: ADD QUALITY OPTIONS TO SETTINGS
+            self.bookmark.imageData = preview.image?.jpegData(compressionQuality: 1.0)
         }
         
-        if self.bookmark.imageUrl.isEmpty {
-            self.bookmark.imageUrl = preview.imageUrl
+        if self.bookmark.iconData == nil {
+            self.bookmark.iconData = preview.icon?.pngData()
+        }
+        
+        if self.bookmark.videoUrl == nil {
+            self.bookmark.videoUrl = preview.videoUrl
         }
         
         if self.bookmark.domain.isEmpty {
-            self.bookmark.domain = preview.siteName
+            self.bookmark.domain = preview.host
         }
         
         self.urlErrorText = ""

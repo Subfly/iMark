@@ -61,7 +61,6 @@ class ShareViewController: UIViewController {
         let contentView = UIHostingController(
             rootView: CreateBookmarkSheetContent(
                 bookmark: .empty(withLink: link),
-                isOpeningFromShareSheet: true,
                 onDismiss: {
                     self.close()
                 }

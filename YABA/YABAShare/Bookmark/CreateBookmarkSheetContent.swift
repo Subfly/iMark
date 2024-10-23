@@ -31,7 +31,7 @@ struct CreateBookmarkSheetContent: View {
     init(bookmark: Bookmark?, onDismiss: @escaping () -> Void) {
         self.createBookmarkVM = .init(
             bookmark: bookmark,
-            isOpeningFromShareSheet: false
+            isOpeningFromShareSheet: true
         )
         self.onDismiss = onDismiss
     }

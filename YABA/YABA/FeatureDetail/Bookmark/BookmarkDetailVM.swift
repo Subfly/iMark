@@ -72,15 +72,9 @@ class BookmarkDetailVM: ObservableObject {
             }
 
             self.fillSuccess(with: prefillContent)
-        } catch UnfurlError.urlNotValid(_) {
-            // TASK: Show global error component
         } catch UnfurlError.cannotCreateURL(_) {
             // TASK: Show global error component
         } catch UnfurlError.unableToUnfurl(_) {
-            // TASK: Show global error component
-        } catch UnfurlError.clientError(_) {
-            // TASK: Show global error component
-        } catch UnfurlError.serverError(_) {
             // TASK: Show global error component
         } catch {
             // TASK: Show global error component
@@ -92,11 +86,11 @@ class BookmarkDetailVM: ObservableObject {
      Helper function to prefill conent
      */
     private func fillSuccess(with preview: LinkPreview) {
-        if self.bookmark.bookmarkDescription.isEmpty {
-            self.bookmark.bookmarkDescription = preview.description
-        }
-
-        self.bookmark.imageUrl = preview.imageUrl
-        self.bookmark.domain = preview.siteName
+        // TASK: ADD QUALITY OPTIONS TO SETTINGS
+        self.bookmark.imageData = preview.image?.jpegData(compressionQuality: 1.0)
+        self.bookmark.iconData = preview.icon?.pngData()
+        
+        self.bookmark.videoUrl = preview.videoUrl
+        self.bookmark.domain = preview.host
     }
 }

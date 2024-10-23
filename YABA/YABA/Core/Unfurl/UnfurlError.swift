@@ -8,7 +8,4 @@
 enum UnfurlError: Error {
     case cannotCreateURL(String)
     case unableToUnfurl(String)
-    case urlNotValid(String)
-    case clientError(String)
-    case serverError(String)
 }

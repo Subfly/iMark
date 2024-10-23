@@ -7,13 +7,36 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 @Model
 final class Bookmark {
-    var link: String
+    @Attribute(.externalStorage, .allowsCloudEncryption)
+    var imageData: Data?
+    var image: UIImage? {
+        if let data = self.imageData {
+            return UIImage(data: data)
+        }
+        return nil
+    }
+    
+    var iconData: Data?
+    var icon: UIImage? {
+        if let data = self.iconData {
+            return UIImage(data: data)
+        }
+        return nil
+    }
+    
+    var videoUrl: String?
+    
+    @Attribute(.spotlight)
     var label: String
+    
+    @Attribute(.spotlight)
     var bookmarkDescription: String
-    var imageUrl: String
+    
+    var link: String
     var domain: String
     var createdAt: Date
     var tags: [Tag] = []
@@ -23,18 +46,22 @@ final class Bookmark {
         link: String,
         label: String,
         bookmarkDescription: String,
-        imageUrl: String,
         domain: String,
         createdAt: Date,
+        imageData: Data?,
+        iconData: Data?,
+        videoUrl: String?,
         tags: [Tag],
         folder: Folder
     ) {
         self.link = link
         self.label = label
         self.bookmarkDescription = bookmarkDescription
-        self.imageUrl = imageUrl
         self.domain = domain
         self.createdAt = createdAt
+        self.imageData = imageData
+        self.iconData = iconData
+        self.videoUrl = videoUrl
         self.tags = tags
         self.folder = folder
     }
@@ -44,9 +71,11 @@ final class Bookmark {
             link: "",
             label: "",
             bookmarkDescription: "",
-            imageUrl: "",
             domain: "",
             createdAt: .now,
+            imageData: nil,
+            iconData: nil,
+            videoUrl: nil,
             tags: [],
             folder: .empty()
         )
@@ -57,9 +86,11 @@ final class Bookmark {
             link: link,
             label: "",
             bookmarkDescription: "",
-            imageUrl: "",
             domain: "",
             createdAt: .now,
+            imageData: nil,
+            iconData: nil,
+            videoUrl: nil,
             tags: [],
             folder: .empty()
         )

@@ -23,7 +23,14 @@ struct BookmarkDetailLinkSection: View {
             }.padding(.leading)
         } footer: {
             HStack {
-                Image(systemName: "link.circle.fill")
+                if let icon = self.bookmark.icon {
+                    Image(uiImage: icon)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24, alignment: .center)
+                } else {
+                    Image(systemName: "link.circle.fill")
+                }
                 Text(
                     self.bookmark.domain.isEmpty
                     ? self.bookmark.link
@@ -40,26 +47,15 @@ struct BookmarkDetailLinkSection: View {
 
     @ViewBuilder
     private var linkImageView: some View {
-        AsyncImage(
-            url: URL(
-                string: self.bookmark.imageUrl
-            )
-        ) { phase in
-            switch phase {
-            case .empty:
-                ProgressView()
-                    .frame(maxWidth: .infinity, alignment: .center)
-            case .success(let image):
-                image
-                    .resizable()
-                    .scaledToFill()
-            case .failure:
-                self.imageUnavailableView
-            @unknown default:
-                self.imageUnavailableView
-            }
+        if let image = self.bookmark.image {
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFill()
+                .frame(idealHeight: 256, alignment: .center)
+        } else {
+            self.imageUnavailableView
+                .frame(idealHeight: 256, alignment: .center)
         }
-        .frame(idealHeight: 256, alignment: .center)
     }
 
     @ViewBuilder
